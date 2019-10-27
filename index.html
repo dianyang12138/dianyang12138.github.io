@@ -176,21 +176,9 @@
 <li>Akka是JVM平台上，高并发、分布式和容错应用的工具包。</li>
 <li>能方便写出高效稳定的并发程序。</li>
 </ol>
-<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>Actor模型能够解决并发所造成的，数据一致性问题，正确性问题等。</p>
-<h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p><img src="/2019/10/27/Akka/Akka.png" alt></p>
-<ol>
-<li>Akka会有一个Actor System（单例，一个就VM进程中一个即可）</li>
-<li>在这个系统中，所有事物都是Actor（继承Actor）</li>
-<li>Actor与Actor之间通过消息通信</li>
-<li>每个Actor都会有对应的ActorRef。</li>
-<li>通过使用ActorRef对Actor发消息<ul>
-<li>消息从ActorRef传到Dispatcher Message（线程池），然后Dispatcher Message发给对应的mailbox</li>
-</ul>
-</li>
-<li>mailbox是一个Runable，内置一个队列。所有消息都会发给mailbox，mailbox调用Actor中的receive方法</li>
-</ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Akka，给我的感觉像是消息队列的复杂版。对于他是如何处理并发的问题，没有任何理解</p>
-
+        
+          <a class="article-more-a" href="2019/10/27/Akka/#more">more >></a>
+        
       
 
       
