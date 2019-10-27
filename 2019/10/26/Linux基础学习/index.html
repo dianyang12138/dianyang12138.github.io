@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="dian的博客">
 <meta property="og:description" content="Linux文件系统目录结构基本介绍Linux中一切皆为文件">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-27T02:31:44.754Z">
+<meta property="og:updated_time" content="2019-10-27T07:12:51.767Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
@@ -894,7 +894,26 @@
 </ul>
 </li>
 </ul>
-<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><h3 id="虚拟网络编辑器"><a href="#虚拟网络编辑器" class="headerlink" title="虚拟网络编辑器"></a>虚拟网络编辑器</h3><p>虚拟机的网络编辑器，可在内修改ip地址、</p>
+<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><h3 id="端口分类"><a href="#端口分类" class="headerlink" title="端口分类"></a>端口分类</h3><ul>
+<li>0号保留端口</li>
+<li>1-1024是固定端口<ul>
+<li>22：SSH远程登陆协议</li>
+<li>23：telnet使用</li>
+<li>21：ftp</li>
+<li>25：smtp</li>
+<li>80：iis</li>
+<li>7：echo</li>
+</ul>
+</li>
+<li>1025-65535是动态端口</li>
+</ul>
+<h4 id="端口使用注意"><a href="#端口使用注意" class="headerlink" title="端口使用注意"></a>端口使用注意</h4><ul>
+<li>尽量少开端口</li>
+<li>一个端口只能被一个程序监听</li>
+<li><code>netstat -an</code>可以查看本机有哪些端口在监听</li>
+<li><code>nestat -anb</code>这些监听端口的pid</li>
+</ul>
+<h3 id="虚拟网络编辑器"><a href="#虚拟网络编辑器" class="headerlink" title="虚拟网络编辑器"></a>虚拟网络编辑器</h3><p>虚拟机的网络编辑器，可在内修改ip地址、</p>
 <h3 id="查看网关"><a href="#查看网关" class="headerlink" title="查看网关"></a>查看网关</h3><p>虚拟机的网络编辑器，点NAT设置查看</p>
 <h3 id="查看ip"><a href="#查看ip" class="headerlink" title="查看ip"></a>查看ip</h3><ul>
 <li><p>ipconfig</p>
