@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="dian的博客">
 <meta property="og:description" content="设计模式的好处 更易读懂源码。框架大量运用了设计模式。 提高代码的维护性 便于程序员间的交流">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-28T06:12:28.855Z">
+<meta property="og:updated_time" content="2019-10-28T06:52:20.048Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
@@ -228,6 +228,31 @@
 <li><code>Observable</code>等价于Subject</li>
 <li><code>Observable</code>是类，已经实现了核心的三个方法</li>
 </ul>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>为对象提供一个替身，来控制对这个对象的访问</p>
+<p>代理模式有不同的形式(静态代理，动态代理，远程代理)</p>
+<h3 id="RMI远程方法调用（知道即可）"><a href="#RMI远程方法调用（知道即可）" class="headerlink" title="RMI远程方法调用（知道即可）"></a>RMI远程方法调用（知道即可）</h3><p>远程对象有一个代理对象（本地代表），通过它把远程对象当作本地对象</p>
+<p>RMI：是一种机制，能够让JAVA虚拟机上的对象调用另一个Java虚拟机中的对象上的方法。底层封装了socket编程，简化操作</p>
+<p>RMI是一种面向对象的开发方式，通过调用远程对象来调用接口，RPC是远程过程调用</p>
+<p>在<code>java.rmi.</code>包下，下面代码（RMI实现）了解即可</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.rmi.&#123;<span class="type">Remote</span>, <span class="type">RemoteException</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这是一个接口文件.该文件会给远程端和本地端是使用</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">MyRemote</span> <span class="keyword">extends</span> <span class="title">Remote</span></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//一个抽象方法</span></span><br><span class="line">  <span class="meta">@throws</span>(classOf[<span class="type">RemoteException</span>])</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span></span>(): <span class="type">String</span> <span class="comment">//throws RemoteException</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.rmi.<span class="type">Naming</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRemoteClient</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">go</span></span>() = &#123;</span><br><span class="line">    <span class="keyword">val</span> service = <span class="type">Naming</span>.lookup(<span class="string">"rmi://127.0.0.1:9999/RemoteHello"</span>).asInstanceOf[<span class="type">MyRemote</span>]</span><br><span class="line">    <span class="keyword">val</span> str = service.sayHello()</span><br><span class="line">    println(<span class="string">"str = "</span> + str)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MyRemoteClient</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">MyRemoteClient</span>().go()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.rmi.registry.<span class="type">LocateRegistry</span></span><br><span class="line"><span class="keyword">import</span> java.rmi.&#123;<span class="type">Naming</span>, <span class="type">RemoteException</span>&#125;</span><br><span class="line"><span class="keyword">import</span> java.rmi.server.<span class="type">UnicastRemoteObject</span></span><br><span class="line"><span class="comment">//这里就是实现了MyRemote trait</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRemoteImpl</span> <span class="keyword">extends</span> <span class="title">UnicastRemoteObject</span> <span class="keyword">with</span> <span class="title">MyRemote</span> </span>&#123;</span><br><span class="line">  <span class="meta">@throws</span>(classOf[<span class="type">RemoteException</span>])</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">sayHello</span></span>(): <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="string">"Hello World!~"</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这里我们完成对服务(sayHello)注册任务-&gt;对服务管理</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">MyRemoteImpl</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> service: <span class="type">MyRemote</span> = <span class="keyword">new</span> <span class="type">MyRemoteImpl</span>()</span><br><span class="line">    <span class="comment">//准备把服务绑定到9999端口【第一种注册方式】</span></span><br><span class="line">    <span class="comment">//LocateRegistry.createRegistry(9999)</span></span><br><span class="line">    <span class="comment">//Naming.rebind("RemoteHello", service)</span></span><br><span class="line">    <span class="comment">//准备把服务绑定到9999端口【第二种注册方式】</span></span><br><span class="line">    <span class="type">Naming</span>.rebind(<span class="string">"rmi://127.0.0.1:9999/RemoteHello"</span>, service)</span><br><span class="line">    println(<span class="string">"远程服务开启，在127.0.0.1 的 9999端口监听，服务名 RemoteHello"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h2><p>运行时动态的创建代理类（对象）。</p>
+<p>使用反射创建一个代理对象，对代理对象增强，访问权限等</p>
+<blockquote>
+<p>Scala中反射与Java有一定区别。在返回<code>method.invoke</code>时Java要传入对象和参数，Scala中只要传对象不要传方法，底层会去获取，否则会失败</p>
+</blockquote>
+<p>常见的代理模式</p>
+<ol>
+<li>防火墙代理</li>
+<li>缓存代理</li>
+<li>静态代理</li>
+<li>Cglib代理</li>
+<li>同步代理：多线程间的</li>
+</ol>
 
       
 
@@ -470,6 +495,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">bug</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
@@ -482,10 +515,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
@@ -494,19 +523,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">bug</a>
               </li>
             
             <div class="clearfix"></div>
