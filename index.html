@@ -152,19 +152,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-英语作文例句" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-英语作文" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87%E4%BE%8B%E5%8F%A5/">英语作文例句</a>
+      <a class="article-title" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87/">英语作文</a>
     </h1>
   
 
         
-        <a href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87%E4%BE%8B%E5%8F%A5/" class="archive-article-date">
+        <a href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87/" class="archive-article-date">
   	<time datetime="2019-11-06T03:45:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-06</time>
 </a>
         
@@ -172,11 +172,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="作文例句"><a href="#作文例句" class="headerlink" title="作文例句"></a>作文例句</h2><h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><h4 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h4><ul>
-<li><p>… is no more … than … is</p>
-<p>… 绝不比…更…</p></li></ul>
+        <h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><p><strong>原则</strong>：自然通畅，平淡如水</p>
         
-          <a class="article-more-a" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87%E4%BE%8B%E5%8F%A5/#more">more >></a>
+          <a class="article-more-a" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87/#more">more >></a>
         
       
 
@@ -204,7 +202,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87%E4%BE%8B%E5%8F%A5/">展开全文 >></a>
+          <a class="article-more-a" href="2019/11/06/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87/">展开全文 >></a>
         </p>
       
 
@@ -576,6 +574,104 @@
 
 
   
+    <article id="post-Scala编程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="2019/10/28/Scala%E7%BC%96%E7%A8%8B/">scala函数式编程</a>
+    </h1>
+  
+
+        
+        <a href="2019/10/28/Scala%E7%BC%96%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2019-10-28T02:52:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><h3 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h3><p>在对部分符合某个条件时使用。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="type">PartialFunction</span>[<span class="type">Any</span>, <span class="type">Int</span>] &#123;<span class="comment">//接受Any，返回Int类型</span></span><br><span class="line">    <span class="comment">//如果返回true，就会触发apply方法。false则跳过</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">isDefinedAt</span></span>(x: <span class="type">Any</span>): <span class="type">Boolean</span> = &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">apply</span></span>(v1: <span class="type">Any</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果使用偏函数，<strong>不能使用map</strong>，应使用collect</p>
+<h4 id="简化"><a href="#简化" class="headerlink" title="简化"></a>简化</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//形式1</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">partialfunction</span></span>: <span class="type">PartialFunction</span>[<span class="type">Any</span>, <span class="type">Int</span>]= &#123;</span><br><span class="line">	<span class="keyword">case</span> a: <span class="type">Int</span> =&gt; a</span><br><span class="line">	<span class="keyword">case</span> b: <span class="type">Double</span> =&gt; b.toInt</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//形式2</span></span><br><span class="line">list.collect&#123;<span class="keyword">case</span> a:<span class="type">Int</span>=&gt;a&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//多行就加大括号</span></span><br><span class="line">(x:<span class="type">Double</span>) =&gt; <span class="number">3</span>*x</span><br></pre></td></tr></table></figure>
+
+<h2 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//高阶函数,传入Double类型，返回Double</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span></span>(f:<span class="type">Double</span> =&gt; <span class="type">Double</span>,n1:<span class="type">Double</span>)=&#123;</span><br><span class="line">    f(n1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型推断"><a href="#类型推断" class="headerlink" title="类型推断"></a>类型推断</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类型推断</span></span><br><span class="line"><span class="keyword">var</span> list = <span class="type">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">list.map((x: <span class="type">Int</span>) =&gt; x + <span class="number">1</span>)</span><br><span class="line">list.map((x) =&gt; x + <span class="number">1</span>)</span><br><span class="line">list.map(x =&gt; x + <span class="number">1</span>)</span><br><span class="line">list.map( _ + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>闭包就是一个函数和与其相关的引用环境组合的一个整体。（<strong>类似对象</strong>）</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">minusxy</span></span>(<span class="type">X</span>:<span class="type">Int</span>) =(y:<span class="type">Int</span>)=&gt;x-y</span><br><span class="line"><span class="comment">//f就是一个闭包</span></span><br><span class="line"><span class="keyword">val</span> f = minusxy(<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数柯里化"><a href="#函数柯里化" class="headerlink" title="函数柯里化"></a>函数柯里化</h2><p>就是只传一个值</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//分开传</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">m</span></span>(x:<span class="type">Int</span>)(y:<span class="type">Int</span>)=x*y</span><br><span class="line">m(<span class="number">1</span>)(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="抽象控制"><a href="#抽象控制" class="headerlink" title="抽象控制"></a>抽象控制</h2><p>传入没有参数没有返回值的函数</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myRunInThread</span></span>(f1:()=&gt;<span class="type">Unit</span>)=&#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>&#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>():<span class="type">Unit</span>=&#123;</span><br><span class="line">            f1()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start()</span><br><span class="line">&#125;</span><br><span class="line">myRunInThread&#123;</span><br><span class="line">    ()=&gt;</span><br><span class="line">    	print(<span class="string">""</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">myRunInThread</span></span>(f1:=&gt;<span class="type">Unit</span>)=&#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Thread</span>&#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">run</span></span>():<span class="type">Unit</span>=&#123;</span><br><span class="line">            f1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.start()</span><br><span class="line">&#125;</span><br><span class="line">myRunInThread&#123;</span><br><span class="line">    	print(<span class="string">""</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//控制抽象模拟while</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">until</span></span>(condition: =&gt; <span class="type">Boolean</span>)(block: =&gt; <span class="type">Unit</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (condition) &#123;</span><br><span class="line">        block</span><br><span class="line">        until(condition)(block)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">10</span></span><br><span class="line">until(x &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    x -= <span class="number">1</span></span><br><span class="line">    println(<span class="string">"until x="</span> + x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">scala</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="2019/10/28/Scala%E7%BC%96%E7%A8%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-设计模式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -906,87 +1002,6 @@
 
 
   
-    <article id="post-搭建hexo博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="2019/10/26/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/">搭建hexo博客</a>
-    </h1>
-  
-
-        
-        <a href="2019/10/26/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
-  	<time datetime="2019-10-26T02:52:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-基础环境"><a href="#1-基础环境" class="headerlink" title="1.基础环境"></a>1.基础环境</h2><p>安装好node.js和git，配置好git的用户信息</p>
-<h2 id="2-安装hexo"><a href="#2-安装hexo" class="headerlink" title="2.安装hexo"></a>2.安装hexo</h2><h3 id="2-1配置taobao镜像"><a href="#2-1配置taobao镜像" class="headerlink" title="2.1配置taobao镜像"></a>2.1配置taobao镜像</h3>
-        
-          <a class="article-more-a" href="2019/10/26/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">博客</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="2019/10/26/%E6%90%AD%E5%BB%BAhexo%E5%8D%9A%E5%AE%A2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">Next &amp;raquo;</a>
@@ -1084,15 +1099,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,14 +1143,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">博客</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">英语</a>
               </li>
              
@@ -1141,6 +1152,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">博客</a>
               </li>
              
               <li class="article-tag-list-item">
