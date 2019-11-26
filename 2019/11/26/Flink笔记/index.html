@@ -8,15 +8,15 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Flink笔记 | dian的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="后端Java工程师">
-<meta name="keywords" content="后端,Java,Spring,程序猿">
+  <meta name="description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高】良好的容错性  有状态：指有些需要保存下来比对的数据">
+<meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink笔记">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;index.html">
 <meta property="og:site_name" content="dian的博客">
-<meta property="og:description" content="后端Java工程师">
+<meta property="og:description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高】良好的容错性  有状态：指有些需要保存下来比对的数据">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-26T07:15:13.012Z">
+<meta property="og:updated_time" content="2019-11-26T08:20:52.393Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
@@ -171,7 +171,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。</p>
+<p>Flink比spark更快，延迟更低</p>
+<p>高吞吐，低延迟，准确性高】良好的容错性</p>
+<blockquote>
+<p>有状态：指有些需要保存下来比对的数据</p>
+</blockquote>
+<a id="more"></a>
+
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><p>数据报表、广告投放、实时报警、基站流量调配、实时结算和通知推送、实时监测异常行为</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>事件驱动：程序依赖于事件的发生，来运转。与之相反的Spark流是按照时间来获取流数据</p>
+<p>分层API：越顶层越抽象，表达、使用越简洁明了</p>
+<p>越底层表达越丰富，越灵活</p>
+<h5 id="流与批的世界观"><a href="#流与批的世界观" class="headerlink" title="流与批的世界观"></a>流与批的世界观</h5><p>在Flink内，所有都是流，离线数据是有界的流，实时数据是无界的流。</p>
+<p>Spark内是批，离线数据是一个大批次，而实时数据是由一个一个无限的小批次组成的。</p>
+<h5 id="其它特点"><a href="#其它特点" class="headerlink" title="其它特点"></a>其它特点</h5><ul>
+<li>支持事件时间、处理时间</li>
+<li>精确一次的状态一致性保证</li>
+<li>低延迟，每秒处理百万级事件，毫秒级延迟</li>
+<li>能与大多数存储系统对接</li>
+<li>高可用，动态扩展，24小时运行</li>
+</ul>
+<h5 id="Flink和Spark的区别"><a href="#Flink和Spark的区别" class="headerlink" title="Flink和Spark的区别"></a>Flink和Spark的区别</h5><p>Spark：</p>
+<ul>
+<li>Spark的流实际是很小的批次，采用RDD模型</li>
+<li>批计算，将DAG划分为不同的stage，一个完成后计算下一个</li>
+</ul>
+<p>Flink：</p>
+<ul>
+<li>Flink是数据流和事件序列</li>
+<li>流执行模式，一个事件在一个节点处理完成后直接发往下一个节点处理</li>
+</ul>
+
       
 
       
@@ -210,6 +241,21 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">大数据</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Flink</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -402,11 +448,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -418,6 +464,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
@@ -426,7 +480,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -434,11 +488,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -454,19 +504,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">后端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">博客</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">后端</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -478,15 +528,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
