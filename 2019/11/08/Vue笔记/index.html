@@ -35,7 +35,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;Vue%E7%AC%94%E8%AE%B0&#x2F;devtools.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;Vue%E7%AC%94%E8%AE%B0&#x2F;vuex_jiegou.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;Vue%E7%AC%94%E8%AE%B0&#x2F;vuex_wenjianjia.png">
-<meta property="og:updated_time" content="2019-11-25T02:45:34.950Z">
+<meta property="og:updated_time" content="2019-11-26T07:03:28.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;08&#x2F;Vue%E7%AC%94%E8%AE%B0&#x2F;life_3.png">
   
@@ -877,7 +877,8 @@ babel-core babel-preset-es2015</code></p>
 <p>在modules内定义的mutation，使用时和外部的mutation一样。mutation和外部不能重名！</p>
 <p>modules内的getters，也是和外部getter一样调用。如果还传入getter，是本modules的getter。getters还能传入第三个参数<code>rootState</code>就是根的state</p>
 <p>modules内的actions。actions里方法的context指的是本模块的mutation。这里的context可以通过<code>.rootGetters</code>和<code>.rootState</code>等方法拿到根的属性</p>
-<h5 id="对象的解构"><a href="#对象的解构" class="headerlink" title="对象的解构"></a>对象的解构</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可以这样获取对象内的属性</span></span><br><span class="line"><span class="keyword">const</span> obj=&#123;<span class="attr">name</span>:<span class="string">'lisi'</span>,<span class="attr">age</span>:<span class="number">18</span>,<span class="attr">heigh</span>:<span class="number">175</span>&#125;</span><br><span class="line"><span class="keyword">const</span> &#123;name,age,heigh&#125;=obj</span><br></pre></td></tr></table></figure>
+<h5 id="对象的解构"><a href="#对象的解构" class="headerlink" title="对象的解构"></a>对象的解构</h5><p>数组也可以解构</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//可以这样获取对象内的属性</span></span><br><span class="line"><span class="keyword">const</span> obj=&#123;<span class="attr">name</span>:<span class="string">'lisi'</span>,<span class="attr">age</span>:<span class="number">18</span>,<span class="attr">heigh</span>:<span class="number">175</span>&#125;</span><br><span class="line"><span class="keyword">const</span> &#123;name,age,heigh&#125;=obj</span><br></pre></td></tr></table></figure>
 
 <p>传参的时候也是可以使用的</p>
 <p><img src="/2019/11/08/Vue%E7%AC%94%E8%AE%B0/vuex_jiegou.png" alt></p>
@@ -893,6 +894,100 @@ babel-core babel-preset-es2015</code></p>
 <li>拦截请求和响应</li>
 <li>转换请求和响应数据</li>
 </ul>
+<h5 id="安装使用"><a href="#安装使用" class="headerlink" title="安装使用"></a>安装使用</h5><p>安装：<code>npm install axios --save</code>。</p>
+<p>导入<code>import axios from &#39;axios&#39;</code></p>
+<p>使用<code>axios({url:&#39;httpbin.org&#39;})</code></p>
+<p>axios返回的是一个Promise 可以直接通过.then进行回调</p>
+<blockquote>
+<p>httpbin.org可以进行网络测试</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">axios(&#123;<span class="comment">//params是要传递的参数，框架内部会自动拼接</span></span><br><span class="line">    url:<span class="string">'http//host:port/path'</span>,</span><br><span class="line">    params:&#123;</span><br><span class="line">        参数名: 值</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="发送并发请求"><a href="#发送并发请求" class="headerlink" title="发送并发请求"></a>发送并发请求</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">axios.all([axios(),axios()])</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span>&#123;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这里返回的res默认是一个数组</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">axios.all([axios(),axios()])</span><br><span class="line">  .then(axios.spread(<span class="function">(<span class="params">res1,res2</span>)=&gt;</span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>axios.spread</code>将数组打散传入</p>
+<h5 id="axios全局配置"><a href="#axios全局配置" class="headerlink" title="axios全局配置"></a>axios全局配置</h5><p>通过设置，更axios的默认配置</p>
+<p><code>axios.defaults.headers.post[‘Content-Type’] = ‘application/x-www-form-urlencoded’;</code></p>
+<h6 id="axios常见配置"><a href="#axios常见配置" class="headerlink" title="axios常见配置"></a>axios常见配置</h6><ul>
+<li><p>请求地址</p>
+<ul>
+<li>url: ‘/user’,</li>
+</ul>
+</li>
+<li><p>请求类型</p>
+<ul>
+<li>method: ‘get’,</li>
+</ul>
+</li>
+<li><p>请根路径</p>
+<ul>
+<li>baseURL: ‘<a href="http://www.mt.com/api&#39;" target="_blank" rel="noopener">http://www.mt.com/api&#39;</a>,</li>
+</ul>
+</li>
+<li><p>请求前的数据处理</p>
+<ul>
+<li>transformRequest:[function(data){}],</li>
+</ul>
+</li>
+<li><p>请求后的数据处理</p>
+<ul>
+<li>transformResponse: [function(data){}],</li>
+</ul>
+</li>
+<li><p>自定义的请求头</p>
+<ul>
+<li>headers:{‘x-Requested-With’:’XMLHttpRequest’},</li>
+</ul>
+</li>
+<li><p>URL查询对象（get传递数据的方式）</p>
+<ul>
+<li>params:{ id: 12 },</li>
+</ul>
+</li>
+<li><p>查询对象序列化函数</p>
+<ul>
+<li>paramsSerializer: function(params){ }</li>
+</ul>
+</li>
+<li><p>request body（post传递数据的方式）</p>
+<ul>
+<li>data: { key: ‘aa’},</li>
+</ul>
+</li>
+<li><p>超时设置s</p>
+<ul>
+<li>timeout: 1000,</li>
+</ul>
+</li>
+<li><p>跨域是否带Token</p>
+<ul>
+<li>withCredentials: false,</li>
+</ul>
+</li>
+<li><p>自定义请求处理</p>
+<ul>
+<li>adapter: function(resolve, reject, config){},</li>
+</ul>
+</li>
+<li><p>身份验证信息</p>
+<ul>
+<li>auth: { uname: ‘’, pwd: ‘12’},</li>
+</ul>
+</li>
+<li><p>响应的数据格式 json / blob /document /arraybuffer / text / stream</p>
+<ul>
+<li>responseType: ‘json’,</li>
+</ul>
+</li>
+</ul>
+<h4 id="封装axios"><a href="#封装axios" class="headerlink" title="封装axios"></a>封装axios</h4><p>不要在项目中直接引用第三方框架</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">config</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 1.创建axios的实例，设置自己的默认配置</span></span><br><span class="line">  <span class="keyword">const</span> instance = axios.create(&#123;</span><br><span class="line">    baseURL: <span class="string">'http://0.0.0.0'</span>,</span><br><span class="line">    timeout: <span class="number">5000</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">//return Promise</span></span><br><span class="line">  <span class="keyword">return</span> instance(config)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="axios拦截器"><a href="#axios拦截器" class="headerlink" title="axios拦截器"></a>axios拦截器</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">config</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 1.创建axios的实例</span></span><br><span class="line">  <span class="keyword">const</span> instance = axios.create(&#123;</span><br><span class="line">    baseURL: <span class="string">'http://0.0.0.0:8000'</span>,</span><br><span class="line">    timeout: <span class="number">5000</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 2.axios的拦截器</span></span><br><span class="line">  <span class="comment">// 2.1.请求拦截的作用</span></span><br><span class="line">  instance.interceptors.request.use(<span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// console.log(config);</span></span><br><span class="line">    <span class="comment">// 1.比如config中的一些信息不符合服务器的要求</span></span><br><span class="line">    <span class="comment">// 2.比如每次发送网络请求时, 都希望在界面中显示一个请求的图标</span></span><br><span class="line">    <span class="comment">// 3.某些网络请求(比如登录(token)), 必须携带一些特殊的信息</span></span><br><span class="line">    <span class="keyword">return</span> config</span><br><span class="line">  &#125;, err =&gt; &#123;</span><br><span class="line">    <span class="comment">// console.log(err);</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 2.2.响应拦截</span></span><br><span class="line">  <span class="comment">//res里会有响应码，响应数据等，响应数据一般在data属性里</span></span><br><span class="line">  instance.interceptors.response.use(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// console.log(res);</span></span><br><span class="line">    <span class="keyword">return</span> res.data</span><br><span class="line">  &#125;, err =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 3.发送真正的网络请求</span></span><br><span class="line">  <span class="keyword">return</span> instance(config)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -1148,15 +1243,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1168,11 +1267,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1216,19 +1311,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">英语</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">作文</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
               </li>
              
               <li class="article-tag-list-item">
