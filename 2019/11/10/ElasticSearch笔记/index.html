@@ -22,7 +22,8 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;esinstall4.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;esinstall5.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;es_consistion.png">
-<meta property="og:updated_time" content="2019-11-10T07:23:29.479Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;number_var.png">
+<meta property="og:updated_time" content="2019-11-29T07:53:58.971Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;esinstall1.png">
   
@@ -279,6 +280,98 @@ vm.max_map_count=262144
 <blockquote>
 <p>6.x一个index只有一个type</p>
 </blockquote>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><h3 id="创建索引库"><a href="#创建索引库" class="headerlink" title="创建索引库"></a>创建索引库</h3><p>settings和index是固定的</p>
+<p>number_of_shards：分片数</p>
+<p>number_of_replicas：副本数</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">put /索引库名称</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"settings"</span>:&#123;</span><br><span class="line">        <span class="attr">"index"</span>:&#123;</span><br><span class="line">            <span class="attr">"number_of_shards"</span>:<span class="number">1</span>,</span><br><span class="line">            <span class="attr">"number_of_replicas"</span>:<span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>相当于一张表</p>
+</blockquote>
+<h3 id="创建映射"><a href="#创建映射" class="headerlink" title="创建映射"></a>创建映射</h3><p>文档–Row记录</p>
+<p>字段–Columns列</p>
+<p>post <a href="http://localhost:9200/索引库名称/类型名称/_mapping" target="_blank" rel="noopener">http://localhost:9200/索引库名称/类型名称/_mapping</a> </p>
+<blockquote>
+<p>类型在6.0开始逐渐弱化，索引指定类型名称的时候，可以取一个没有意义的名字</p>
+</blockquote>
+<p>创建映射</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST 索引库名/类型名称/_mapping</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"properties"</span>: &#123;</span><br><span class="line">        <span class="attr">"name"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"text"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"description"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"text"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"studymodel"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"keyword"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># 查看</span><br><span class="line">GET 索引库名/类型名称/[Id值]</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建文档"><a href="#创建文档" class="headerlink" title="创建文档"></a>创建文档</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST 索引库名/类型名称/[Id值]</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"字段名"</span>: <span class="string">"值"</span>,</span><br><span class="line">    <span class="attr">"字段名"</span>: <span class="string">"值"</span>,</span><br><span class="line">    ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果不指定Id值，会随机生成Id。修改既是覆盖</p>
+<h3 id="搜索文档"><a href="#搜索文档" class="headerlink" title="搜索文档"></a>搜索文档</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#根据ID查询</span><br><span class="line">GET 索引库名/类型名称/[Id值]</span><br><span class="line"></span><br><span class="line">#结果</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"_index"</span> : <span class="string">"索引库名"</span>,</span><br><span class="line">  <span class="attr">"_type"</span> : <span class="string">"类型名称"</span>,</span><br><span class="line">  <span class="attr">"_id"</span> : <span class="string">"Id值"</span>,</span><br><span class="line">  <span class="attr">"_version"</span> : <span class="number">1</span>,</span><br><span class="line">  <span class="attr">"_seq_no"</span> : <span class="number">1</span>,</span><br><span class="line">  <span class="attr">"_primary_term"</span> : <span class="number">1</span>,</span><br><span class="line">  <span class="attr">"found"</span> : <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"_source"</span> : &#123;</span><br><span class="line">    内容键值对</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过搜索接口搜索"><a href="#通过搜索接口搜索" class="headerlink" title="通过搜索接口搜索"></a>通过搜索接口搜索</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查询所有</span><br><span class="line">GET 索引库名/类型名称/_search </span><br><span class="line"></span><br><span class="line">#查询name中包括xxx关键字的的记录，中文会报错</span><br><span class="line">GET 索引库名/类型名称/_search?q=name:xxx</span><br></pre></td></tr></table></figure>
+
+<h2 id="IK分词器"><a href="#IK分词器" class="headerlink" title="IK分词器"></a>IK分词器</h2><p>在添加文档时会进行分词，索引中存放的就是一个一个的词（term），当你去搜索时就是拿关键字去匹配词，最终找到词关联的文档。<br>测试当前索引库使用的分词器：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"text"</span>:<span class="string">"测试分词器，后边是测试内容：spring cloud实战"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现是按照一个字一个字分词</p>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><p><a href="https://github.com/medcl/elasticsearch-analysis-ik" target="_blank" rel="noopener">下载IK分词器</a>，在releases下载和es版本相同的ik分词器。解压将整个文件夹放入plugins文件夹下。文件夹名可以随意。重启es</p>
+<p>测试ik分词器</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"text"</span>:<span class="string">"测试分词器，后边是测试内容：spring cloud实战"</span>,</span><br><span class="line">    <span class="attr">"analyzer"</span>:<span class="string">"ik_max_word"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="俩种分词器"><a href="#俩种分词器" class="headerlink" title="俩种分词器"></a>俩种分词器</h3><p>ik分词器有两种分词模式：<code>ik_max_word</code>和<code>ik_smart</code>模式。</p>
+<ol>
+<li>ik_max_word<br>会将文本做最细粒度的拆分，比如会将“中华人民共和国人民大会堂”拆分为“中华人民共和国、中华人民、中华、华人、人民共和国、人民、共和国、大会堂、大会、会堂等词语。</li>
+<li>ik_smart<br>会做最粗粒度的拆分，比如会将“中华人民共和国人民大会堂”拆分为中华人民共和国、人民大会堂。 </li>
+</ol>
+<h3 id="添加分词"><a href="#添加分词" class="headerlink" title="添加分词"></a>添加分词</h3><p>Ik分词器中有一些特殊词 是无法分词的，这就需要到<code>elasticsearch-6.6.0/plugins/analysis-ik/config/IKAnalyzer.cfg.xml</code>配置文件中指定要添加的词汇表</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">comment</span>&gt;</span>IK Analyzer 扩展配置<span class="tag">&lt;/<span class="name">comment</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--用户可以在这里配置自己的扩展字典 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"ext_dict"</span>&gt;</span>my.dic<span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line">	 <span class="comment">&lt;!--用户可以在这里配置自己的扩展停止词字典--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"ext_stopwords"</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--用户可以在这里配置远程扩展字典 --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- &lt;entry key="remote_ext_dict"&gt;words_location&lt;/entry&gt; --&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--用户可以在这里配置远程扩展停止词字典--&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- &lt;entry key="remote_ext_stopwords"&gt;words_location&lt;/entry&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在平级目录下创建my.dic</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">xxx</span></span><br><span class="line"><span class="attribute">xx</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>保存格式为UTF-8</p>
+</blockquote>
+<h2 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#查看所有映射</span><br><span class="line">GET  _mapping</span><br><span class="line"></span><br><span class="line">#创建映射</span><br><span class="line">POST 索引库名/类型名称/_mapping</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"properties"</span>: &#123;</span><br><span class="line">        <span class="attr">"字段名"</span>: &#123;</span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"类型"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        ……</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#删除</span><br><span class="line">DELETE 索引库名</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>无则添加，有则更新。不允许已添加字段名的类型</p>
+</blockquote>
+<h3 id="常用映射类型"><a href="#常用映射类型" class="headerlink" title="常用映射类型"></a>常用映射类型</h3><ol>
+<li><p>text：可以指定分词器和搜索时使用的分词器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">"name": &#123;</span><br><span class="line">    "type": "text",</span><br><span class="line">    "analyzer":"ik_max_word",</span><br><span class="line">    "search_analyzer":"ik_smart",</span><br><span class="line">    #是否建立索引</span><br><span class="line">    "index":false,</span><br><span class="line">    #是否在source之外存储，每个文档索引后会在 ES中保存一份原始文档，存放在"_source"中，一般情况下不需要设置 store为true，因为在_source中已经有一份原始文档了。</span><br><span class="line">    "stoure": true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>date类型：format设置样式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"timestamp": &#123;</span><br><span class="line">    "type": "date",</span><br><span class="line">    "format": "yyyy‐MM‐dd HH:mm:ss||yyyy‐MM‐dd"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li><p>数值类型：尽量选择范围小的类型，提高搜索效率 .对于浮点数尽量用比例因子 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"price": &#123;</span><br><span class="line">    "type": "scaled_float",</span><br><span class="line">    "scaling_factor": 100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<p>   <img src="/2019/11/10/ElasticSearch%E7%AC%94%E8%AE%B0/number_var.png" alt></p>
+<h2 id="客户端维护索引"><a href="#客户端维护索引" class="headerlink" title="客户端维护索引"></a>客户端维护索引</h2><p>多种客户端</p>
+<ol>
+<li>TransportClient：计划8.0删除</li>
+<li>RestClient：推荐使用包含俩种客户端 Java Low Level REST Client和 Java High Level REST Client。 两种客户端官方更推荐使用 Java High Level REST Client </li>
+</ol>
+<p>pom文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.elasticsearch.client<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>elasticsearch‐rest‐high‐level‐client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.elasticsearch<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>elasticsearch<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认已经注入</span></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">RestHighLevelClient client;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">RestClient restClient;</span><br></pre></td></tr></table></figure>
+
+<p>删除 索引库</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDeleteIndex</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//删除索引对象</span></span><br><span class="line">    DeleteIndexRequest deleteIndexRequest = <span class="keyword">new</span> DeleteIndexRequest(<span class="string">"xc_course"</span>);</span><br><span class="line">    <span class="comment">//操作索引的客户端</span></span><br><span class="line">    IndicesClient indices = client.indices();</span><br><span class="line">    <span class="comment">//执行删除索引</span></span><br><span class="line">    DeleteIndexResponse delete = indices.delete(deleteIndexRequest);</span><br><span class="line">    <span class="comment">//得到响应</span></span><br><span class="line">    <span class="keyword">boolean</span> acknowledged = delete.isAcknowledged();</span><br><span class="line">    System.out.println(acknowledged);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>创建索引库</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCreateIndex</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">//创建索引对象</span></span><br><span class="line">    CreateIndexRequest createIndexRequest = <span class="keyword">new</span> CreateIndexRequest(<span class="string">"xc_course"</span>);</span><br><span class="line">    <span class="comment">//设置参数</span></span><br><span class="line">    createIndexRequest.settings(Settings.builder().put(<span class="string">"number_of_shards"</span>, <span class="string">"1"</span>).put(<span class="string">"number_of_replicas"</span>, <span class="string">"0"</span>));</span><br><span class="line">    <span class="comment">//指定映射</span></span><br><span class="line">    createIndexRequest.mapping(<span class="string">"doc"</span>, <span class="string">" &#123;\n"</span> +</span><br><span class="line">                               <span class="string">" \t\"properties\": &#123;\n"</span> +</span><br><span class="line">                               <span class="string">"            \"studymodel\":&#123;\n"</span> +</span><br><span class="line">                               <span class="string">"             \"type\":\"keyword\"\n"</span> +</span><br><span class="line">                               <span class="string">"           &#125;,\n"</span> +</span><br><span class="line">                               <span class="string">"            \"name\":&#123;\n"</span> +</span><br><span class="line">                               <span class="string">"             \"type\":\"keyword\"\n"</span> +</span><br><span class="line">                               <span class="string">"           &#125;,\n"</span> +</span><br><span class="line">                               <span class="string">"           \"description\": &#123;\n"</span> +</span><br><span class="line">                               <span class="string">"              \"type\": \"text\",\n"</span> +</span><br><span class="line">                               <span class="string">"              \"analyzer\":\"ik_max_word\",\n"</span> +</span><br><span class="line">                               <span class="string">"              \"search_analyzer\":\"ik_smart\"\n"</span> +</span><br><span class="line">                               <span class="string">"           &#125;,\n"</span> +</span><br><span class="line">                               <span class="string">"           \"pic\":&#123;\n"</span> +</span><br><span class="line">                               <span class="string">"             \"type\":\"text\",\n"</span> +</span><br><span class="line">                               <span class="string">"             \"index\":false\n"</span> +</span><br><span class="line">                               <span class="string">"           &#125;\n"</span> +</span><br><span class="line">                               <span class="string">" \t&#125;\n"</span> +</span><br><span class="line">                               <span class="string">"&#125;"</span>, XContentType.JSON);</span><br><span class="line">    <span class="comment">//操作索引的客户端</span></span><br><span class="line">    IndicesClient indices = client.indices();</span><br><span class="line">    <span class="comment">//执行创建索引库</span></span><br><span class="line">    CreateIndexResponse createIndexResponse = indices.create(createIndexRequest);</span><br><span class="line">    <span class="comment">//得到响应</span></span><br><span class="line">    <span class="keyword">boolean</span> acknowledged = createIndexResponse.isAcknowledged();</span><br><span class="line">    System.out.println(acknowledged);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -534,14 +627,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
@@ -558,11 +643,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -574,7 +659,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -618,15 +711,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
