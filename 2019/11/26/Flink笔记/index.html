@@ -33,7 +33,14 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;session_window.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;time.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;watermark.png">
-<meta property="og:updated_time" content="2019-12-05T10:38:52.651Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_7.png">
+<meta property="og:updated_time" content="2019-12-06T04:38:51.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
   
@@ -783,6 +790,112 @@
 </blockquote>
 <h5 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明一个键控状态.传入相应的名称和类</span></span><br><span class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> lastTemp: <span class="type">ValueState</span>[<span class="type">Double</span>] = getRuntimeContext.getState( <span class="keyword">new</span> <span class="type">ValueStateDescriptor</span>[<span class="type">Double</span>](<span class="string">"lastTemp"</span>, classOf[<span class="type">Double</span>]) )</span><br><span class="line"><span class="comment">//更新数据</span></span><br><span class="line">lastTemp.update( timerTs )</span><br><span class="line"><span class="comment">//获取值</span></span><br><span class="line"><span class="keyword">val</span> lastTemp = lastTemp.value()</span><br></pre></td></tr></table></figure>
 
+<h3 id="状态后端"><a href="#状态后端" class="headerlink" title="状态后端"></a>状态后端</h3><ul>
+<li>管理状态的可插入的组件叫状态后端。是用来管理状态的存储、维护和访问。</li>
+<li>主要负责：本地的状态管理、以及将检查点状态写入远程存储</li>
+<li>有效的状态访问对于数据的低延迟至关重要，因此每个并行任务都会在本地维护其状态。</li>
+</ul>
+<h4 id="选择一个状态后端"><a href="#选择一个状态后端" class="headerlink" title="选择一个状态后端"></a>选择一个状态后端</h4><ul>
+<li><p>MemoryStateBackend</p>
+<ul>
+<li>内存级的状态后端，会将键控状态作为对象在内存中管理。将它们存储到TaskManager的JVM堆上，而checkpoint存储在JobManager内存中</li>
+</ul>
+<blockquote>
+<p>快速、低延迟、不稳定。生产环境一般不会使用</p>
+</blockquote>
+</li>
+<li><p>FsStateBackend</p>
+<ul>
+<li>将checkpoint存到远程的持久化文件系统上，本地状态和MemoryStateBackend一样。</li>
+</ul>
+<blockquote>
+<p>本地拥有内存级的访问。高容错性。</p>
+<p>远程存储checkpoint，对性能影响不大</p>
+</blockquote>
+</li>
+<li><p>RocksDBStateBackend</p>
+<ul>
+<li>将状态序列化存储到本地RocksDB上</li>
+</ul>
+<blockquote>
+<p>状态过大，可能导致oom。就使用该状态后端</p>
+</blockquote>
+</li>
+</ul>
+<p>使用RocksDBStateBackend需要引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-statebackend-rocksdb_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用状态管理</span></span><br><span class="line">env.setStateBackend(<span class="keyword">new</span> <span class="type">RocksDBStateBackend</span>(<span class="string">"路径"</span>))</span><br><span class="line"><span class="comment">//开启checkpoint，传入存储间隔时间</span></span><br><span class="line">env.enableCheckpointing(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="状态编程"><a href="#状态编程" class="headerlink" title="状态编程"></a>状态编程</h3><p>在代码中管理状态</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传入一个阈值，当温度差超过阈值则输出报警。把new出的对象传入flatMap</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TempChangeAlert</span>(<span class="params">threshold: <span class="type">Double</span></span>) <span class="keyword">extends</span> <span class="title">RichFlatMapFunction</span>[<span class="type">SensorReading</span>, (<span class="type">String</span>, <span class="type">Double</span>, <span class="type">Double</span>)] </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">var</span> lastTempState: <span class="type">ValueState</span>[<span class="type">Double</span>] = _</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">open</span></span>(parameters: <span class="type">Configuration</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// 初始化的时候声明state变量</span></span><br><span class="line">    lastTempState = getRuntimeContext.getState(<span class="keyword">new</span> <span class="type">ValueStateDescriptor</span>[<span class="type">Double</span>](<span class="string">"lastTemp"</span>, classOf[<span class="type">Double</span>]))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">flatMap</span></span>(value: <span class="type">SensorReading</span>, out: <span class="type">Collector</span>[(<span class="type">String</span>, <span class="type">Double</span>, <span class="type">Double</span>)]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// 获取上次的温度值</span></span><br><span class="line">    <span class="keyword">val</span> lastTemp = lastTempState.value()</span><br><span class="line">    <span class="comment">// 用当前的温度值和上次的求差，如果大于阈值，输出报警信息</span></span><br><span class="line">    <span class="keyword">val</span> diff = (value. -temperature lastTemp).abs</span><br><span class="line">    <span class="keyword">if</span> (diff &gt; threshold) &#123;</span><br><span class="line">      out.collect((value.id, lastTemp, value.temperature))</span><br><span class="line">    &#125;</span><br><span class="line">    lastTempState.update(value.temperature)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flatMapWithState方法。reduce这类方法没有withState，是因为这类方法本身是有状态的</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用flatMapWithState实现需求。</span></span><br><span class="line"><span class="keyword">val</span> processedStream3 = dataStream.keyBy(_.id)</span><br><span class="line"><span class="comment">//第一个泛型为输出，第二个为状态</span></span><br><span class="line">  .flatMapWithState[(<span class="type">String</span>, <span class="type">Double</span>, <span class="type">Double</span>), <span class="type">Double</span>]&#123;</span><br><span class="line">    <span class="comment">// 如果没有状态的话，也就是没有数据来过，那么就将当前数据温度值存入状态</span></span><br><span class="line">    <span class="keyword">case</span> ( input: <span class="type">SensorReading</span>, <span class="type">None</span> ) =&gt; ( <span class="type">List</span>.empty, <span class="type">Some</span>(input.temperature) )</span><br><span class="line">    <span class="comment">// 如果有状态，就应该与上次的温度值比较差值，如果大于阈值就输出报警</span></span><br><span class="line">    <span class="keyword">case</span> ( input: <span class="type">SensorReading</span>, lastTemp: <span class="type">Some</span>[<span class="type">Double</span>] ) =&gt;</span><br><span class="line">      <span class="keyword">val</span> diff = ( input.temperature - lastTemp.get ).abs</span><br><span class="line">      <span class="keyword">if</span>( diff &gt; <span class="number">10.0</span> )&#123;<span class="comment">//返回一个TraversableOnce[R]的输出数据集。</span></span><br><span class="line">        ( <span class="type">List</span>((input.id, lastTemp.get, input.temperature)), <span class="type">Some</span>(input.temperature) )</span><br><span class="line">      &#125; <span class="keyword">else</span></span><br><span class="line">        ( <span class="type">List</span>.empty, <span class="type">Some</span>(input.temperature) )</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h2><h3 id="一致性检查点"><a href="#一致性检查点" class="headerlink" title="一致性检查点"></a>一致性检查点</h3><ul>
+<li>有状态流应用的检查点，就是所有任务在某个时间点的快照备份。这个时间点，应该是所有任务都恰好处理完一个相同的输入数据的时候</li>
+<li>Flink故障恢复机制的核心，就是检查点 </li>
+</ul>
+<blockquote>
+<p>让数据流动流动到刚好处理完某一个数据的时候，这时候保存快照</p>
+<p>会保存的数据的偏移量</p>
+</blockquote>
+<h4 id="检查点恢复"><a href="#检查点恢复" class="headerlink" title="检查点恢复"></a>检查点恢复</h4><ul>
+<li><p>在执行流应用程序期间，Flink会定期保存状态的一致性检查点</p>
+</li>
+<li><p>如果发生故障，Flink将会使用最近的检查点来一致恢复应用程序的状态，并重新启动处理流程（重启处理流程，可以由我们在代码中或配置文件中配置）</p>
+</li>
+<li><p>这种检查点机制，保证了应用程序状态“精确一次”的一致性。所有算子都会保存检查点并恢复所有状态，这样所有的输入流会被重置到检查点完成时</p>
+</li>
+</ul>
+<blockquote>
+<p>精确一次就是数据保证不丢失，只处理一次。这里的精确一次是内部的精确一次。无法保证外部精确一次。</p>
+</blockquote>
+<h4 id="检查点实现算法和分界线"><a href="#检查点实现算法和分界线" class="headerlink" title="检查点实现算法和分界线"></a>检查点实现算法和分界线</h4><ul>
+<li>简单的实现<ul>
+<li>暂停所有应用，保存状态到检查点，再重新恢复</li>
+<li>性能损耗过大</li>
+</ul>
+</li>
+<li>Flink的实现<ul>
+<li>改进基于Chandy-Lamport算法的分布式快照</li>
+<li>将检查点的保存和数据处理分离开，不暂停整个应用。只短暂暂停对应的应用</li>
+</ul>
+</li>
+</ul>
+<p>检查点分界线</p>
+<ul>
+<li>Flink的检查点算法通过分界线，将一条流上数据按照不同的检查点分开<ul>
+<li>分界线是一种特殊数据形式</li>
+</ul>
+</li>
+<li>分界线之前到来的数据导致的状态更改，都会保存到当前分界线所属的检查点中。分界线后的数据更改，会保存到之后的检查点</li>
+</ul>
+<h3 id="检查点流程"><a href="#检查点流程" class="headerlink" title="检查点流程"></a>检查点流程</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_1.png" alt></p>
+<p>该图共分为：输入、根据奇偶重排，分别计算奇数和偶数和、输出</p>
+<p>有俩个流并行运作</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_2.png" alt></p>
+<p>JobManager向每个source任务发送带有新检查点ID的消息，通过这种方式，启动检查点</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_3.png" alt></p>
+<ol>
+<li>收到检查点，任务会停止然后数据源会将它们的状态写入检查点，并会发出检查点barrier，</li>
+<li>在存入检查点之后，会返回通知给source任务，source任务会向JobManager确认检查点完成</li>
+</ol>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_4.png" alt></p>
+<p>barrier会向下游传递，sum任务会等待所有输入分区的barrier到达，比如黄色检查点到达后，黄色的数据再来就会被存入缓存。还未到达的检查点的分区数据会继续处理</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_5.png" alt></p>
+<p>所有输入分区的barrier都到达后，任务就将状态保存到转台后端的检查点。然后将barrier向下发送</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_6.png" alt></p>
+<p>发送后，任务继续正常处理</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_7.png" alt></p>
+<p>Sink任务向JobManager确认状态保存到checkpoint完毕。</p>
+<p>当所有任务都确认成功保存，检查点建立完毕</p>
+<h4 id="保存点"><a href="#保存点" class="headerlink" title="保存点"></a>保存点</h4><p>原理和算法几乎和检查点一样。用法不同</p>
+<p>Flink不会自动创建保持点，需要用户指定触发创建。</p>
+<p>保持点，除了故障恢复外，可用于：手动备份，更新升级应用程序，版本迁移，测试，展厅和重启应用，也可以升级Flink版本，暂停不重要Flink程序释放资源等等</p>
+<h3 id="检查点配置"><a href="#检查点配置" class="headerlink" title="检查点配置"></a>检查点配置</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//检查点间隔</span></span><br><span class="line">env.enableCheckpointing(<span class="number">60000</span>)</span><br><span class="line"><span class="comment">//默认EXACTLY_ONCE，可以改成至少一次</span></span><br><span class="line">env.getCheckpointConfig.setCheckpointingMode(<span class="type">CheckpointingMode</span>.<span class="type">AT_LEAST_ONCE</span>)</span><br><span class="line"><span class="comment">//超时时间，超过就丢弃checkpoint</span></span><br><span class="line">env.getCheckpointConfig.setCheckpointTimeout(<span class="number">100000</span>)</span><br><span class="line"><span class="comment">//checkpoint失败，是否整个任务失败，默认是true。</span></span><br><span class="line">env.getCheckpointConfig.setFailOnCheckpointingErrors(<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//最大同时的checkpoint的数量，默认为1</span></span><br><span class="line">env.getCheckpointConfig.setMaxConcurrentCheckpoints(<span class="number">1</span>)</span><br><span class="line"><span class="comment">//俩次checkpoint最小时间间隔，如果设置了间隔，最大同时数就只能为1</span></span><br><span class="line">env.getCheckpointConfig.setMinPauseBetweenCheckpoints(<span class="number">100</span>)</span><br><span class="line"><span class="comment">//开启checkpoint外部持久化。如果不设置，job失败后checkpoint会清理掉checkpoint的持久化。</span></span><br><span class="line"><span class="comment">// DELETE_ON_CANCELLATION:手动取消就不要存,RETAIN_ON_CANCELLATION：即使手动取消也要存</span></span><br><span class="line">env.getCheckpointConfig.enableExternalizedCheckpoints(<span class="type">ExternalizedCheckpointCleanup</span>.<span class="type">DELETE_ON_CANCELLATION</span>)</span><br><span class="line"><span class="comment">//重启策略，</span></span><br><span class="line"><span class="comment">//fixedDelayRestart：尝试次数、尝试间隔时间</span></span><br><span class="line"><span class="comment">// failureRateRestart：失败率最大尝试次数在失败尝试时间内、失败尝试时间、尝试间隔</span></span><br><span class="line">env.setRestartStrategy(<span class="type">RestartStrategies</span>.failureRateRestart(<span class="number">3</span>, org.apache.flink.api.common.time.<span class="type">Time</span>.seconds(<span class="number">300</span>), org.apache.flink.api.common.time.<span class="type">Time</span>.seconds(<span class="number">10</span>)))</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -1066,6 +1179,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
@@ -1074,19 +1191,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1118,14 +1231,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">英语</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">作文</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
@@ -1135,6 +1240,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">英语</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">作文</a>
               </li>
              
               <li class="article-tag-list-item">
