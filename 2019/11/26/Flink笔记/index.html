@@ -33,7 +33,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;session_window.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;time.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;watermark.png">
-<meta property="og:updated_time" content="2019-12-04T09:01:35.840Z">
+<meta property="og:updated_time" content="2019-12-05T10:38:52.651Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
   
@@ -678,6 +678,111 @@
 <p>窗口：包含开始没包含结束</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Event time</span></span><br><span class="line"><span class="comment">//滑动窗口大小10，每4秒滑动一次</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> env = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line">    env.setParallelism(<span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 设置事件时间</span></span><br><span class="line">    env.setStreamTimeCharacteristic(<span class="type">TimeCharacteristic</span>.<span class="type">EventTime</span>)</span><br><span class="line">    <span class="comment">//设置周期性时间</span></span><br><span class="line">    env.getConfig.setAutoWatermarkInterval(<span class="number">300</span>)</span><br><span class="line">    <span class="comment">// 设置事件时间</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> inputStream = env.socketTextStream(<span class="string">"192.168.5.102"</span>, <span class="number">7777</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> valueStream: <span class="type">DataStream</span>[<span class="type">SensorReading</span>] = inputStream.map(data =&gt; &#123;</span><br><span class="line">      <span class="keyword">val</span> dataArray = data.split(<span class="string">","</span>)</span><br><span class="line">      <span class="comment">//case class SensorReading( id: String, timestamp: Long, temperature: Double )</span></span><br><span class="line">      <span class="type">SensorReading</span>(dataArray(<span class="number">0</span>).trim, dataArray(<span class="number">1</span>).trim.toLong, dataArray(<span class="number">2</span>).trim.toDouble)</span><br><span class="line">    &#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> dataStream: <span class="type">DataStream</span>[<span class="type">SensorReading</span>] = valueStream.assignTimestampsAndWatermarks(<span class="keyword">new</span> <span class="type">BoundedOutOfOrdernessTimestampExtractor</span>[<span class="type">SensorReading</span>](<span class="type">Time</span>.seconds(<span class="number">1</span>)) &#123;</span><br><span class="line">      <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">extractTimestamp</span></span>(t: <span class="type">SensorReading</span>): <span class="type">Long</span> = t.timestamp * <span class="number">1000</span>L</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//dataStream.map(data =&gt; (data.id, data.timestamp)).print</span></span><br><span class="line">    <span class="keyword">val</span> minTimeStream: <span class="type">DataStream</span>[(<span class="type">String</span>, <span class="type">Long</span>)] =</span><br><span class="line">      dataStream.map(data =&gt; (data.id, data.timestamp))</span><br><span class="line">        .keyBy(_._1).timeWindow(<span class="type">Time</span>.seconds(<span class="number">10</span>), <span class="type">Time</span>.seconds(<span class="number">4</span>))</span><br><span class="line">        .reduce((data1, data2) =&gt; (data1._1, math.min(data2._2, data1._2)))</span><br><span class="line"></span><br><span class="line">    minTimeStream.print()</span><br><span class="line">    env.execute(<span class="string">"window api test"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><code>.timeWindow(SlidingEventTimeWindows.of(Time.seconds(15),Time.seconds(5),Time.hours(-8)))</code>可以通过该方法指定时间偏移量（时差）</p>
+<h2 id="ProcessFunction-API-底层"><a href="#ProcessFunction-API-底层" class="headerlink" title="ProcessFunction API(底层)"></a>ProcessFunction API(底层)</h2><p>先前的转化算子无法访问事件的时间戳信息和水位线信息。</p>
+<p>ProcessFunction API可以访问时间戳、watermark以及注册定时事件。还能输出特定一些事件。</p>
+<p>共8个ProcessFunction：</p>
+<ul>
+<li>ProcessFunction</li>
+<li>KeyedProcessFunction</li>
+<li>CoProcessFunction</li>
+<li>ProcessJoinFunction</li>
+<li>BroadcastProcessFunction</li>
+<li>KeyedBroadcastProcessFunction</li>
+<li>ProcessWindowFunction</li>
+<li>ProcessAllWindowFunction</li>
+</ul>
+<blockquote>
+<p>所有ProcessFunction都基础了RichFunction接口，所以都有open，close，getRuntimeContext()等方法</p>
+</blockquote>
+<h3 id="KeyedProcessFunction-重点"><a href="#KeyedProcessFunction-重点" class="headerlink" title="KeyedProcessFunction(重点)"></a>KeyedProcessFunction(重点)</h3><p>用来操作KeyedStream。KeyedProcessFunction会处理流中的每个元素，输出0以上的元素。</p>
+<p><code>KeyedProcessFunction&lt;K, I, O&gt;</code>的俩个方法</p>
+<ul>
+<li><code>processElement(I value, Context ctx, Collector&lt;O&gt; out)</code>：处理每个数据都会调用该方法，I为输入数据，out为输出，ctx为上下文</li>
+<li><code>onTimer(long timestamp, OnTimerContext ctx, Collector&lt;O&gt; out)</code>：回调函数。定时器触发时的操作。timestamp为定时器所设定的触发时间戳。out为输出。ctx为上下文</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//实现温度连续上升一秒后报警</span></span><br><span class="line"><span class="comment">//泛型为key，输入，输出</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TempIncreAlert</span>(<span class="params"></span>) <span class="keyword">extends</span> <span class="title">KeyedProcessFunction</span>[<span class="type">String</span>, <span class="type">SensorReading</span>, <span class="type">String</span>]</span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 定义一个状态，用来保存上一个数据的温度值</span></span><br><span class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> lastTemp: <span class="type">ValueState</span>[<span class="type">Double</span>] = getRuntimeContext.getState( <span class="keyword">new</span> <span class="type">ValueStateDescriptor</span>[<span class="type">Double</span>](<span class="string">"lastTemp"</span>, classOf[<span class="type">Double</span>]) )</span><br><span class="line">  <span class="comment">// 定义一个状态，用来保存定时器的时间戳</span></span><br><span class="line">  <span class="keyword">lazy</span> <span class="keyword">val</span> currentTimer: <span class="type">ValueState</span>[<span class="type">Long</span>] = getRuntimeContext.getState( <span class="keyword">new</span> <span class="type">ValueStateDescriptor</span>[<span class="type">Long</span>](<span class="string">"currentTimer"</span>, classOf[<span class="type">Long</span>]) )</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">processElement</span></span>(value: <span class="type">SensorReading</span>, ctx: <span class="type">KeyedProcessFunction</span>[<span class="type">String</span>, <span class="type">SensorReading</span>, <span class="type">String</span>]#<span class="type">Context</span>, out: <span class="type">Collector</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// 先取出上一个温度值</span></span><br><span class="line">    <span class="keyword">val</span> preTemp = lastTemp.value()</span><br><span class="line">    <span class="comment">// 更新温度值</span></span><br><span class="line">    lastTemp.update( value.temperature )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> curTimerTs = currentTimer.value()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>( value.temperature &lt; preTemp || preTemp == <span class="number">0.0</span> )&#123;</span><br><span class="line">      <span class="comment">// 如果温度下降，或是第一条数据，删除定时器并清空状态</span></span><br><span class="line">      ctx.timerService().deleteProcessingTimeTimer( curTimerTs )</span><br><span class="line">      currentTimer.clear()</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( value.temperature &gt; preTemp &amp;&amp; curTimerTs == <span class="number">0</span> )&#123;</span><br><span class="line">      <span class="comment">// 温度上升且没有设过定时器，则注册定时器，定时器为onTimer内的内容</span></span><br><span class="line">      <span class="keyword">val</span> timerTs = ctx.timerService().currentProcessingTime() + <span class="number">5000</span>L</span><br><span class="line">      ctx.timerService().registerProcessingTimeTimer( timerTs )</span><br><span class="line">      currentTimer.update( timerTs )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">onTimer</span></span>(timestamp: <span class="type">Long</span>, ctx: <span class="type">KeyedProcessFunction</span>[<span class="type">String</span>, <span class="type">SensorReading</span>, <span class="type">String</span>]#<span class="type">OnTimerContext</span>, out: <span class="type">Collector</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">// 输出报警信息</span></span><br><span class="line">    out.collect( ctx.getCurrentKey + <span class="string">" 温度连续上升"</span> )</span><br><span class="line">    currentTimer.clear()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="TimerService和定时器"><a href="#TimerService和定时器" class="headerlink" title="TimerService和定时器"></a>TimerService和定时器</h3><p>context和OnTimerContext所有的TimerService对象有这些方法</p>
+<ul>
+<li><code>currentProcessingTime();</code>：返回当前处理时间</li>
+<li><code>currentWatermark();</code>：返回当前watermark的时间戳</li>
+<li><code>registerProcessingTimeTimer(long time);</code>：注册当前key的Processing Time定时器，当到达时间时，触发timer</li>
+<li><code>registerEventTimeTimer(long time);</code>：注册当前key的event time定时器。当水位线大于等于定时器注册时间时，会触发</li>
+<li><code>deleteProcessingTimeTimer(long time);</code>：删除之前处理eventime的定时器，如果没有对应定时器则不执行</li>
+<li><code>deleteEventTimeTimer(long time);</code>：删除之前处理Processing Time的定时器，如果没有对应定时器则不执行</li>
+</ul>
+<h3 id="Emitting-toSide-Outputs-侧输出"><a href="#Emitting-toSide-Outputs-侧输出" class="headerlink" title="Emitting toSide Outputs(侧输出)"></a>Emitting toSide Outputs(侧输出)</h3><p><code>split</code>其实已经被弃用</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//冰点报警，如果小于32F，输出报警信息到侧输出流，</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.<span class="type">TimeCharacteristic</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.functions.<span class="type">ProcessFunction</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.functions.timestamps.<span class="type">BoundedOutOfOrdernessTimestampExtractor</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.scala._</span><br><span class="line"><span class="keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="type">Time</span></span><br><span class="line"><span class="keyword">import</span> org.apache.flink.util.<span class="type">Collector</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SideOutputTest</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> env = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line">    env.setParallelism(<span class="number">1</span>)</span><br><span class="line">    env.setStreamTimeCharacteristic(<span class="type">TimeCharacteristic</span>.<span class="type">EventTime</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> stream = env.socketTextStream(<span class="string">"localhost"</span>, <span class="number">7777</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> dataStream = stream.map(data =&gt; &#123;</span><br><span class="line">      <span class="keyword">val</span> dataArray = data.split(<span class="string">","</span>)</span><br><span class="line">      <span class="type">SensorReading</span>(dataArray(<span class="number">0</span>).trim, dataArray(<span class="number">1</span>).trim.toLong, dataArray(<span class="number">2</span>).trim.toDouble)</span><br><span class="line">    &#125;)</span><br><span class="line">      .assignTimestampsAndWatermarks( <span class="keyword">new</span> <span class="type">BoundedOutOfOrdernessTimestampExtractor</span>[<span class="type">SensorReading</span>]( <span class="type">Time</span>.seconds(<span class="number">1</span>) ) &#123;</span><br><span class="line">        <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">extractTimestamp</span></span>(element: <span class="type">SensorReading</span>): <span class="type">Long</span> = element.timestamp * <span class="number">1000</span></span><br><span class="line">      &#125; )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> processedStream = dataStream</span><br><span class="line">      .process( <span class="keyword">new</span> <span class="type">FreezingAlert</span>() )</span><br><span class="line"></span><br><span class="line">    processedStream.print(<span class="string">"processed data"</span>)</span><br><span class="line">    <span class="comment">//获取对应的侧输出流，打印</span></span><br><span class="line">    processedStream.getSideOutput( <span class="keyword">new</span> <span class="type">OutputTag</span>[<span class="type">String</span>](<span class="string">"freezing alert"</span>) ).print(<span class="string">"alert data"</span>)</span><br><span class="line">    env.execute(<span class="string">"side output test"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//泛型：输入，主输出</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FreezingAlert</span>(<span class="params"></span>) <span class="keyword">extends</span> <span class="title">ProcessFunction</span>[<span class="type">SensorReading</span>, <span class="type">SensorReading</span>]</span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  lazy val alertOutput: OutputTag[String] = new OutputTag[String]( "freezing alert" )</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">processElement</span></span>(value: <span class="type">SensorReading</span>, ctx: <span class="type">ProcessFunction</span>[<span class="type">SensorReading</span>, <span class="type">SensorReading</span>]#<span class="type">Context</span>, out: <span class="type">Collector</span>[<span class="type">SensorReading</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span>( value.temperature &lt; <span class="number">32.0</span> )&#123;<span class="comment">//定义侧输出流</span></span><br><span class="line">      ctx.output( <span class="keyword">new</span> <span class="type">OutputTag</span>[<span class="type">String</span>]( <span class="string">"freezing alert"</span> ), <span class="string">"freezing alert for "</span> + value.id )</span><br><span class="line">    &#125;</span><br><span class="line">    out.collect( value )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CoProcessFunction"><a href="#CoProcessFunction" class="headerlink" title="CoProcessFunction"></a>CoProcessFunction</h3><p>俩个流，连接在一起。需要提供俩个处理方法，分别对流进行处理</p>
+<h2 id="状态管理"><a href="#状态管理" class="headerlink" title="状态管理"></a>状态管理</h2><p>状态：其实就是数据，在处理数据的时候。可能需要依赖，之前的数据中的属性。所有需要保存下来，这就是状态。可以认为是一个本地变量</p>
+<p>Flink会统一管理状态。如状态的一致性、故障处理和高效存储</p>
+<h3 id="Flink中的状态"><a href="#Flink中的状态" class="headerlink" title="Flink中的状态"></a>Flink中的状态</h3><p>Flink中的状态与特定算子相关联</p>
+<p>状态使用前要预先注册</p>
+<p>共有俩种类型的状态：</p>
+<ul>
+<li>算子状态<ul>
+<li>算子状态的作用范围限定为算子任务。一个任务一个状态</li>
+</ul>
+</li>
+<li>键控状态<ul>
+<li>根据数据定义的key，状态的维护，对应key维护和访问，不同的key有不同的状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="算子状态"><a href="#算子状态" class="headerlink" title="算子状态"></a>算子状态</h3><p>同一并行子任务认为一个状态，同一并行任务的所有数据可以访问到相同的状态。</p>
+<p>状态在同一任务是共享，对不同任务是隔离的包括同一算子不同子任务</p>
+<h4 id="算子状态数据结构"><a href="#算子状态数据结构" class="headerlink" title="算子状态数据结构"></a>算子状态数据结构</h4><ul>
+<li><p>列表状态</p>
+<ul>
+<li>状态为一组数据的列表</li>
+</ul>
+</li>
+<li><p>联合列表状态</p>
+<ul>
+<li>与列表状态区别为，在发生故障时，或者从保持点启动程序时如何恢复</li>
+</ul>
+<blockquote>
+<p>列表会根据并行度的调整，重新调整分配。联合列表会将每个状态广播到对应算子</p>
+</blockquote>
+</li>
+<li><p>广播状态</p>
+<ul>
+<li>一个算子多个子任务的任务状态相同，使用广播状态</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>实际应用中这些状态用的都不多,用的更多的是none keyed state.没有用键控制的状态.更常见是用keyby后的状态</p>
+</blockquote>
+<h3 id="键控状态"><a href="#键控状态" class="headerlink" title="键控状态"></a>键控状态</h3><p>一个key会维护自己的状态,不同key访问自己对应的状态.</p>
+<p>每条数据,会自动将状态的访问范围限定为当前的key</p>
+<h4 id="键控状态数据结构"><a href="#键控状态数据结构" class="headerlink" title="键控状态数据结构"></a>键控状态数据结构</h4><ul>
+<li>值状态<ul>
+<li>将状态表示为单个的值</li>
+</ul>
+</li>
+<li>列表状态<ul>
+<li>一组数据的列表</li>
+</ul>
+</li>
+<li>映射状态<ul>
+<li>状态表示为k-v的类型</li>
+</ul>
+</li>
+<li>聚合状态(Reducing state &amp; Aggregating State)<ul>
+<li>状态表示为用于聚合创作的列表,每个数据进入,都会被操作</li>
+<li>Reducing:内部相当于reduce操作,输出和输入类型同样,不可变</li>
+<li>Aggregating:一般的操作.数据类型可不一样</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>不同数据类型的操作时不同的.具体查看对应文档</p>
+</blockquote>
+<h5 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明一个键控状态.传入相应的名称和类</span></span><br><span class="line"><span class="keyword">lazy</span> <span class="keyword">val</span> lastTemp: <span class="type">ValueState</span>[<span class="type">Double</span>] = getRuntimeContext.getState( <span class="keyword">new</span> <span class="type">ValueStateDescriptor</span>[<span class="type">Double</span>](<span class="string">"lastTemp"</span>, classOf[<span class="type">Double</span>]) )</span><br><span class="line"><span class="comment">//更新数据</span></span><br><span class="line">lastTemp.update( timerTs )</span><br><span class="line"><span class="comment">//获取值</span></span><br><span class="line"><span class="keyword">val</span> lastTemp = lastTemp.value()</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -806,8 +911,8 @@
     </a>
   
   
-    <a href="../../12/%E4%BD%9C%E6%96%87%E7%9C%9F%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">作文真题</div>
+    <a href="../../10/ElasticSearch%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ElasticSearch笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -933,19 +1038,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -969,11 +1074,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">后端</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -981,7 +1082,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color4">PHP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">后端</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1005,14 +1110,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">英语</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">作文</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
@@ -1021,7 +1118,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color3">英语</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">作文</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1030,6 +1131,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
