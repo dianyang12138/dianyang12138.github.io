@@ -40,7 +40,8 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_5.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_6.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_7.png">
-<meta property="og:updated_time" content="2019-12-06T04:38:51.510Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;e2e.png">
+<meta property="og:updated_time" content="2019-12-10T11:41:50.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
   
@@ -437,7 +438,7 @@
 <h4 id="分组转化算子-键控流"><a href="#分组转化算子-键控流" class="headerlink" title="分组转化算子(键控流)"></a>分组转化算子(键控流)</h4><ul>
 <li>KeyBy：从dataStream=&gt;KeyedStream：流还是单个流，内部做了分区。每个分区有相同的key，内部以hash实现</li>
 </ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传入int 返回</span></span><br><span class="line"><span class="comment">//T为dataStream的泛型</span></span><br><span class="line"><span class="comment">//JavaTuple就是KeyedStream[T, K]的K</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBy</span></span>(fields: <span class="type">Int</span>*):<span class="type">KeyedStream</span>[<span class="type">T</span>, <span class="type">JavaTuple</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">//传入函数</span></span><br><span class="line"><span class="comment">//T为dataStream的泛型</span></span><br><span class="line"><span class="comment">//K为函数返回值的类型 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBy</span></span>[<span class="type">K</span>: <span class="type">TypeInformation</span>](fun: <span class="type">T</span> =&gt; <span class="type">K</span>): <span class="type">KeyedStream</span>[<span class="type">T</span>, <span class="type">K</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传入int，Int为传入元素的键值位置 返回</span></span><br><span class="line"><span class="comment">//T为dataStream的泛型</span></span><br><span class="line"><span class="comment">//JavaTuple就是KeyedStream[T, K]的K</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBy</span></span>(fields: <span class="type">Int</span>*):<span class="type">KeyedStream</span>[<span class="type">T</span>, <span class="type">JavaTuple</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">//传入函数</span></span><br><span class="line"><span class="comment">//T为dataStream的泛型</span></span><br><span class="line"><span class="comment">//K为函数返回值的类型 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keyBy</span></span>[<span class="type">K</span>: <span class="type">TypeInformation</span>](fun: <span class="type">T</span> =&gt; <span class="type">K</span>): <span class="type">KeyedStream</span>[<span class="type">T</span>, <span class="type">K</span>]</span><br></pre></td></tr></table></figure>
 
 <h4 id="滚动聚合算子-Rolling-Aggregation"><a href="#滚动聚合算子-Rolling-Aggregation" class="headerlink" title="滚动聚合算子(Rolling Aggregation)"></a>滚动聚合算子(Rolling Aggregation)</h4><p>dataStream没有这些算子。这些算子针能对keyedStream的每一支流做聚合。会返回<code>DataStream</code>。</p>
 <ul>
@@ -896,6 +897,115 @@
 <p>保持点，除了故障恢复外，可用于：手动备份，更新升级应用程序，版本迁移，测试，展厅和重启应用，也可以升级Flink版本，暂停不重要Flink程序释放资源等等</p>
 <h3 id="检查点配置"><a href="#检查点配置" class="headerlink" title="检查点配置"></a>检查点配置</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//检查点间隔</span></span><br><span class="line">env.enableCheckpointing(<span class="number">60000</span>)</span><br><span class="line"><span class="comment">//默认EXACTLY_ONCE，可以改成至少一次</span></span><br><span class="line">env.getCheckpointConfig.setCheckpointingMode(<span class="type">CheckpointingMode</span>.<span class="type">AT_LEAST_ONCE</span>)</span><br><span class="line"><span class="comment">//超时时间，超过就丢弃checkpoint</span></span><br><span class="line">env.getCheckpointConfig.setCheckpointTimeout(<span class="number">100000</span>)</span><br><span class="line"><span class="comment">//checkpoint失败，是否整个任务失败，默认是true。</span></span><br><span class="line">env.getCheckpointConfig.setFailOnCheckpointingErrors(<span class="literal">false</span>)</span><br><span class="line"><span class="comment">//最大同时的checkpoint的数量，默认为1</span></span><br><span class="line">env.getCheckpointConfig.setMaxConcurrentCheckpoints(<span class="number">1</span>)</span><br><span class="line"><span class="comment">//俩次checkpoint最小时间间隔，如果设置了间隔，最大同时数就只能为1</span></span><br><span class="line">env.getCheckpointConfig.setMinPauseBetweenCheckpoints(<span class="number">100</span>)</span><br><span class="line"><span class="comment">//开启checkpoint外部持久化。如果不设置，job失败后checkpoint会清理掉checkpoint的持久化。</span></span><br><span class="line"><span class="comment">// DELETE_ON_CANCELLATION:手动取消就不要存,RETAIN_ON_CANCELLATION：即使手动取消也要存</span></span><br><span class="line">env.getCheckpointConfig.enableExternalizedCheckpoints(<span class="type">ExternalizedCheckpointCleanup</span>.<span class="type">DELETE_ON_CANCELLATION</span>)</span><br><span class="line"><span class="comment">//重启策略，</span></span><br><span class="line"><span class="comment">//fixedDelayRestart：尝试次数、尝试间隔时间</span></span><br><span class="line"><span class="comment">// failureRateRestart：失败率最大尝试次数在失败尝试时间内、失败尝试时间、尝试间隔</span></span><br><span class="line">env.setRestartStrategy(<span class="type">RestartStrategies</span>.failureRateRestart(<span class="number">3</span>, org.apache.flink.api.common.time.<span class="type">Time</span>.seconds(<span class="number">300</span>), org.apache.flink.api.common.time.<span class="type">Time</span>.seconds(<span class="number">10</span>)))</span><br></pre></td></tr></table></figure>
 
+<h2 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h2><p>无论是断电、短路、宕机等等，最后结果都要准确</p>
+<ul>
+<li>一条数据不应该丢失，也不能重复计算</li>
+<li>遇到故障可以恢复，恢复后重新计算结果也是正确</li>
+</ul>
+<h3 id="状态一致性的类别"><a href="#状态一致性的类别" class="headerlink" title="状态一致性的类别"></a>状态一致性的类别</h3><ul>
+<li>AT-MOST-ONCE（最多一次）<ul>
+<li>当任务故障时，啥事都不干，既不恢复丢失的状态，也不重播丢失的数据。</li>
+</ul>
+</li>
+<li>AT-LEAST-ONCE（至少一次）<ul>
+<li>所有事件都得到处理，可能会被处理多次</li>
+</ul>
+</li>
+<li>EXACTLY-ONCE（精确一次）<ul>
+<li>恰好处理一次，保证不丢失</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>一致性检查点是Flink数据一致性的的保证</p>
+</blockquote>
+<h3 id="端到端状态一致性"><a href="#端到端状态一致性" class="headerlink" title="端到端状态一致性"></a>端到端状态一致性</h3><p>在生产环境中，需要保证数据源、流处理器和输出到持久化系统的数据一致性。</p>
+<p>整个端到端的数据一致性取决于所有组件最弱的一个组件</p>
+<h4 id="端到端exactly-once"><a href="#端到端exactly-once" class="headerlink" title="端到端exactly-once"></a>端到端exactly-once</h4><ul>
+<li>内部保证—checkpoint</li>
+<li>source端—可重设数据的读取位置</li>
+<li>sink端—从故障恢复时，数据不会重复写入外部系统<ul>
+<li>幂等写入</li>
+<li>事物写入</li>
+</ul>
+</li>
+</ul>
+<h4 id="幂等写入-Idempotent-Writes"><a href="#幂等写入-Idempotent-Writes" class="headerlink" title="幂等写入(Idempotent Writes)"></a>幂等写入(Idempotent Writes)</h4><p>幂等操作，就是一个操作执行多次和执行一次的结果是一致的</p>
+<blockquote>
+<p>幂等写入无法做到，真正意义上的精确一次</p>
+</blockquote>
+<h4 id="事务写入"><a href="#事务写入" class="headerlink" title="事务写入"></a>事务写入</h4><p>所有做错必须同时成功或者同时失败</p>
+<p>实现思想：构建的事物对应着checkpoint，等到checkpoint完成的时候，才将结果写入sink</p>
+<p>实现方式</p>
+<ul>
+<li>预写日志</li>
+<li>两阶段提交</li>
+</ul>
+<h5 id="预写日志-WAL"><a href="#预写日志-WAL" class="headerlink" title="预写日志(WAL)"></a>预写日志(WAL)</h5><ul>
+<li>把结果数据先当初状态保持，在收到checkpoint完成通知后，一次性写入sink</li>
+</ul>
+<p>DataStream API提供了模板类：GenericWriteAheadSink来实现这种事务性sink</p>
+<p>可能会出现最后一次性写入，出现故障。再重写可能会导致数据重复</p>
+<h4 id="两阶段提交-2pc"><a href="#两阶段提交-2pc" class="headerlink" title="两阶段提交(2pc)"></a>两阶段提交(2pc)</h4><ul>
+<li>对于每个checkpoint，sink任务都会启动事物，然后将数据添加到事务中</li>
+<li>然后将数据写到外部sink系统，但不提交，只是”预提交”</li>
+<li>等他收到checkpoint完成通知时，才正式提交事务，真正写入</li>
+</ul>
+<blockquote>
+<p>实现了exactly-one，但是需要一个提供事务支持的外部sink系统。Flink提供了TwoPhaseCommitSinkFunction接口</p>
+</blockquote>
+<h5 id="2pc对外部sink系统的要求"><a href="#2pc对外部sink系统的要求" class="headerlink" title="2pc对外部sink系统的要求"></a>2pc对外部sink系统的要求</h5><ul>
+<li><p>外部sink系统必须提供事务支持，或sink任务必须能够模拟外部系统上的事务</p>
+</li>
+<li><p>在checkpoint间隔间内，必须能够开启一个事务接收数据写入</p>
+</li>
+<li><p>在收到checkpoint完成通知之前，事务必须是”等待提交”的出台。如果超时，未提交数据会丢失</p>
+</li>
+<li><p>sink任务能在进程失败后恢复事务</p>
+</li>
+</ul>
+<p>提交事务必须是幂等操作</p>
+<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/e2e.png" alt></p>
+<h3 id="Flink-Kafka端到端状态一致性"><a href="#Flink-Kafka端到端状态一致性" class="headerlink" title="Flink+Kafka端到端状态一致性"></a>Flink+Kafka端到端状态一致性</h3><ul>
+<li><p>source：kafka consumer作为source，可以将偏移量保留，如果后续任务出故障，恢复可以由连接器重置偏移量，重新消费</p>
+</li>
+<li><p>transform：checkpoint机制</p>
+</li>
+<li><p>sink：kafka producer作为sink，采用两阶段提交sink，实现一个TwoPhaseCommitSinkFunction</p>
+</li>
+</ul>
+<p>提交步骤</p>
+<ol>
+<li>第一条数据来了就开启了kafka的一个事务，正常写入kafka分区日志，但标记未提交</li>
+<li>jobmanager触发checkpoint操作，barrier从source开始向下传递，遇到barrier的算子将状态存入状态后端，并通知jobmanager</li>
+<li>sink连接器收到barrier，保存当前状态，存入checkpoint，通知jobmanager，并开启下一段事务</li>
+<li>jobmanager收到所有任务的通知，发出确认信息，表示checkpoint完成</li>
+<li>sink任务收到jobmanager的确认信息，表示checkpoint完成</li>
+<li>kafka关闭事务，已提交的数据可以正常消费</li>
+</ol>
+<blockquote>
+<p>flink的sink超时时间默认为1小时</p>
+<p>kafka的事件默认超时时间15分钟</p>
+</blockquote>
+<h2 id="Table-API"><a href="#Table-API" class="headerlink" title="Table API"></a>Table API</h2><p>Table API是流处理和批处理通用的关系型API，Table API可以基于流输入或者批输入来运行而不需要进行任何修改。Table API是SQL语言的超集并专门为Apache Flink设计的，Table API是Scala 和Java语言集成式的API。与常规SQL语言中将查询指定为字符串不同，Table API查询是以Java或Scala中的语言嵌入样式来定义的，具有IDE支持如:自动完成和语法检测。</p>
+<h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><p>pom</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.flink<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>flink-table_2.11<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>样例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> env: <span class="type">StreamExecutionEnvironment</span> = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> myKafkaConsumer: <span class="type">FlinkKafkaConsumer011</span>[<span class="type">String</span>] = <span class="type">MyKafkaUtil</span>.getConsumer(<span class="string">"ECOMMERCE"</span>)</span><br><span class="line">    <span class="keyword">val</span> dstream: <span class="type">DataStream</span>[<span class="type">String</span>] = env.addSource(myKafkaConsumer)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> tableEnv: <span class="type">StreamTableEnvironment</span> = <span class="type">TableEnvironment</span>.getTableEnvironment(env)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> startupLogDstream: <span class="type">DataStream</span>[<span class="type">StartupLog</span>] = dstream.map&#123; jsonString =&gt;<span class="type">JSON</span>.parseObject(jsonString,classOf[<span class="type">StartupLog</span>]) &#125;</span><br><span class="line">    <span class="comment">//从dataStream读取一张表</span></span><br><span class="line">    <span class="keyword">val</span> startupLogTable: <span class="type">Table</span> = tableEnv.fromDataStream(startupLogDstream)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> table: <span class="type">Table</span> = startupLogTable.select(<span class="string">"mid,ch"</span>).filter(<span class="string">"ch ='appstore'"</span>)</span><br><span class="line">    <span class="comment">//dataStream转化为流</span></span><br><span class="line">    <span class="keyword">val</span> midchDataStream: <span class="type">DataStream</span>[(<span class="type">String</span>, <span class="type">String</span>)] = table.toAppendStream[(<span class="type">String</span>,<span class="type">String</span>)]</span><br><span class="line"></span><br><span class="line">    midchDataStream.print()</span><br><span class="line">    env.execute()</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="动态表"><a href="#动态表" class="headerlink" title="动态表"></a>动态表</h3><p>如果流中的数据类型是case classk可以总结根据case class的结构生成table</p>
+<p><code>tableEnv.fromDataStream(ecommerceLogDstream)</code></p>
+<p>或者根据字段顺序单独命名<code>tableEnv.fromDataStream(ecommerceLogDstream,&#39;mid&#39;,&#39;name&#39;,……)</code></p>
+<p>动态表可以转化为流</p>
+<p><code>table.toAppendStream[(String,String)]</code></p>
+<blockquote>
+<p>传入的字段名为单引号，Append模式只能用insert</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//每10秒中渠道为appstore的个数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">  <span class="comment">//sparkcontext</span></span><br><span class="line">  <span class="keyword">val</span> env: <span class="type">StreamExecutionEnvironment</span> = <span class="type">StreamExecutionEnvironment</span>.getExecutionEnvironment</span><br><span class="line"></span><br><span class="line">  <span class="comment">//时间特性改为eventTime</span></span><br><span class="line">  env.setStreamTimeCharacteristic(<span class="type">TimeCharacteristic</span>.<span class="type">EventTime</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">val</span> myKafkaConsumer: <span class="type">FlinkKafkaConsumer011</span>[<span class="type">String</span>] = <span class="type">MyKafkaUtil</span>.getConsumer(<span class="string">"GMALL_STARTUP"</span>)</span><br><span class="line">  <span class="keyword">val</span> dstream: <span class="type">DataStream</span>[<span class="type">String</span>] = env.addSource(myKafkaConsumer)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">val</span> startupLogDstream: <span class="type">DataStream</span>[<span class="type">StartupLog</span>] = dstream.map&#123; jsonString =&gt;<span class="type">JSON</span>.parseObject(jsonString,classOf[<span class="type">StartupLog</span>]) &#125;</span><br><span class="line">  <span class="comment">//告知watermark 和 eventTime如何提取</span></span><br><span class="line">  <span class="keyword">val</span> startupLogWithEventTimeDStream: <span class="type">DataStream</span>[<span class="type">StartupLog</span>] = startupLogDstream.assignTimestampsAndWatermarks(<span class="keyword">new</span> <span class="type">BoundedOutOfOrdernessTimestampExtractor</span>[<span class="type">StartupLog</span>](<span class="type">Time</span>.seconds(<span class="number">0</span>L)) &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">extractTimestamp</span></span>(element: <span class="type">StartupLog</span>): <span class="type">Long</span> = &#123;</span><br><span class="line">      element.ts</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).setParallelism(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">//SparkSession</span></span><br><span class="line">  <span class="keyword">val</span> tableEnv: <span class="type">StreamTableEnvironment</span> = <span class="type">TableEnvironment</span>.getTableEnvironment(env)</span><br><span class="line"></span><br><span class="line">  <span class="comment">//把数据流转化成Table</span></span><br><span class="line">  <span class="comment">//时间使用eventtime要用.rowtime</span></span><br><span class="line">  <span class="comment">//如果为Processing Time，就要自己指定字段.proctime</span></span><br><span class="line">  <span class="keyword">val</span> startupTable: <span class="type">Table</span> = tableEnv.fromDataStream(startupLogWithEventTimeDStream , <span class="symbol">'mid</span>,<span class="symbol">'uid</span>,<span class="symbol">'appid</span>,<span class="symbol">'area</span>,<span class="symbol">'os</span>,<span class="symbol">'ch</span>,<span class="symbol">'logType</span>,<span class="symbol">'vs</span>,<span class="symbol">'logDate</span>,<span class="symbol">'logHour</span>,<span class="symbol">'logHourMinute</span>,<span class="symbol">'ts</span>.rowtime)</span><br><span class="line"></span><br><span class="line">  <span class="comment">//通过table api 进行操作</span></span><br><span class="line">  <span class="comment">// 每10秒 统计一次各个渠道的个数 table api 解决</span></span><br><span class="line">  <span class="comment">//1 groupby  2 要用 window   3 用eventtime来确定开窗时间</span></span><br><span class="line">  <span class="keyword">val</span> resultTable: <span class="type">Table</span> = startupTable.window(<span class="type">Tumble</span> over <span class="number">10000.</span>millis on <span class="symbol">'ts</span> as <span class="symbol">'tt</span>).groupBy(<span class="symbol">'ch</span>,<span class="symbol">'tt</span> ).select( <span class="symbol">'ch</span>, <span class="symbol">'ch</span>.count)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  <span class="comment">//把Table转化成数据流</span></span><br><span class="line">  <span class="comment">//val appstoreDStream: DataStream[(String, String, Long)] = appstoreTable.toAppendStream[(String,String,Long)]</span></span><br><span class="line">  <span class="keyword">val</span> resultDstream: <span class="type">DataStream</span>[(<span class="type">Boolean</span>, (<span class="type">String</span>, <span class="type">Long</span>))] = resultSQLTable.toRetractStream[(<span class="type">String</span>,<span class="type">Long</span>)]</span><br><span class="line"></span><br><span class="line">  resultDstream.filter(_._1).print()</span><br><span class="line"></span><br><span class="line">  env.execute()</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//窗口函数，preAggregator做聚合运算。windowFunction做结果输出</span></span><br><span class="line"><span class="comment">//传入的俩个函数，可以继承自定义</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aggregate</span></span>[<span class="type">ACC</span>: <span class="type">TypeInformation</span>, <span class="type">V</span>: <span class="type">TypeInformation</span>, <span class="type">R</span>: <span class="type">TypeInformation</span>](</span><br><span class="line">      <span class="comment">//IN：输入，OUT：输出，ACC累加器(中间的聚合状态)</span></span><br><span class="line">      preAggregator: <span class="type">AggregateFunction</span>[<span class="type">IN</span>, <span class="type">ACC</span>, <span class="type">OUT</span>],</span><br><span class="line">      <span class="comment">//IN：输入(这里的输入一般是聚合函数的输出)，OUT：输出，KEY：key的类型*(具体按照keyby返回的类型)，W：当前window类型</span></span><br><span class="line">      windowFunction: <span class="type">WindowFunction</span>[<span class="type">IN</span>, <span class="type">OUT</span>, <span class="type">KEY</span>, <span class="type">W</span> &lt;: <span class="type">Window</span>]): <span class="type">DataStream</span>[<span class="type">R</span>]</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -1167,27 +1277,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1199,7 +1293,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1207,7 +1309,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">php</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1223,23 +1341,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">博客</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1251,11 +1361,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
             
             <div class="clearfix"></div>

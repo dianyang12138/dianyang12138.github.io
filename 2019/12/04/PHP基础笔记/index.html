@@ -17,7 +17,8 @@
 <meta property="og:description" content="PHP运行环境目录 1234- wamp	- php	- apache	- mysql   文件名、路径不要出现中文和空格">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
-<meta property="og:updated_time" content="2019-12-05T14:41:06.522Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;error_php.ini.png">
+<meta property="og:updated_time" content="2019-12-09T07:10:01.916Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
   
@@ -394,12 +395,802 @@
 </ol>
 <blockquote>
 <p>纯PHP代码：可以省略标记结尾符。</p>
-<p>后面，我们会写很多“纯php代码文件”（里面没有任何html代码）。</p>
 </blockquote>
 <h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><ol>
 <li><code>//</code>：单行注释</li>
 <li><code>/**/</code>：多行注释</li>
 </ol>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><h4 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h4><p>定义形式：  $变量名  =  具体的数据；</p>
+<ul>
+<li><p>构成：字母、数字、下划线；</p>
+</li>
+<li><p>开头：字母或下划线；</p>
+</li>
+<li><p>注意：变量名不要跟系统中的“关键字”（即语法所用单词）重复——关键字不多，也就几十个。</p>
+</li>
+</ul>
+<blockquote>
+<p>区分大小写</p>
+<p>尽量见名知意</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$v1 = <span class="number">1</span>;</span><br><span class="line">$v2 = <span class="number">2</span>;</span><br><span class="line">$v3 = $v1 + $v2;</span><br><span class="line"><span class="keyword">echo</span> $v3;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;hr/&gt;"</span>;</span><br><span class="line"><span class="keyword">echo</span> $v1,$v2,$v3;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><ul>
+<li>赋值：<code>=</code>左边赋给右边</li>
+<li>取值：</li>
+<li>判断：判断是否有值，<code>isset(v)</code>，true（真，表示有），或者false（假，表示没有）。</li>
+<li>删除/销毁：<code>unset(v)</code></li>
+</ul>
+<h4 id="传值"><a href="#传值" class="headerlink" title="传值"></a>传值</h4><p><code>$v2 = $v1</code>：复制传值</p>
+<p><code>$v2 = &amp;$v1</code>：引用传值</p>
+<h4 id="预定义变量"><a href="#预定义变量" class="headerlink" title="预定义变量"></a>预定义变量</h4><ul>
+<li><code>$_GET[&#39;age&#39;]</code>：获得get方式里的age值</li>
+<li><code>$_POST[&#39;age&#39;]</code>：获得post方式里的age值</li>
+<li><code>$_REQUEST[&#39;age&#39;]</code>：获取get或post里的age值</li>
+<li><code>$_SERVER[&#39;&#39;]</code>：传以下值获取相应信息<ul>
+<li>PHP_SELF：表示当前请求的网页地址（不含域名部分）</li>
+<li>SERVER_NAME：表示当前请求的服务器名</li>
+<li>SERVER_ADDR：表示当前请求的服务器IP地址</li>
+<li>DOCUMENT_ROOT：表示当前请求的网站物理路径（apache设置站点时那个）</li>
+<li>REMOTE_ADDR：表示当前请求的客户端的IP地址</li>
+<li>SCRIPT_NAME：表示当前网页地址</li>
+</ul>
+</li>
+</ul>
+<h4 id="可变变量"><a href="#可变变量" class="headerlink" title="可变变量"></a>可变变量</h4><p>变量名本身又是一个“变量”的变量。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$v1 = <span class="number">0</span>;</span><br><span class="line">$str = <span class="string">"v1"</span>;</span><br><span class="line"><span class="keyword">echo</span> $$str;<span class="comment">//打印0</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h3><p>不变的量</p>
+<blockquote>
+<p>常量只能存储j简单数据类型</p>
+<p>推荐常量名全大写</p>
+</blockquote>
+<h4 id="两种定义形式"><a href="#两种定义形式" class="headerlink" title="两种定义形式"></a>两种定义形式</h4><ul>
+<li><code>define(‘常量名’,  对应的常量值);</code></li>
+<li><code>const 常量名 =  对应的常量值;</code></li>
+</ul>
+<h4 id="两种取值形式"><a href="#两种取值形式" class="headerlink" title="两种取值形式"></a>两种取值形式</h4><ul>
+<li>直接使用<code>echo 常量名;</code>：使用常量，前面不带”$”符号，也不能有引号</li>
+<li><code>echo constant(‘常量名’)</code>：此时常量名要用引号引起来。</li>
+</ul>
+<h4 id="判断常量"><a href="#判断常量" class="headerlink" title="判断常量"></a>判断常量</h4><p><code>defined();</code>：true（表示存在）或false（表示不存在）</p>
+<h4 id="预定义常量"><a href="#预定义常量" class="headerlink" title="预定义常量"></a>预定义常量</h4><p>预定义常量就是PHP语言内部预先定义好的常量，我们可以直接使用。</p>
+<ul>
+<li><p>PHP_VERSION：表示当前php的版本信息</p>
+</li>
+<li><p>PHP_OS：表示当前php运行所在的系统信息</p>
+</li>
+<li><p>PHP_INT_MAX：表示当前版本的php中的最大的整数值</p>
+</li>
+<li><p>M_PI： 表示圆周率π（一个有10多位小数的数）</p>
+</li>
+</ul>
+<blockquote>
+<p>其他预定义常量在，PHP手册-&gt;附录-&gt;保留字列表-&gt;预定义常量</p>
+</blockquote>
+<h4 id="魔术常量"><a href="#魔术常量" class="headerlink" title="魔术常量"></a>魔术常量</h4><p>魔术常量也是常量，只是在形式上为常量，而其值其实是“变化”的。</p>
+<p>他们也是系统中预先定义好的，也就几个，下面是最常用的 3个：</p>
+<p><code>__DIR__</code>：代表当前php网页文件所在的目录</p>
+<p><code>__FILE__</code>：代表当前php网页文件本身的路径</p>
+<p><code>__LINE__</code>：代表当前这个常量所在的行号</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="标量类型"><a href="#标量类型" class="headerlink" title="标量类型"></a>标量类型</h3><p>标量类型也可以理解为“基本类型”，“简单类型”。</p>
+<p>标量类型包括如下4种：</p>
+<ul>
+<li><p>字符串类型：String</p>
+<p>就是一串字符串，当做一个整体，表示一个连续有确定顺序的字符串。</p>
+<p>通常需要使用单引号或双引号来引起来，比如：<code>$name = “张三”;</code></p>
+</li>
+<li><p>整数类型：Int， Integer</p>
+</li>
+<li><p>浮点数： Float， Double 就是数学上的小数。</p>
+</li>
+<li><p>布尔类型： Bool， Boolean</p>
+<p>这种数据类型只有两个数据：true， false</p>
+</li>
+</ul>
+<h4 id="整型integer，int"><a href="#整型integer，int" class="headerlink" title="整型integer，int"></a>整型integer，int</h4><p>4种表示</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//10进制形式：</span></span><br><span class="line">$n1 = <span class="number">123</span>;</span><br><span class="line"><span class="comment">//8进制形式：</span></span><br><span class="line">$n1 = <span class="number">0123</span>;		<span class="comment">//以0开头</span></span><br><span class="line"><span class="comment">//16进制形式：</span></span><br><span class="line">$n1 = <span class="number">0x12A34</span>;	<span class="comment">//以0x开头，还可以有A，B，C，D，E，F这个6个“16进制数字”		</span></span><br><span class="line"><span class="comment">//2进制形式：</span></span><br><span class="line">$n1 = <span class="number">0b1011011010</span>;	<span class="comment">//以0b开头</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="进制转化"><a href="#进制转化" class="headerlink" title="进制转化"></a>进制转化</h5><p>直接通过系统函数来进行，能完成：</p>
+<p>10进制转为2, 8, 16进制：</p>
+<ul>
+<li><p>decbin()：将10进制转为2进制</p>
+</li>
+<li><p>decoct()：将10进制转为8进制</p>
+</li>
+<li><p>dechex()：将10进制转为16进制</p>
+</li>
+</ul>
+<p>或：</p>
+<p>2, 8, 16进制转为10进制：</p>
+<ul>
+<li>bindec()：将2进制数字字符串转为10进制</li>
+<li>octdec()：将8进制数字字符串转为10进制</li>
+<li>hexdec()：将16进制数字字符串转为10进制</li>
+</ul>
+<h4 id="浮点型float"><a href="#浮点型float" class="headerlink" title="浮点型float"></a>浮点型float</h4><p>float和double在php一样精度</p>
+<ul>
+<li><p>直接小数点形式：<code>$f1 = 0.1;</code>       //或者1.23;   123.0;</p>
+</li>
+<li><p>科学计数法：<code>$f2 = 1.23e3;</code>        //表示1.23 乘以10的3次方</p>
+</li>
+</ul>
+<blockquote>
+<p>浮点数不要做相等比较（==）：因为浮点数进行相等比较，是“不可靠”的：</p>
+</blockquote>
+<h4 id="布尔型Boolean"><a href="#布尔型Boolean" class="headerlink" title="布尔型Boolean"></a>布尔型Boolean</h4><p>只有两个数据值： true，  false（不区分大小写）</p>
+<p><code>false,  0, 0.0,  “”,   null, ‘0’,  空数组</code>这些都会被当作false</p>
+<h4 id="字符串型String"><a href="#字符串型String" class="headerlink" title="字符串型String"></a>字符串型String</h4><p>可以使用单引号或双引号来表示（引起来）。</p>
+<p><code>字符串.变量</code>：可以拼接变量</p>
+<blockquote>
+<p>双引号字符串中，如果出现“$”符号，则该符号后的连续字符（单词）会被识别为一个变量名。单引号不行</p>
+</blockquote>
+<h3 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h3><p>就是“数组”（Array）和“对象”（Object）两种。</p>
+<h4 id="数组类型Array"><a href="#数组类型Array" class="headerlink" title="数组类型Array"></a>数组类型Array</h4><p>数组，就是将多个“数据”放在一起，排成一个序列，这个序列作为一个整体（里面包括了多个数据）</p>
+<p><code>$arr1  = array(‘张三丰’,  18,  “男” );</code>和<code>$arr  = array(‘name’ =&gt; ‘张三丰’,  ‘age’=&gt;18,  ‘gender’ =&gt; “男” );</code>也可以<code>$arr  = [‘name’ =&gt; ‘张三丰’,  ‘age’=&gt;18,  ‘gender’ =&gt; “男” ];</code></p>
+<p>取值：行为为：$数组变量[下标]比如： <code>echo  $arr1[0];</code>       <code>print_r( $arr2[‘name’] );</code></p>
+<h3 id="特殊类型"><a href="#特殊类型" class="headerlink" title="特殊类型"></a>特殊类型</h3><p>空类型： 有且只有一个数据可以使用，那就是null</p>
+<h4 id="空类型NULL"><a href="#空类型NULL" class="headerlink" title="空类型NULL"></a>空类型NULL</h4><p>只有一个值： null（不区分大小写）。</p>
+<p>$v1 = null;      //此时，具有变量$v1,但其中的数据是“空的”（没有数据）</p>
+<p>空值变量，isset()判断的结果是false（即不存在）。</p>
+<h3 id="资源类型"><a href="#资源类型" class="headerlink" title="资源类型"></a>资源类型</h3><p>后续再说。。。。</p>
+<h3 id="类型判断"><a href="#类型判断" class="headerlink" title="类型判断"></a>类型判断</h3><ul>
+<li><p><code>gettype()</code>：获取一个变量的类型，结果为一个变量类型的名称（字符串）</p>
+</li>
+<li><p><code>settype()</code>： 设置一个变量的类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$v1 = 10;        //此时，$v1中数据是整数类型</span><br><span class="line">settype( $v1,  ‘string’); //此时，$v1是字符串类型，即其中的数据变成了：“10”</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>var_dump()：输出变量的“完整信息”，包括变量类型，长度（如果需要），内容</p>
+</li>
+<li><p>判断是否为某种类型（类型系列函数）：  </p>
+<ul>
+<li>is_int() / is_integer()：判断是否为整数类型</li>
+<li>is_float()：判断是否为浮点类型</li>
+<li>is_bool()：判断是否为布尔类型</li>
+<li>is_string()：判断是否为字符串类型</li>
+<li>is_array()：判断是否为数组类型</li>
+<li>is_numeric()：判断是否为“数字”类型（含整数，小数，以及“纯数字字符串”）</li>
+<li>is_object()：</li>
+</ul>
+</li>
+<li><p>两个特殊判断：</p>
+<ul>
+<li><p>isset()：  判断一个变量中是否有数据，如果有返回true，如果没有(即此时就是null)返回false</p>
+</li>
+<li><p>empty()：判断是否为“空的”。如果确实是“空的”，返回true，否则返回false。</p>
+<blockquote>
+<p>“空的”的意思，比较接近日常生活中的“没有”。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><h4 id="自动转换"><a href="#自动转换" class="headerlink" title="自动转换"></a>自动转换</h4><p>我们无需做任何处理，而是，程序会根据运算时运算符所需要的数据类型进行转换。</p>
+<p>转换为数字：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>+”<span class="number">2</span>”                    <span class="comment">//3</span></span><br><span class="line">“<span class="number">1</span>” + “<span class="number">2</span>”               <span class="comment">//3</span></span><br><span class="line"><span class="number">1</span> + ”<span class="number">2</span>abc”             <span class="comment">//3</span></span><br><span class="line"><span class="number">1</span> + ”<span class="number">2</span>abc34”          <span class="comment">//3</span></span><br><span class="line"><span class="number">1</span> + “abc”               <span class="comment">//1</span></span><br><span class="line"><span class="number">1</span> + “abc2”             <span class="comment">//1</span></span><br><span class="line"><span class="number">1.2</span> + “<span class="number">2</span>”               <span class="comment">//3.2</span></span><br><span class="line"><span class="number">1.2</span> + “<span class="number">2.2</span>abc”        <span class="comment">//3.4</span></span><br><span class="line"><span class="number">1.2</span> + “abc2<span class="number">.2</span>”        <span class="comment">//1.2</span></span><br><span class="line">“<span class="number">1.2</span>abc” + <span class="number">2</span>          <span class="comment">//3.2</span></span><br><span class="line">“<span class="number">1.2</span>abc” + “<span class="number">2</span>abc”   <span class="comment">//3.2</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>字符串当作数字，将字符串开头的数字转化为数值。若无则为0</p>
+</blockquote>
+<p>转换为整数：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10.8</span>  %  <span class="number">3.6</span></span><br><span class="line">“<span class="number">10.8</span>”  %  “<span class="number">3.6</span>”</span><br><span class="line">“<span class="number">10.8</span>”  %  “<span class="number">3.6</span>abc”</span><br><span class="line">“<span class="number">10.8</span>ab”  %  “<span class="number">3.6</span>cd”</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>只保留整数</p>
+</blockquote>
+<h4 id="强制转换："><a href="#强制转换：" class="headerlink" title="强制转换："></a>强制转换：</h4><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$v1 = (<span class="built_in">int</span>) “<span class="number">1</span>”;      <span class="comment">//结果，$v1是整数类型的1</span></span><br><span class="line">$v2 = (<span class="built_in">float</span>)  “<span class="number">1.23</span>”;    <span class="comment">//结果，$v2是浮点类型的1.23`</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h4 id="按参与运算的数据的个数来分类"><a href="#按参与运算的数据的个数来分类" class="headerlink" title="按参与运算的数据的个数来分类"></a>按参与运算的数据的个数来分类</h4><ul>
+<li><p>单目运算符：</p>
+<p>只需要一个数据——但必须是变量。</p>
+</li>
+<li><p>双目运算符：</p>
+<p>需要两个数据——可以是变量，也可以直接的数据本身。</p>
+</li>
+<li><p>三元运算符：</p>
+<p>需要3个数据才能运算，也称为三目运算符。只有一个三元运算符。</p>
+</li>
+</ul>
+<h4 id="按功能分类"><a href="#按功能分类" class="headerlink" title="按功能分类"></a>按功能分类</h4><p>赋值运算符：</p>
+<p><code>=</code></p>
+<p>算术运算符：</p>
+<p><code>+  -  * /  %</code></p>
+<blockquote>
+<p>如果不是数字，会自动转换为数字进行</p>
+</blockquote>
+<p>连接运算符：</p>
+<p><code>.</code></p>
+<blockquote>
+<p>就是字符串的连接，能够将前后字符连接起来。</p>
+<p>如果不是字符串，会自动转换为字符串。</p>
+</blockquote>
+<p>自赋值运算符：</p>
+<p><code>+=   -=   *=   =   %=   .=</code></p>
+<p>自操作运算符：</p>
+<p><code>++   --</code></p>
+<p>比较运算符：</p>
+<p><code>&gt;   &gt;=   &lt;   &lt;=  ==  !=   ===   !==</code></p>
+<blockquote>
+<p>等于（==）和全等于（===）的区别：</p>
+<p>通常，等于（==）也会用“模糊相等”或“松散比较”的说法。</p>
+<p>两个数据“基本相等”（类型可能会发生自动转换），就算是相等。</p>
+<p>全等于（===）就是完全相等：</p>
+<p>只有两个数据的数据类型一样，并且其值也一样的时候，才是全等。</p>
+</blockquote>
+<blockquote>
+<p>不等于： ！=</p>
+<p>两个数据不满足“==”这个运算结果，不等于（！=）的结果就是true，比如：</p>
+<p>if（ 1 != 2 ）       //true</p>
+<p>不全等于：！==</p>
+<p>两个数据不满足“===”这个运算结果，不全等于（！==）的结果就是true，比如：</p>
+<p>if（ “1” !==  1 ）  //true</p>
+</blockquote>
+<p>逻辑运算符：</p>
+<p><code>&amp;&amp;(与）    ||（或）   ！（非）</code></p>
+<p>条件运算符：</p>
+<p><code>数据1  ? 数据2   :  数据3</code></p>
+<p>位运算符：</p>
+<p><code>&amp;   |   ~</code></p>
+<p>其他：</p>
+<p><code>@</code>，是错误抑制符：在一个表达式出现错误的时候，可以将错误“隐藏”（掩盖）起来（不输出）！</p>
+<blockquote>
+<p>@ 运算符只对表达式有效。</p>
+<p>通常，该符号，用于在实际运行环境中的一些条件非我们（程序员）所能控制的情形。</p>
+<p>如果出现该情形并报错，则我们可以抑制该错误的显示（只是该错误不显示，不是没有错误了）。</p>
+</blockquote>
+<p><code>( )</code>，括号，用于提升运算优先级，括号中的先运算。</p>
+<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><h3 id="三大流程结构"><a href="#三大流程结构" class="headerlink" title="三大流程结构"></a>三大流程结构</h3><ul>
+<li>顺序结构</li>
+<li>分支结构</li>
+<li>循环结构</li>
+</ul>
+<h3 id="分支结构"><a href="#分支结构" class="headerlink" title="分支结构"></a>分支结构</h3><h4 id="if"><a href="#if" class="headerlink" title="if"></a>if</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>（ 条件<span class="number">1</span>）</span><br><span class="line">&#123;</span><br><span class="line">分支<span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">elseif</span>（条件<span class="number">2</span>）</span><br><span class="line">&#123;</span><br><span class="line">分支<span class="number">2</span>:；</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">elseif</span>（ 条件<span class="number">3</span>）</span><br><span class="line">&#123;</span><br><span class="line">分支<span class="number">3</span>；</span><br><span class="line">&#125;</span><br><span class="line">。。。。。。</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">else</span>分支；	<span class="comment">//前面没有一个条件满足的时候，就执行本分支</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>（ 一个变量数据或表达式结果$v1 ）</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">case</span>  值<span class="number">1</span>：			<span class="comment">//如果$v1 等于 这个“值1”，就执行本分支</span></span><br><span class="line">分支语句<span class="number">1</span>；</span><br><span class="line"><span class="keyword">break</span>；			<span class="comment">//表示跳出该分支，也就是跳出switch语句。</span></span><br><span class="line"><span class="keyword">case</span>  值<span class="number">2</span>：			<span class="comment">//如果$v1 等于 这个“值2”，就执行本分支</span></span><br><span class="line">分支语句<span class="number">2</span>；</span><br><span class="line"><span class="keyword">break</span>；</span><br><span class="line">。。。。。。		<span class="comment">//可以更多的分支</span></span><br><span class="line"><span class="keyword">default</span>：</span><br><span class="line">默认分支；		<span class="comment">//前面都不满足的时候，就执行这里，default分支也可以不写</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>进行“相等比较”（==）</p>
+</blockquote>
+<h3 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h3><h4 id="while"><a href="#while" class="headerlink" title="while"></a>while</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>（条件判断）</span><br><span class="line">&#123;</span><br><span class="line">。。。。循环体语句；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="do-while"><a href="#do-while" class="headerlink" title="do while"></a>do while</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> </span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">。。。。循环体语句；</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">while</span>（条件判断）；</span><br></pre></td></tr></table></figure>
+
+<h4 id="for循环语句（重点-难点）"><a href="#for循环语句（重点-难点）" class="headerlink" title="for循环语句（重点/难点）"></a>for循环语句（重点/难点）</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>（循环变量初始化○<span class="number">1</span>； 循环条件判断○<span class="number">2</span>； 循环变量的改变○<span class="number">3</span>）&#123;</span><br><span class="line">。。。。。。。。循环体语句块○<span class="number">4</span>；</span><br><span class="line"><span class="comment">//这里可以有多条语句</span></span><br><span class="line"><span class="comment">//是可以反复执行的部分</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="循环的中断"><a href="#循环的中断" class="headerlink" title="循环的中断"></a>循环的中断</h3><ul>
+<li><p>continue中断：</p>
+<p>含义：中断当前正在进行的循环体（即后续语句不再执行），继续下一次循环要执行的语句。</p>
+<ul>
+<li>语法形式：</li>
+</ul>
+<p>​    continue  [$n]；          //表示是要中断第几层的循环，继续该层循环的下一次。</p>
+<p>​    //其中$n可以省略，如果省略，表示1，就是中断当前层的循环。</p>
+</li>
+<li><p>break中断：</p>
+<p>含义：停止（跳出）当前正在进行的循环（即完全终止循环），去执行该循环之后的语句。</p>
+<ul>
+<li><p>语法形式：</p>
+<p>​    break  [$n]；               //表示是要中断几层循环。</p>
+<p>​    //其中$n可以省略，如果省略，表示1，就是中断当前循环</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>他们都适用于3种循环。</p>
+</blockquote>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//终端层数</span></span><br><span class="line"><span class="keyword">while</span>()&#123;<span class="comment">//循环1</span></span><br><span class="line">    <span class="keyword">while</span>()&#123;<span class="comment">//循环2</span></span><br><span class="line">        <span class="keyword">while</span>()&#123;<span class="comment">//循环3</span></span><br><span class="line">            <span class="keyword">break</span>;<span class="comment">//中断循环3</span></span><br><span class="line">           	<span class="keyword">break</span> <span class="number">1</span>;<span class="comment">//中断循环3</span></span><br><span class="line">            <span class="keyword">break</span> <span class="number">2</span>;<span class="comment">//中断循环2</span></span><br><span class="line">            <span class="keyword">break</span> <span class="number">3</span>;<span class="comment">//中断循环1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="定义、调用"><a href="#定义、调用" class="headerlink" title="定义、调用"></a>定义、调用</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义</span></span><br><span class="line">function   函数名（$形参1，$形参2， ...... ）&#123;	//形参，就是形式参数，是变</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//调用</span></span><br><span class="line">函数名（$实参<span class="number">1</span>，$实参<span class="number">2</span>， ...... ）；	<span class="comment">//实参就是实际参数，是数据</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="值传递"><a href="#值传递" class="headerlink" title="值传递"></a>值传递</h3><p>默认情况下是值传递。</p>
+<p>可以使用“&amp;”符号设定为引用传递</p>
+<h3 id="形参的默认值"><a href="#形参的默认值" class="headerlink" title="形参的默认值"></a>形参的默认值</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">f1</span><span class="params">($p1,  $p2,  $p3 = <span class="number">3</span>,  $p4 =true )</span></span>&#123;</span><br><span class="line"><span class="comment">//函数体语句块</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//则此时调用上述函数，以下形式都可以：</span></span><br><span class="line">f1(<span class="number">1</span>,<span class="number">2</span>);</span><br><span class="line">f1(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">f1(<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>, <span class="number">9</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数返回值"><a href="#函数返回值" class="headerlink" title="函数返回值"></a>函数返回值</h3><p>return  要返回的数据；</p>
+<blockquote>
+<p>return语句也可以不带后面的数据，此时，就只是单纯地结束函数，并不返回数据（也可以说返回null这个空数据）</p>
+</blockquote>
+<h3 id="可变函数"><a href="#可变函数" class="headerlink" title="可变函数"></a>可变函数</h3><p>函数名和变量一致</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">f1</span><span class="params">()</span></span>&#123; ....... &#125;</span><br><span class="line">$f  = “f1”;</span><br><span class="line">$f();		<span class="comment">//调用了函数f1，这就是可变函数！！</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$f1 = <span class="function"><span class="keyword">function</span>   <span class="params">(形参...)</span> </span>&#123;  .......  &#125;		<span class="comment">//这是定义匿名函数的形式。</span></span><br><span class="line">$f1(实参);	<span class="comment">//这就是调用该调用。可见其调用，跟可变函数的写法非常类似。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常用系统函数"><a href="#常用系统函数" class="headerlink" title="常用系统函数"></a>常用系统函数</h3><h4 id="与函数有关"><a href="#与函数有关" class="headerlink" title="与函数有关"></a>与函数有关</h4><ul>
+<li><p>function_exists(“函数名”)：判断一个函数是否已经存在；</p>
+</li>
+<li><p>func_get_arg( $n )： 在函数内部可用，用于获得第n个实参（n从0开始算起）</p>
+</li>
+<li><p>func_get_args()：     在函数内部可用，用于获得所有实参，结果是一个数组</p>
+</li>
+<li><p>func_num_args()：   在函数内部可用，用于获得实参的个数</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xxx</span><span class="params">()</span></span>&#123;</span><br><span class="line">	$v1 = func_get_arg(<span class="number">0</span>);	<span class="comment">//1</span></span><br><span class="line">	<span class="keyword">echo</span> func_get_arg(<span class="number">2</span>);	<span class="comment">//5</span></span><br><span class="line">	$a = func_get_args();	<span class="comment">//结果是数组：[1, 2, 5]</span></span><br><span class="line">$n = func_num_args();	<span class="comment">//3</span></span><br><span class="line">&#125;</span><br><span class="line">xxx(<span class="number">1</span>,<span class="number">2</span>, <span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>没有定义形参，传入也可以使用</p>
+</blockquote>
+<h4 id="字符串有关常用函数"><a href="#字符串有关常用函数" class="headerlink" title="字符串有关常用函数"></a>字符串有关常用函数</h4><ul>
+<li><p>输出与格式化：echo , print, printf, print_r, var_dump.</p>
+</li>
+<li><p>字符串去除与填充：trim, ltrim, rtrim, str_pad</p>
+</li>
+<li><p>字符串连接与分割：implode, join， explode, str_split</p>
+</li>
+<li><p>字符串截取：substr, strchr, strrchr,</p>
+</li>
+<li><p>字符串替换：str_replace, substr_replace</p>
+</li>
+<li><p>字符串长度与位置： strlen, strpos, strrpos,</p>
+</li>
+<li><p>字符转换：strtolower, strtoupper, lcfirst, ucfirst, ucwords</p>
+</li>
+<li><p>特殊字符处理：nl2br, addslashes, htmlspecialchars, htmlspecialchars_decode,</p>
+</li>
+</ul>
+<blockquote>
+<p>手册-&gt;函数参考-&gt;文本处理-&gt;字符串-&gt;字符串函数</p>
+</blockquote>
+<h4 id="常用数学函数"><a href="#常用数学函数" class="headerlink" title="常用数学函数"></a>常用数学函数</h4><ul>
+<li><p>max：     取得若干个数据中的最大值</p>
+</li>
+<li><p>min：     取得若干个数据中的最小值</p>
+</li>
+<li><p>round：  对某个数据进行四舍五入（可以设定保留几位小数）</p>
+</li>
+<li><p>ceil：      对某个数“向上取整”：将一个数据往上找出其小的一个整数（含其本身）。</p>
+</li>
+<li><p>floor：    对某个数“向下取整”：将一个数据往下找出其大的一个整数（含其本身）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$n1 = floor(<span class="number">4.1</span>);	<span class="comment">//4</span></span><br><span class="line">$n2 = floor(<span class="number">4.9</span>);	<span class="comment">//4</span></span><br><span class="line">$n3 = floor(<span class="number">4</span>);		<span class="comment">//4</span></span><br><span class="line">$n4 = floor(<span class="number">-4.1</span>);	<span class="comment">//-5</span></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>abs：      取得某个数据的绝对值</p>
+</li>
+<li><p>sqrt：     计算某个数的开方值</p>
+</li>
+<li><p>pow：     对某个数进行“幂运算”（就是获得某个数的若干次方）</p>
+</li>
+<li><p>rand：    获得某两个数之间的随机整数（含该两个数）</p>
+</li>
+<li><p>mt_rand: 获得某两个数之间的随机整数（含该两个数），比rand更快。</p>
+<ul>
+<li><code>$n1 = mt_rand(0, 10);    //随机数在0-10之间（含）</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="常用时间函数"><a href="#常用时间函数" class="headerlink" title="常用时间函数"></a>常用时间函数</h3><ul>
+<li><p>time：获得当前时间（精确到秒），结果其实一个“整数”而已，代表从1970年1月1日0:0:0秒到当前时刻的秒数。</p>
+</li>
+<li><p>microtime：获得当前时间（可以精确到微秒）</p>
+</li>
+<li><p>mktime：创建一个时间数据，参数为：时、分、秒，月、日、年</p>
+<ul>
+<li><code>$t1 = mktime(10, 8, 5, 7, 12,  2018);</code></li>
+</ul>
+</li>
+<li><p>date：将一个时间转换为某种字符串形式</p>
+</li>
+<li><p>idate：取得一个时间的某个单项数据值，比如idate(“Y”)取得年份数</p>
+</li>
+<li><p><code>date(“Y-m-d H:i:s”);</code></p>
+</li>
+<li><p>strtotime：将一个字符串“转换”为时间值；</p>
+</li>
+<li><p>date_default_timezone_set：在代码中设置“时区”</p>
+</li>
+<li><p>date_default_timezone_get：在代码中获取“时区”</p>
+</li>
+</ul>
+<h2 id="函数相关"><a href="#函数相关" class="headerlink" title="函数相关"></a>函数相关</h2><h3 id="变量的作用域问题"><a href="#变量的作用域问题" class="headerlink" title="变量的作用域问题"></a>变量的作用域问题</h3><p>简单来说，有3种作用域：局部作用域，全局作用域，超全局作用域；</p>
+<p>相对应的，有3种变量：    局部变量，    全局变量，    超全局变量；</p>
+<h4 id="局部作用域与局部变量："><a href="#局部作用域与局部变量：" class="headerlink" title="局部作用域与局部变量："></a>局部作用域与局部变量：</h4><p>局部作用域就是函数内部范围的作用域，其中定义的变量就是局部变量（包括形参也是局部变量）。</p>
+<p>局部变量只能在其所在的局部作用域中使用（访问）。</p>
+<p>局部变量在函数调用结束时，会被自动销毁（可以理解为函数执行结束，该执行空间也被销毁了）。</p>
+<h4 id="静态变量：一个特殊的局部变量"><a href="#静态变量：一个特殊的局部变量" class="headerlink" title="静态变量：一个特殊的局部变量"></a>静态变量：一个特殊的局部变量</h4><p>在函数内部，使用static关键字修饰的变量。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">XXX</span><span class="params">( .... )</span></span>&#123;</span><br><span class="line"><span class="keyword">static</span>  $s1 = <span class="number">10</span>;		<span class="comment">//此时，$s1就是静态变量</span></span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>静态局部变量的值不会在函数调用结束时被销毁，而是会一直保留。</p>
+<blockquote>
+<p>局部无法访问全局变量</p>
+</blockquote>
+<h4 id="全局作用域与全局变量："><a href="#全局作用域与全局变量：" class="headerlink" title="全局作用域与全局变量："></a>全局作用域与全局变量：</h4><p>就是函数外部范围的作用域，其中定义的变量就是全局变量。</p>
+<p>全局变量只能在其所在的全局作用域中可以直接使用（访问）。</p>
+<h4 id="超全局作用域与超全局变量："><a href="#超全局作用域与超全局变量：" class="headerlink" title="超全局作用域与超全局变量："></a>超全局作用域与超全局变量：</h4><p>超全局变量可以在所有范围中使用（访问）。</p>
+<p>实际上，只有有限的10来个系统预定义变量是超全局变量，包括：$_GET, $_POST, $_REQUEST等。</p>
+<p>所以，系统预定义变量，也被统称为超全局变量。</p>
+<h5 id="一个特别的超全局变量：-GLOBALS"><a href="#一个特别的超全局变量：-GLOBALS" class="headerlink" title="一个特别的超全局变量：$GLOBALS"></a>一个特别的超全局变量：$GLOBALS</h5><p>它也是一个数组，其中存储了我们自己定义的所有全局变量。</p>
+<p>每个全局变量的变量名，就是$GLOBALS数组的一个单元。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$v1 = <span class="number">10</span>;			<span class="comment">//这一行执行，就有了一个这个：$GLOBALS[‘v1’], 其值为10</span></span><br><span class="line">$v2 = ‘abc’;		<span class="comment">//这一行执行，就有了一个这个：$GLOBALS[‘v2’], 其值为’abc’</span></span><br><span class="line">$v3 = <span class="keyword">true</span>;		<span class="comment">//这一行执行，就有了一个这个：$GLOBALS[‘v3’], 其值为true</span></span><br><span class="line"><span class="function"><span class="keyword">function</span>  <span class="title">func1</span><span class="params">(  )</span></span>&#123;</span><br><span class="line"><span class="keyword">echo</span>  $GLOBALS[‘v1’];	<span class="comment">//输出10；</span></span><br><span class="line"><span class="keyword">echo</span>  $v1;				<span class="comment">//报错：变量v1未定义</span></span><br><span class="line">$s1 = $GLOBALS[‘v1’] * <span class="number">5</span>;	<span class="comment">//结果为50；</span></span><br><span class="line">$s2 = $v1 * <span class="number">5</span>;				<span class="comment">//报错：变量v1未定义</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="一个特别的的关键字：global"><a href="#一个特别的的关键字：global" class="headerlink" title="一个特别的的关键字：global"></a>一个特别的的关键字：global</h5><p>用于在局部作用域中，修饰一个跟全局变量同名的局部变量。</p>
+<p>此时该局部变量也可以使用全局变量的值了——实际上他们其实是类似变量引用关系。</p>
+<p>其作用类似：$GLOBALS</p>
+<h2 id="文件加载"><a href="#文件加载" class="headerlink" title="文件加载"></a>文件加载</h2><h3 id="文件加载的含义"><a href="#文件加载的含义" class="headerlink" title="文件加载的含义"></a>文件加载的含义</h3><p>将一个（别的）文件包含到当前文件中，成为当前文件运行过程中的一部分。</p>
+<p><code>include  “要载入的文件路径”;          //可以是相对路径，或本地物理路径。</code></p>
+<p>载入一个文件的本质是：将被载入的文件“插入”到当前载入代码所在的位置。</p>
+<blockquote>
+<p>可以载入php文件，也可以载入html文件。</p>
+<p>通常，一些公共的代码，在多个页面都需要用到的时候，会做成一个独立的文件。</p>
+<p>然后在不同的页面需要用到的时候，直接载入进来就可以了。</p>
+</blockquote>
+<h3 id="文件加载的四种方式（重点）"><a href="#文件加载的四种方式（重点）" class="headerlink" title="文件加载的四种方式（重点）"></a>文件加载的四种方式（重点）</h3><ul>
+<li><p>include  ‘要加载的文件’;</p>
+</li>
+<li><p>include_once    ‘要加载的文件’;</p>
+</li>
+<li><p>require      ‘要加载的文件’;</p>
+</li>
+<li><p>require_once  ‘要加载的文件’;</p>
+</li>
+</ul>
+<blockquote>
+<p>文件路径，可以是相对路径，也可以是物理路径，或直接文件名</p>
+</blockquote>
+<blockquote>
+<p>正常情况下，四种方式都一样</p>
+</blockquote>
+<p><strong>获取物理路径</strong>（绝对路径）的方式：</p>
+<p><code>__DIR__</code>：表示当前文件所在路径，由它可以构建出绝对路径；</p>
+<p><code>getcwd()</code>：表示当前正访问的网页路径，由它也可以构建出绝对路径；</p>
+<p><code>cwd</code>：其实是current  working  directory的简写</p>
+<p><strong>非相对非绝对路径</strong>（其实就是没有给出路径，只给出文件名）：不推荐！</p>
+<p>形式为：   include  ‘文件名’；</p>
+<p>此时，会按如下顺序去寻找该文件：</p>
+<ol>
+<li><p>先在php.ini中include_path项设定的目录中寻找该文件；</p>
+</li>
+<li><p>如果上一步没有找到，就在当前工作目录（由getcwd()获取）下寻找该文件；</p>
+</li>
+<li><p>如果上一步没有找到，就在当前载入语句的文件所在目录（由<code>__DIR__</code>获取）下寻找；</p>
+</li>
+<li><p>如果上一步还是没有找到，就报错了。</p>
+</li>
+</ol>
+<h4 id="四种方式的区别"><a href="#四种方式的区别" class="headerlink" title="四种方式的区别"></a>四种方式的区别</h4><p>include：每次都载入文件（可能会重复载入），如果载入失败，在报错后继续执行后续语句；</p>
+<p>include_once：只载入一次（不会重复载入），如果载入失败，在报错后继续执行后续语句；</p>
+<p>require：每次都载入文件（可能会重复载入），如果载入失败，在报错后终止程序；</p>
+<p>require_once：只载入一次（不会重复载入），如果载入失败，在报错后终止程序；</p>
+<blockquote>
+<p>一般来说，如果被载入的文件内容，是后续代码运行的必备前提，则应该使用require载入。</p>
+<p>如果被载入的文件内容，只需要（或只允许）出现一次，则应该使用”xxxx_once”载入。</p>
+</blockquote>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><h3 id="错误分类"><a href="#错误分类" class="headerlink" title="错误分类"></a>错误分类</h3><ul>
+<li><p>语法错误：</p>
+<p>程序不能运行，是在运行之前，检查语法的时候，就发现语法出错，结果是提示错误，不运行程序。</p>
+</li>
+<li><p>运行时错误：</p>
+<p>语法检查没错，然后开始运行，在运行中出现了错误，然后报错。</p>
+<p>这是开发中最常见的错误。 </p>
+</li>
+<li><p>逻辑错误：</p>
+<p>程序能运行，且一直到结束没有报错，但执行得到的结果却是错的。</p>
+</li>
+</ul>
+<h3 id="常见错误代号"><a href="#常见错误代号" class="headerlink" title="常见错误代号"></a>常见错误代号</h3><p>是指在程序运行时，发生的错误，系统会针对每种错误，给出相应的错误代号，并进行提示（报错）。</p>
+<p>另外，程序如果在运行之前检查语法的时候就发现语法错误，也会报错，也有一个错误代号。</p>
+<p>常见错误代号：</p>
+<ul>
+<li><p>E_NOTICE：</p>
+<p>提示性错误，轻微；</p>
+<p>错误发生后，后面的程序继续执行。</p>
+</li>
+<li><p>E_WARNING：</p>
+<p>警告性错误，稍微严重；</p>
+<p>错误发生后，后面的程序继续执行。</p>
+</li>
+<li><p>E_ERROR：</p>
+<p>严重错误/致命错误；</p>
+<p>错误发生后，后面的程序不再执行！</p>
+</li>
+<li><p>E_PARSE：</p>
+<p>语法错误（语法解析错误）；</p>
+<p>语法解释错误，是直接就不运行程序。</p>
+</li>
+<li><p>E_USER_NOTICE：</p>
+<p>用户自定义的提示错误</p>
+</li>
+<li><p>E_USER_WARNING：</p>
+<p>用户自定义的警告错误</p>
+</li>
+<li><p>E_USER_ERROR：</p>
+<p>用户自定义的严重错误</p>
+</li>
+<li><p>E_ALL：</p>
+<p>它是一个代表“所有”错误的代号。</p>
+</li>
+</ul>
+<blockquote>
+<p>这些错误代号，都只是系统预先设定的一些常量，他们的值大约是：1， 2， 4， 8， 16…..</p>
+</blockquote>
+<blockquote>
+<p>这些错误代号，通常只是用于对错误控制时进行“设置”使用。</p>
+</blockquote>
+<blockquote>
+<p>他们是一系列的整数，并具有一定的规律：1,2,4,8,16,32,64， 。。。。</p>
+</blockquote>
+<blockquote>
+<p>可以在php.ini中使用（设置）他们的显示级别，如下所示：</p>
+<p><img src="/2019/12/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/error_php.ini.png" alt></p>
+</blockquote>
+<h3 id="错误触发"><a href="#错误触发" class="headerlink" title="错误触发"></a>错误触发</h3><ul>
+<li><p>程序本身有错，则运行时就会触发错误（并提示）。</p>
+</li>
+<li><p>程序本身没错，但出现不符合预计的情形（比如数据不符合要求）。</p>
+</li>
+</ul>
+<p><code>trigger_error(“自定义错误提示内容”,  自定义错误的代号);</code>：触发自定义错误</p>
+<h3 id="错误显示"><a href="#错误显示" class="headerlink" title="错误显示"></a>错误显示</h3><p>可以对错误是否显示做定制</p>
+<p>在php.ini中设置</p>
+<ul>
+<li>display_errors = On或Off<ul>
+<li>决定所有的错误显不显示</li>
+</ul>
+</li>
+<li>error_reporting = 错误代号1  | 错误代号2<ul>
+<li>通过<code>|</code>决定显示哪些错误</li>
+</ul>
+</li>
+</ul>
+<p>在php代码中设置</p>
+<ul>
+<li>ini_set(‘display_errors’, 1或0);    //1表示显示，0不显示</li>
+<li>ini_set(‘error_reporting’, 错误代号1  | 错误代号2  |  …..）</li>
+</ul>
+<h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>默认不会记录错误日志。我们可以设置错误日志的记录</p>
+<p>php.ini中设置</p>
+<ul>
+<li>log_errors = On 或 Off<ul>
+<li>决定是否记录日志</li>
+</ul>
+</li>
+<li>error_log = error.txt; <ul>
+<li>记录的文件</li>
+</ul>
+</li>
+</ul>
+<p>在php代码中设置</p>
+<ul>
+<li>ini_set (‘log_errors’, 1或0)</li>
+<li>ini_set(“error_log”, ‘error.txt’);</li>
+</ul>
+<h3 id="自定义错误处理"><a href="#自定义错误处理" class="headerlink" title="自定义错误处理"></a>自定义错误处理</h3><p>我们对错误的，是否显示，显示什么，是否记录，记录到哪里做自定义</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//自定义错误，分2步：</span></span><br><span class="line"><span class="comment">//1，声明，我们自己使用自己的函数来处理错误</span></span><br><span class="line"><span class="comment">//set_error_handler("处理错误的自己的函数名");</span></span><br><span class="line"><span class="comment">//系统自动调用</span></span><br><span class="line">set_error_handler(<span class="string">"my_error_handler"</span>);</span><br><span class="line"><span class="comment">//2，定义该函数！</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">my_error_handler</span><span class="params">($errCode, $errMsg, $errFile, $errLine)</span></span></span><br><span class="line"><span class="function">//参数解释：<span class="title">errCode</span>错误代号，<span class="title">errMsg</span>错误信息，<span class="title">errfile</span>错误文件，<span class="title">errline</span>行号</span></span><br><span class="line"><span class="function">//此形参顺序固定，而且是由系统会调用该函数并传入实参数据！</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//此函数中，我们就可以去自己显示有关错误信息，和记录信息</span></span><br><span class="line">	$str = <span class="string">"&lt;p&gt;大事不好了，发生错误了，快来人啊。。。"</span>;</span><br><span class="line">	$str .= <span class="string">"&lt;br&gt;发生时间："</span> . date(<span class="string">'Y-m-d H:i:s'</span>);</span><br><span class="line">	$str .= <span class="string">"&lt;br&gt;错误代号："</span> . $errCode;</span><br><span class="line">	$str .= <span class="string">"&lt;br&gt;错误信息："</span> . $errMsg;</span><br><span class="line">	$str .= <span class="string">"&lt;br&gt;错误文件："</span> . $errFile;</span><br><span class="line">	$str .= <span class="string">"&lt;br&gt;错误行号："</span> . $errLine;</span><br><span class="line">	$str .= <span class="string">"&lt;/p&gt;"</span>;</span><br><span class="line">	<span class="keyword">echo</span> $str;</span><br><span class="line">	<span class="comment">//也可以在这里继续去“记录错误”——就是错误日志</span></span><br><span class="line">	<span class="comment">//FILE_APPEND表示该函数使用“追加模式”来写入数据</span></span><br><span class="line">	file_put_contents(<span class="string">"./error.html"</span>, $str, FILE_APPEND);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//先给出几个出错的代码：</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;br&gt;v1=$v1"</span>;	<span class="comment">//未定义的变量</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="string">'./no-this-file.php'</span>;	<span class="comment">//载入失败</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">I1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">l1();		<span class="comment">//调用不存在的函数；</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;p&gt;最后的段落&lt;/p&gt;"</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串详解"><a href="#字符串详解" class="headerlink" title="字符串详解"></a>字符串详解</h2><h3 id="4种不同形式的字符串"><a href="#4种不同形式的字符串" class="headerlink" title="4种不同形式的字符串"></a>4种不同形式的字符串</h3><ul>
+<li><p>单引号字符串</p>
+<p>在单引号内只能使用两个转义符：<code>\\</code>、<code>\&#39;</code></p>
+<blockquote>
+<p>通常推荐使用单引号</p>
+</blockquote>
+</li>
+<li><p>双引号字符串</p>
+<p>能使用丰富的转义符，<code>\n</code>、<code>\r</code>、<code>\\</code>、<code>\t</code>等等</p>
+<p>在双引号内的$开头的会被识别为变量。只显示$需要用<code>\$</code></p>
+</li>
+<li><p>heredoc字符串</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$s1=&lt;&lt;&lt;<span class="string">"标识符"</span></span><br><span class="line">    …………</span><br><span class="line">    …………</span><br><span class="line">    标识符;</span><br></pre></td></tr></table></figure>
+
+<p>多行字符串，结尾行<strong>只有</strong><code>标识符;</code>。不能有空格 缩进。</p>
+<p>特点与双引号一致</p>
+</li>
+<li><p>nowdoc字符串</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$s1=&lt;&lt;&lt;<span class="string">'标识符'</span></span><br><span class="line">    …………</span><br><span class="line">    …………</span><br><span class="line">    标识符;</span><br></pre></td></tr></table></figure>
+
+<p>特点与单引号一致</p>
+<p>用法和heredoc一致</p>
+</li>
+</ul>
+<h3 id="字符长度"><a href="#字符长度" class="headerlink" title="字符长度"></a>字符长度</h3><p><code>strlen(字符串)</code>：求该字符串的“字节数”，也就是占据的字节空间大小；</p>
+<blockquote>
+<p>根据编码不同，长度不同</p>
+</blockquote>
+<p><code>mb_strlen(字符串</code>)：求字符个数</p>
+<blockquote>
+<p>使用该函数前要将<code>php.ini</code>中的<code>extension=mbstring</code>注释打开，老版本为<code>php_mbstring.dll</code></p>
+</blockquote>
+<h3 id="常用字符串函数"><a href="#常用字符串函数" class="headerlink" title="常用字符串函数"></a>常用字符串函数</h3><h4 id="字符串输出："><a href="#字符串输出：" class="headerlink" title="字符串输出："></a>字符串输出：</h4><ul>
+<li><p>echo： 输出一个或多个字符（不是函数，是语言结构）不能输出数组变量</p>
+</li>
+<li><p>print：输出一个字符串</p>
+</li>
+<li><p>print_r：输出变量的较为详细的信息</p>
+</li>
+<li><p>var_dump：输出变量的完整信息</p>
+</li>
+</ul>
+<h4 id="字符串去除与填充："><a href="#字符串去除与填充：" class="headerlink" title="字符串去除与填充："></a>字符串去除与填充：</h4><ul>
+<li><p>trim：消除一个字符串两端的空白字符或指定字符（空白字符包括：空格，\n, \r, \t等）</p>
+</li>
+<li><p>ltrim：消除一个字符串左边的空白字符或指定字符</p>
+</li>
+<li><p>rtrim：消除一个字符串右边的空白字符或指定字符</p>
+</li>
+<li><p>str_pad：将一个字符串使用指定的字符填充到指定的长度</p>
+</li>
+</ul>
+<h4 id="字符串连接与分割："><a href="#字符串连接与分割：" class="headerlink" title="字符串连接与分割："></a>字符串连接与分割：</h4><ul>
+<li><p>implode：将一个数组的值连接起来组成一个字符串</p>
+</li>
+<li><p>join：同implode</p>
+</li>
+<li><p>explode： 将一个字符串使用指定的字符分割为一个数组</p>
+</li>
+<li><p>str_split：将一个字符串按指定的长度分割为一个数组</p>
+</li>
+</ul>
+<h4 id="字符串截取："><a href="#字符串截取：" class="headerlink" title="字符串截取："></a>字符串截取：</h4><ul>
+<li><p>substr：获取一个字符串中指定位置开始指定长度的子字符串</p>
+</li>
+<li><p>strstr：获取一个字符串中某个指定字符首次出现的位置起，到最后结尾处的字符</p>
+<pre><code>strstr(‘abcd.12.3.txt’, ‘.’);      //结果是：”.12.3.txt”</code></pre></li>
+<li><p>strrchr：获取一个字符串中某个指定字符最后一次出现的位置起，到最后结尾处的字符</p>
+<pre><code>strrchr(‘abcd.12.3.txt’, ‘.’);   //结果是：”.txt”</code></pre></li>
+</ul>
+<h4 id="字符串替换："><a href="#字符串替换：" class="headerlink" title="字符串替换："></a>字符串替换：</h4><ul>
+<li><p>str_replace：将一个字符串中的指定字符，替换为给定的新字符。</p>
+</li>
+<li><p>substr_replace：将一个字符串中指定位置开始的指定个数的字符，替换为给定的新字符。</p>
+</li>
+</ul>
+<h4 id="字符串长度与位置："><a href="#字符串长度与位置：" class="headerlink" title="字符串长度与位置："></a>字符串长度与位置：</h4><ul>
+<li><p>strlen：获取字符串的字节长度。</p>
+</li>
+<li><p>strpos：获取一个字符串中某个子字符串首次出现的位置。</p>
+<pre><code>strpos(‘abcd.12.3.txt’, ‘.’);    //结果是：4</code></pre></li>
+<li><p>strrpos：获取一个字符串中某个子字符串最后一次出现的位置。</p>
+</li>
+<li><p>strrpos(‘abcd.12.3.txt’, ‘.’);   //结果是：9</p>
+</li>
+<li><p>strrpos(‘abcd.12.3.txt’, ‘cd’); //结果是：2</p>
+</li>
+</ul>
+<h4 id="字符转换："><a href="#字符转换：" class="headerlink" title="字符转换："></a>字符转换：</h4><ul>
+<li><p>strtolower：将一个字符串转换为小写。</p>
+</li>
+<li><p>strtoupper：将一个字符串转换为大写。</p>
+</li>
+<li><p>lcfirst：将一个字符串的首字母转换为小写。</p>
+</li>
+<li><p>ucfirst：将一个字符串的首字母转换为大写。</p>
+</li>
+<li><p>ucwords：将一个字符串中的所有单词的首字母转换大写。</p>
+</li>
+</ul>
+<h4 id="特殊字符处理："><a href="#特殊字符处理：" class="headerlink" title="特殊字符处理："></a>特殊字符处理：</h4><ul>
+<li><p>nl2br：将换行符转换为”<br>”标签字符</p>
+</li>
+<li><p>addslashes： 将一个字符串中的以下几个字符使用反斜杠进行转义：\       ‘      “      </p>
+</li>
+<li><p>htmlspecialchars：将html中的特殊字符转换为html实体字符，如下所示： </p>
+<p>（&amp;  ‘  “  &lt;  &gt; ）分别转换为：（（&amp;  &apos;  &quot; &lt;  &gt; ）</p>
+</li>
+<li><p>htmlspecialchars_decode：将html实体字符，转换回原本的字符。</p>
+</li>
+</ul>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><h3 id="创建、获取"><a href="#创建、获取" class="headerlink" title="创建、获取"></a>创建、获取</h3><p>创建数组三种形式：</p>
+<ul>
+<li><p>$arr1  =  array(单元1，单元2，…）；</p>
+</li>
+<li><p>$arr2  =  [单元1，单元2，…]；</p>
+<p>单元（元素）的形式为：  [下标=&gt;]值</p>
+</li>
+<li><p>$arr3[下标1]  =  值1；</p>
+<p>$arr3[下标2]  =  值2；</p>
+</li>
+</ul>
+<p>获取元素<code>$数组名[下标];</code> 其中，下标可以是整数的，也可以是字符串的（注意有引号）</p>
+<h3 id="数组下标"><a href="#数组下标" class="headerlink" title="数组下标"></a>数组下标</h3><p>每一个没有使用下标的单元，系统给其分配的下标为<strong>之前所用过的整数下标的最大值</strong>+1</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$arr1 = <span class="keyword">array</span>(‘a’,  <span class="number">2</span>=&gt;’b’,  ‘c’,  ‘x’=&gt;’d’,  ‘e’);	<span class="comment">// 其下标分别为：0,  2,  3, ‘x’, 4</span></span><br><span class="line">$arr2 = <span class="keyword">array</span>(<span class="number">5</span>=&gt;‘a’,  <span class="number">2</span>=&gt;’b’,  ‘c’,  ‘x’=&gt;’d’);	<span class="comment">// 其下标分别为：5,  2,  6, ‘x’</span></span><br><span class="line">$arr3[‘x’] = <span class="number">5</span>;		<span class="comment">//这一行，会自动创建一个数组，</span></span><br><span class="line">$arr3[ ]	= <span class="number">6</span>;		<span class="comment">//此时下标就是0</span></span><br><span class="line">$arr3[] = <span class="number">3</span>;<span class="comment">//下标为1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>索引数组：指一个数组的下标是从0开始的连续的整数。</p>
+</li>
+<li><p>关联数组：指一个数组的下标都是字符串。</p>
+</li>
+</ul>
+<h3 id="多维数组"><a href="#多维数组" class="headerlink" title="多维数组"></a>多维数组</h3><p>在数组里塞数组</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$arr1 = <span class="keyword">array</span>(<span class="keyword">array</span>(<span class="number">1</span>,<span class="number">2</span>),<span class="keyword">array</span>(<span class="number">2</span>,<span class="number">1</span>),<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="数组遍历"><a href="#数组遍历" class="headerlink" title="数组遍历"></a>数组遍历</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span>( $数组名  <span class="keyword">as</span>  [$key =&gt;] $value)&#123;</span><br><span class="line"><span class="comment">//这里，$key和$value只是变量，它会在遍历数组的过程中，按顺序依次取得数组每个单元的下标和值。</span></span><br><span class="line"><span class="keyword">echo</span> “&lt;br /&gt;&#123;$key&#125; &gt;&gt;&gt; &#123;$value&#125; “;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数组内的指针"><a href="#数组内的指针" class="headerlink" title="数组内的指针"></a>数组内的指针</h3><p>数组内默认维护一个指针，初始状态下指向第一个元素</p>
+<p>指针函数：</p>
+<ul>
+<li><p>$re  =  current( $arr1);        //取得数组中当前指针所在单元的值；</p>
+</li>
+<li><p>$re  =  key( $arr1 );           //取得数组中当前指针所在单元的键（下标）；</p>
+</li>
+<li><p>$re  =  next( $arr1 );          //将数组中的指针往后移动一个位置，并取得新位置上的值；</p>
+</li>
+<li><p>$re  =  prev( $arr1 );          //将数组中的指针往前移动一个位置，并取得新位置上的值；</p>
+</li>
+<li><p>$re  =  end( $arr1 );           //将数组中的指针移动到最后一个位置，并取得新位置上的值；</p>
+</li>
+<li><p>$re  =  reset($arr1);           //将数组中的指针移动到最前一个位置，并取得新位置上的值；</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="comment">//请用for（即不用foreach）来遍历如下数组，</span></span><br><span class="line"><span class="comment">////并按顺序输出其每一个单元的键和值：</span></span><br><span class="line"><span class="comment">///提示：count()函数可以求数组的长度</span></span><br><span class="line">$arr1 = <span class="keyword">array</span>(<span class="string">"a"</span>,  <span class="number">2</span>=&gt;<span class="string">"b"</span>,  <span class="string">"c"</span>,  <span class="string">"x"</span>=&gt;<span class="string">"d"</span>,  <span class="string">"e"</span>);	</span><br><span class="line">$v1 = current($arr1);	<span class="comment">//"a";</span></span><br><span class="line">$k1 = key($arr1);		<span class="comment">//0</span></span><br><span class="line">next($arr1);			<span class="comment">//指针往后移动一位</span></span><br><span class="line">$v2 = current($arr1);	<span class="comment">//'b'</span></span><br><span class="line">$k2 = key($arr1);		<span class="comment">//2</span></span><br><span class="line">end($arr1);				<span class="comment">//指针移动到最后一个单元</span></span><br><span class="line">$v3 = current($arr1);	<span class="comment">//'e'</span></span><br><span class="line">$k3 = key($arr1);		<span class="comment">//4</span></span><br><span class="line"><span class="comment">//先将指针移回第一个：</span></span><br><span class="line">reset($arr1);</span><br><span class="line">$len = count($arr1);</span><br><span class="line"><span class="keyword">for</span>($i = <span class="number">0</span>; $i &lt; $len; $i++)</span><br><span class="line">&#123;</span><br><span class="line">	$key = key($arr1);</span><br><span class="line">	$value = current($arr1);</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">"&lt;br&gt;$key :::: $value"</span>;</span><br><span class="line">	next($arr1);	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数组函数"><a href="#数组函数" class="headerlink" title="数组函数"></a>数组函数</h3><p>操控数组的函数</p>
+<ul>
+<li><p>max()：         获取一个数组中的最大值</p>
+</li>
+<li><p>min()：          获取一个数组中的最小值</p>
+</li>
+<li><p>count()：        获取一个数组的元素个数</p>
+</li>
+<li><p>in_array()：   判断一个数据是否在指定数组中。</p>
+<p>语法形式：$b = in_array( $数组， 数据); //结果true或false</p>
+</li>
+<li><p>range()：               生成某个范围的连续值的数组，比如range(3, 9)会得到数组：array(3, 4, 5, 6, 7, 8, 9, );</p>
+</li>
+<li><p>array_keys()：       取出一个数组中的所有“键”并放入一个索引数组中。</p>
+</li>
+<li><p>array_values()：    取出一个数组中的所有“值”并放入一个索引数组中。</p>
+</li>
+<li><p>array_push()：       将一个或多个数据放入一个数组的“末端”。</p>
+</li>
+<li><p>array_pop()：        将一个数组的最后一个单元删除，并返回该单元的值。</p>
+</li>
+<li><p>array_reverse()：   将一个数组的所有单元的顺序进行反转（最前的放最后，最后的放最前）</p>
+</li>
+</ul>
+<blockquote>
+<p>手册-&gt;函数参考-&gt;变量与类型相关扩展-&gt;数组-&gt;数组函数</p>
+</blockquote>
+<h2 id="PHP连接MySQL"><a href="#PHP连接MySQL" class="headerlink" title="PHP连接MySQL"></a>PHP连接MySQL</h2><h3 id="基本连接关闭函数"><a href="#基本连接关闭函数" class="headerlink" title="基本连接关闭函数"></a>基本连接关闭函数</h3><ul>
+<li><p><code>mysqli_connect([host][,username][,password][,dbname][,port])</code></p>
+<ul>
+<li><p>host：MySQL服务器。可以包含端口号，默认值为“localhost:3306”</p>
+</li>
+<li><p>username：用户名。默认值是服务器进程所有者的用户名；</p>
+</li>
+<li><p>password：密码。</p>
+</li>
+<li><p>dbname：数据库名称。</p>
+</li>
+<li><p>port：MySQL服务器的端口号，默认为3306。</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>如果连接成功，则返回MySQLi连接对象。如果失败，则返回FALSE。</p>
+</blockquote>
+<ul>
+<li><p>exit()或die()</p>
+<ul>
+<li><code>void exit ([ string $string ] )</code> ：输出 $string 的值，并中止程序的运行。</li>
+<li>die()：终止程序</li>
+</ul>
+</li>
+<li><p><code>mysqli_connect_error()</code>：返回上一个 MySQL 连接产生的文本错误信息 </p>
+</li>
+<li><p><code>bool mysqli_close ( mysqli $link )</code></p>
+<ul>
+<li>传入数据库连接对象</li>
+</ul>
+</li>
+<li><p><code>bool mysqli_select_db(mysqli $link, string $database)</code></p>
+<ul>
+<li>选择数据库</li>
+</ul>
+</li>
+<li><p><code>bool mysqli_set_charset ( mysqli $link , string $charset )</code></p>
+<ul>
+<li>设置字符集</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL语句函数"><a href="#SQL语句函数" class="headerlink" title="SQL语句函数"></a>SQL语句函数</h3><ul>
+<li><code>resource mysqli_query(mysqli $link , string
+$query )</code></li>
+</ul>
 
       
 
@@ -517,6 +1308,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="../../07/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          推荐系统
+        
+      </div>
+    </a>
   
   
     <a href="../../../11/28/storm/" id="article-nav-older" class="article-nav-link-wrap">
@@ -662,27 +1462,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -694,7 +1478,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -702,7 +1494,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">php</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -718,23 +1526,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">博客</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -746,11 +1546,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
             
             <div class="clearfix"></div>

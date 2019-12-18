@@ -23,7 +23,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;esinstall5.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;es_consistion.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;number_var.png">
-<meta property="og:updated_time" content="2019-12-02T10:19:41.398Z">
+<meta property="og:updated_time" content="2019-12-14T09:05:57.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;ElasticSearch%E7%AC%94%E8%AE%B0&#x2F;esinstall1.png">
   
@@ -491,6 +491,18 @@ vm.max_map_count=262144
 </ul>
 <h5 id="JAVA-API-9"><a href="#JAVA-API-9" class="headerlink" title="JAVA API"></a>JAVA API</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Highlight</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHighlight</span><span class="params">()</span> <span class="keyword">throws</span> IOException, ParseException </span>&#123;</span><br><span class="line">    <span class="comment">//搜索请求对象</span></span><br><span class="line">    SearchRequest searchRequest = <span class="keyword">new</span> SearchRequest(<span class="string">"xc_course"</span>);</span><br><span class="line">    <span class="comment">//指定类型</span></span><br><span class="line">    searchRequest.types(<span class="string">"doc"</span>);</span><br><span class="line">    <span class="comment">//搜索源构建对象</span></span><br><span class="line">    SearchSourceBuilder searchSourceBuilder = <span class="keyword">new</span> SearchSourceBuilder();</span><br><span class="line">    <span class="comment">//boolQuery搜索方式</span></span><br><span class="line">    <span class="comment">//先定义一个MultiMatchQuery</span></span><br><span class="line">    MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(<span class="string">"开发框架"</span>, <span class="string">"name"</span>, <span class="string">"description"</span>)</span><br><span class="line">        .minimumShouldMatch(<span class="string">"50%"</span>)</span><br><span class="line">        .field(<span class="string">"name"</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="comment">//定义一个boolQuery</span></span><br><span class="line">    BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();</span><br><span class="line">    boolQueryBuilder.must(multiMatchQueryBuilder);</span><br><span class="line">    <span class="comment">//定义过虑器</span></span><br><span class="line">    boolQueryBuilder.filter(QueryBuilders.rangeQuery(<span class="string">"price"</span>).gte(<span class="number">0</span>).lte(<span class="number">100</span>));</span><br><span class="line">    searchSourceBuilder.query(boolQueryBuilder);</span><br><span class="line">    <span class="comment">//设置源字段过虑,第一个参数结果集包括哪些字段，第二个参数表示结果集不包括哪些字段</span></span><br><span class="line">    searchSourceBuilder.fetchSource(<span class="keyword">new</span> String[]&#123;<span class="string">"name"</span>, <span class="string">"studymodel"</span>, <span class="string">"price"</span>, <span class="string">"timestamp"</span>&#125;, <span class="keyword">new</span> String[]&#123;&#125;);</span><br><span class="line">    <span class="comment">//设置高亮</span></span><br><span class="line">    HighlightBuilder highlightBuilder = <span class="keyword">new</span> HighlightBuilder();</span><br><span class="line">    highlightBuilder.preTags(<span class="string">"&lt;tag&gt;"</span>);</span><br><span class="line">    highlightBuilder.postTags(<span class="string">"&lt;/tag&gt;"</span>);</span><br><span class="line">    highlightBuilder.fields().add(<span class="keyword">new</span> HighlightBuilder.Field(<span class="string">"name"</span>));</span><br><span class="line">    <span class="comment">//再添加一个高亮字段</span></span><br><span class="line">    <span class="comment">//highlightBuilder.fields().add(new HighlightBuilder.Field("description"));</span></span><br><span class="line">    searchSourceBuilder.highlighter(highlightBuilder);</span><br><span class="line">    <span class="comment">//向搜索请求对象中设置搜索源</span></span><br><span class="line">    searchRequest.source(searchSourceBuilder);</span><br><span class="line">    <span class="comment">//执行搜索,向ES发起http请求</span></span><br><span class="line">    SearchResponse searchResponse = client.search(searchRequest);</span><br><span class="line">    <span class="comment">//搜索结果</span></span><br><span class="line">    SearchHits hits = searchResponse.getHits();</span><br><span class="line">    <span class="comment">//匹配到的总记录数</span></span><br><span class="line">    <span class="keyword">long</span> totalHits = hits.getTotalHits();</span><br><span class="line">    <span class="comment">//得到匹配度高的文档</span></span><br><span class="line">    SearchHit[] searchHits = hits.getHits();</span><br><span class="line">    <span class="comment">//日期格式化对象</span></span><br><span class="line">    SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line">    <span class="keyword">for</span> (SearchHit hit : searchHits) &#123;</span><br><span class="line">        <span class="comment">//文档的主键</span></span><br><span class="line">        String id = hit.getId();</span><br><span class="line">        <span class="comment">//源文档内容</span></span><br><span class="line">        Map&lt;String, Object&gt; sourceAsMap = hit.getSourceAsMap();</span><br><span class="line">        <span class="comment">//源文档的name字段内容</span></span><br><span class="line">        String name = (String) sourceAsMap.get(<span class="string">"name"</span>);</span><br><span class="line">        <span class="comment">//取出高亮字段</span></span><br><span class="line">        Map&lt;String, HighlightField&gt; highlightFields = hit.getHighlightFields();</span><br><span class="line">        <span class="keyword">if</span> (highlightFields != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">//取出name高亮字段</span></span><br><span class="line">            HighlightField nameHighlightField = highlightFields.get(<span class="string">"name"</span>);</span><br><span class="line">            <span class="keyword">if</span> (nameHighlightField != <span class="keyword">null</span>) &#123;</span><br><span class="line">                Text[] fragments = nameHighlightField.getFragments();</span><br><span class="line">                StringBuffer stringBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">                <span class="keyword">for</span> (Text text : fragments) &#123;</span><br><span class="line">                    stringBuffer.append(text);</span><br><span class="line">                &#125;</span><br><span class="line">                name = stringBuffer.toString();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//由于前边设置了源文档字段过虑，这时description是取不到的</span></span><br><span class="line">        String description = (String) sourceAsMap.get(<span class="string">"description"</span>);</span><br><span class="line">        <span class="comment">//学习模式</span></span><br><span class="line">        String studymodel = (String) sourceAsMap.get(<span class="string">"studymodel"</span>);</span><br><span class="line">        <span class="comment">//价格</span></span><br><span class="line">        Double price = (Double) sourceAsMap.get(<span class="string">"price"</span>);</span><br><span class="line">        <span class="comment">//日期</span></span><br><span class="line">        Date timestamp = dateFormat.parse((String) sourceAsMap.get(<span class="string">"timestamp"</span>));</span><br><span class="line">        System.out.println(name);</span><br><span class="line">        System.out.println(studymodel);</span><br><span class="line">        System.out.println(description);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h4 id="aggs聚合"><a href="#aggs聚合" class="headerlink" title="aggs聚合"></a>aggs聚合</h4><p>环境改变了。下列代码不复用上述环境</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 按照total_amount求平均值</span><br><span class="line">POST order_infor/_doc/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">    <span class="attr">"Name"</span>:&#123;</span><br><span class="line">      <span class="attr">"avg"</span>:&#123;</span><br><span class="line">        <span class="attr">"field"</span>:<span class="string">"total_amount"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#AAA中包含BBB的，根据name分类降序聚合出前10位</span><br><span class="line">GET …/_search</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"query"</span>: &#123;</span><br><span class="line">        <span class="attr">"match"</span> : &#123;</span><br><span class="line">            <span class="attr">"AAA"</span>: <span class="string">"BBB"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">        <span class="attr">"Name"</span>:&#123;</span><br><span class="line">            <span class="attr">"terms"</span>:&#123;</span><br><span class="line">               <span class="attr">"field"</span>:<span class="string">"name"</span>,</span><br><span class="line">                <span class="attr">"size"</span>: <span class="number">10</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在聚合的时候test字段可能会报错，这时要设置字段属性</p>
+<p>PUT 索引库名/_mapping/类型名<br>{<br>  “properties”: {<br>    “参数名”: {<br>      “type”:     “text”,<br>      “fielddata”: true<br>    }<br>  }<br>}</p>
+<p>如果设置报错，可以删除索引库，再创建，在创建映射的时候，在字段的属性内加入”fielddata”: true</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#聚合内部还可以再聚合</span><br><span class="line">GET 索引名/_search</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">        <span class="attr">"name1"</span>:&#123;</span><br><span class="line">            <span class="attr">"terms"</span>:&#123;</span><br><span class="line">                <span class="attr">"field"</span>: <span class="string">"field1"</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"aggs"</span>:&#123;</span><br><span class="line">          <span class="attr">"name2"</span>:&#123;</span><br><span class="line">            <span class="attr">"terms"</span>:&#123;</span><br><span class="line">              <span class="attr">"field"</span>: <span class="string">"field2"</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -762,27 +774,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -794,7 +790,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -802,7 +806,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">php</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -818,23 +838,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">博客</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">流程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">开发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -846,11 +858,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">流程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
             
             <div class="clearfix"></div>
