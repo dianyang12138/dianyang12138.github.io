@@ -19,7 +19,15 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;PowerDesigner.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;log_1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;log_2.png">
-<meta property="og:updated_time" content="2019-12-18T06:08:45.849Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC_1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC_2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC_3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC_4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC0.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;RBAC2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0%5CRBAC3.png">
+<meta property="og:updated_time" content="2019-12-20T03:46:10.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0&#x2F;PowerDesigner.png">
   
@@ -467,10 +475,140 @@
 </ul>
 <h6 id="MBG生产的Mapper使用"><a href="#MBG生产的Mapper使用" class="headerlink" title="MBG生产的Mapper使用"></a>MBG生产的Mapper使用</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//找到POJO对应的example类</span></span><br><span class="line">TAdminExample tAdminExample = <span class="keyword">new</span> TAdminExample();</span><br><span class="line">TAdminExample.Criteria criteria = tAdminExample.createCriteria().andLoginacctEqualTo(loginacct);</span><br><span class="line">List&lt;TAdmin&gt; list = adminMapper.selectByExample(tAdminExample);</span><br></pre></td></tr></table></figure>
 
+<blockquote>
+<p>一个Example可以创建多个Criteria，然后通过or或and连接起来</p>
+</blockquote>
 <h6 id="js内的包含"><a href="#js内的包含" class="headerlink" title="js内的包含"></a>js内的包含</h6><p>包含的页面内有常变得用动态包含</p>
 <figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--动态包含，包含的也会生成一个<span class="class"><span class="keyword">class</span>--&gt;</span></span><br><span class="line">&lt;jsp:include page="/WEB-INF/jsp/common/top.jsp"&gt;&lt;/jsp:include&gt;</span><br><span class="line">&lt;!--静态包含，只生成一个<span class="class"><span class="keyword">class</span>--&gt;</span></span><br><span class="line"><span class="class">&lt;%@ <span class="title">include</span> <span class="title">file</span></span>=<span class="string">"/WEB-INF/jsp/common/css.jsp"</span> %&gt;</span><br></pre></td></tr></table></figure>
 
 <h6 id="session"><a href="#session" class="headerlink" title="session"></a>session</h6><p>过期session会销毁，所以要判断session是否为null</p>
+<h6 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h6><p>引入分页助手</p>
+<p>Mybatis配置文件内</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置PageHelper插件; 或者在spring配置SqlSessionFactoryBean进行配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugin</span> <span class="attr">interceptor</span>=<span class="string">"com.github.pagehelper.PageInterceptor"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"reasonable"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span><span class="comment">&lt;!--分页合理化--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>spring配置文件内</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"configLocation"</span> <span class="attr">value</span>=<span class="string">"classpath:/mybatis/mybatis-config.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mapperLocations"</span> <span class="attr">value</span>=<span class="string">"classpath*:/mybatis/mapper/*.xml"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"plugins"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"com.github.pagehelper.PageInterceptor"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"properties"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>reasonable=true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>合理化是，当传入的页数过大时。分页助手会把它定位到最后</p>
+</blockquote>
+<p>分页使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPage</span><span class="params">()</span></span>&#123;</span><br><span class="line">    PageHelper.startPage(<span class="number">2</span>, <span class="number">10</span>);<span class="comment">//分页指定绑定的是线程，所以可以在controller内指定，在service内使用</span></span><br><span class="line">    <span class="comment">//select id, loginacct, userpswd, username, email, createtime from t_admin </span></span><br><span class="line">    List&lt;TAdmin&gt; list= adminMapper.selectByExample(<span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//5表示，导航条一共5个页数，默认为8</span></span><br><span class="line">    PageInfo&lt;TAdmin&gt; pageInfo = <span class="keyword">new</span> PageInfo&lt;&gt;( list,<span class="number">5</span>);</span><br><span class="line">    logger.debug(<span class="string">"总页码：&#123;&#125;"</span>,pageInfo.getPages());</span><br><span class="line">    logger.debug(<span class="string">"总记录数：&#123;&#125;"</span>,pageInfo.getTotal());</span><br><span class="line">    logger.debug(<span class="string">"当前页：&#123;&#125;"</span>,pageInfo.getPageNum());</span><br><span class="line">    logger.debug(<span class="string">"下一页：&#123;&#125; == &#123;&#125;"</span>,pageInfo.isHasNextPage() , pageInfo.getNextPage());</span><br><span class="line">    logger.debug(<span class="string">"连续分页页码："</span>);</span><br><span class="line">    <span class="keyword">for</span> (Integer pn : pageInfo.getNavigatepageNums()) &#123;</span><br><span class="line">        System.out.println(pn);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">updateByExampleSelective()<span class="comment">//有选择性更新</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="get请求与post请求中文乱码问题的解决办法"><a href="#get请求与post请求中文乱码问题的解决办法" class="headerlink" title="get请求与post请求中文乱码问题的解决办法"></a>get请求与post请求中文乱码问题的解决办法</h6><p>get</p>
+<p>将tomcat的server.xml文件内<code>&lt;Connector connectionTimeout=&quot;20000&quot; port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; redirectPort=&quot;8443&quot;/&gt;</code>改为<code>&lt;Connector connectionTimeout=&quot;20000&quot; port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot; redirectPort=&quot;8443&quot; URIEncoding=&quot;UTF-8&quot;/&gt;</code></p>
+<p>post</p>
+<p>在项目的web.xml下配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 字符编码过滤器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.web.filter.CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>encoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>forceRequestEncoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>forceResponseEncoding<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>CharacterEncodingFilter<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="Spring代理"><a href="#Spring代理" class="headerlink" title="Spring代理"></a>Spring代理</h6><p>两种</p>
+<ul>
+<li>JDK：代理类以<code>$</code>开头</li>
+<li>cglib：代理的类，要求不能是final类</li>
+</ul>
+<h6 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h6><p>用<code>where in ( )</code></p>
+<h6 id="转json"><a href="#转json" class="headerlink" title="转json"></a>转json</h6><p>启用消息转换器：HttpMessageConverter</p>
+<p> 如果返回结果为对象（Entity Class,List,Map..）类型：启用这个转换器-&gt;MappingJackson2HttpMessageConverter 将对象序列化为json串，使用Jackson组件转换</p>
+<p>如果返回结果为String类型：启用这个转换器-&gt;StringHttpMessageConverter  将字符串原样输出。</p>
+<h6 id="zTree"><a href="#zTree" class="headerlink" title="zTree"></a>zTree</h6><p>jq的插件，生成树</p>
+<h6 id="代理主键、自然主键"><a href="#代理主键、自然主键" class="headerlink" title="代理主键、自然主键"></a>代理主键、自然主键</h6><ul>
+<li><strong>代理主键</strong>：一般是没有业务含义的.只是用于标识一条数据,表示数据的唯一性. </li>
+<li>自然主键: 表示业务来维护主键. </li>
+</ul>
+<h6 id="RBAC权限数据表"><a href="#RBAC权限数据表" class="headerlink" title="RBAC权限数据表"></a>RBAC权限数据表</h6><p>由简到繁</p>
+<ul>
+<li><p><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC_1.png" alt></p>
+</li>
+<li><p><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC_2.png" alt></p>
+</li>
+<li><p><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC_3.png" alt></p>
+</li>
+<li><p><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC_4.png" alt></p>
+</li>
+</ul>
+<h6 id="角色模型的四个级别"><a href="#角色模型的四个级别" class="headerlink" title="角色模型的四个级别"></a>角色模型的四个级别</h6><ul>
+<li><p>0级别：</p>
+<ul>
+<li>模型里包括：用户(U)、角色(R)、许可权(P)</li>
+<li>session代表登录系统产生会话</li>
+<li><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC0.png" alt></li>
+</ul>
+</li>
+<li><p>1级别：</p>
+<ul>
+<li>基于级别0，引入角色间的继承关系。<ul>
+<li>一般继承关系：允许角色间多继承</li>
+<li>受限继承关系：要求单继承</li>
+</ul>
+</li>
+<li><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC1.png" alt></li>
+</ul>
+</li>
+<li><p>2级别：</p>
+<ul>
+<li>基于RBAC0模型的基础上，进行了角色的访问控制。添加了责任分离<ul>
+<li>责任分离包括：静态责任分离、动态责任分离</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>互斥角色：统一用户只能分配到一组互斥角色集合种最多一个角色。例如：出纳和会计</p>
+<ul>
+<li>基数约束：一个角色分配的用户数受限制；一个用户可拥有的角色数受限；一个角色对应的访问权限数也受限，以控制高级全现在系统中的分配</li>
+<li>先决条件角色：要想获得较高的权限，要首先拥有低一级的权限。</li>
+</ul>
+</li>
+<li><p>运行时互斥：运行一个用户具有多个角色，但运行时不可同时激活</p>
+<ul>
+<li><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/RBAC2.png" alt></li>
+</ul>
+</li>
+<li><p>3级别</p>
+<ul>
+<li>是最全面级的权限管理，它是基于RBAC2的基础上，将RBAC1和RBAC2进行整合了，最全面，也最复杂的</li>
+<li><img src="/2019/12/15/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0%5CRBAC3.png" alt></li>
+</ul>
+</li>
+</ul>
+<h6 id="ACL模型"><a href="#ACL模型" class="headerlink" title="ACL模型"></a>ACL模型</h6><p>用户直接对应权限，不经过角色。</p>
+<p>通常用在临时用户</p>
+<h6 id="SpringBoot-unknown错误"><a href="#SpringBoot-unknown错误" class="headerlink" title="SpringBoot unknown错误"></a>SpringBoot unknown错误</h6><p>2.1.5版本后报错，插件兼容</p>
+<p>pom文件内添加</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">maven-jar-plugin.version</span>&gt;</span>2.6<span class="tag">&lt;/<span class="name">maven-jar-plugin.version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="ComponentScan-“报名”"><a href="#ComponentScan-“报名”" class="headerlink" title="@ComponentScan(“报名”)"></a>@ComponentScan(“报名”)</h6><p>指定扫描包，可以不指定</p>
+<h6 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h6><p>@Document生成javadoc </p>
+<p>生成时指定虚拟机参数<code>-encoding UTF-8 -charset UTF-8</code></p>
+<p>@Inherited：继承的子类也能有该直接，接口实现不算</p>
+<h6 id="配置、注解"><a href="#配置、注解" class="headerlink" title="配置、注解"></a>配置、注解</h6><p>整合mybatis要加入在启动类上@MapperScan()注解</p>
+<p>在启动类上加@EnableTransactionManagement//启用声明式事务</p>
+<p>在方法上加@Transactional即可添加事务，加在类上表示该类上所有方法都有</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//隔离级别，传播行为，回滚的异常</span></span><br><span class="line"><span class="meta">@Transactional</span>(isolation=Isolation.DEFAULT,propagation=Propagation.REQUIRED,rollbackFor=Exception.class)</span><br><span class="line"><span class="comment">//只读方法</span></span><br><span class="line"><span class="meta">@Transactional</span>(readOnly=<span class="keyword">true</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简单用注解，复杂用xml</span></span><br><span class="line"><span class="comment">//	@Insert</span></span><br><span class="line"><span class="comment">//	@Delete</span></span><br><span class="line"><span class="comment">//	@Update</span></span><br><span class="line"><span class="meta">@Select</span>(<span class="string">"select * from t_admin where id=#&#123;id&#125;"</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置德鲁伊数据库连接池</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//编程式配置德鲁伊、监控系统</span></span><br><span class="line"><span class="meta">@SpringBootConfiguration</span><span class="comment">//官网推荐用这个注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.datasource"</span>) <span class="comment">//将数据库连接信息直接封装到数据源对象中</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        <span class="comment">//等于spring.datasource.filters=stat</span></span><br><span class="line">        dataSource.setFilters(<span class="string">"stat"</span>);<span class="comment">//配置监控统计拦截的filters</span></span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//配置Druid的监控</span></span><br><span class="line">    <span class="comment">//1、配置一个管理后台的Servlet</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServletRegistrationBean <span class="title">statViewServlet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ServletRegistrationBean bean = <span class="keyword">new</span> ServletRegistrationBean(<span class="keyword">new</span> StatViewServlet(), <span class="string">"/druid/*"</span>);</span><br><span class="line">        Map&lt;String, String&gt; initParams = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        initParams.put(<span class="string">"loginUsername"</span>, <span class="string">"admin"</span>);</span><br><span class="line">        initParams.put(<span class="string">"loginPassword"</span>, <span class="string">"123456"</span>);</span><br><span class="line">        initParams.put(<span class="string">"allow"</span>, <span class="string">""</span>);<span class="comment">// 默认就是允许所有访问</span></span><br><span class="line">        initParams.put(<span class="string">"deny"</span>, <span class="string">"192.168.15.21"</span>);<span class="comment">//拒绝哪个ip访问</span></span><br><span class="line">        bean.setInitParameters(initParams);</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2、配置一个web监控的filter</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> FilterRegistrationBean <span class="title">webStatFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        FilterRegistrationBean bean = <span class="keyword">new</span> FilterRegistrationBean();</span><br><span class="line">        bean.setFilter(<span class="keyword">new</span> WebStatFilter());</span><br><span class="line">        Map&lt;String, String&gt; initParams = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        initParams.put(<span class="string">"exclusions"</span>, <span class="string">"*.js,*.css,/druid/*"</span>);<span class="comment">//排除过滤</span></span><br><span class="line">        bean.setInitParameters(initParams);</span><br><span class="line">        bean.setUrlPatterns(Arrays.asList(<span class="string">"/*"</span>));</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数据库最大连接数默认是100个，实质是101一个，这一个是超级管理员用的</p>
+<h6 id="springboot整合web组件"><a href="#springboot整合web组件" class="headerlink" title="springboot整合web组件"></a>springboot整合web组件</h6><p>@ServletComponentScan开启扫面以下注解</p>
+<ul>
+<li><p>@WebServlet</p>
+</li>
+<li><p>@WebFilter</p>
+</li>
+<li><p>@WebListener</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.ServletContextEvent;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletContextListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebListener;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloListener</span> <span class="keyword">implements</span> <span class="title">ServletContextListener</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span><span class="params">(ServletContextEvent arg0)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"应用销毁了....HelloListener"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextInitialized</span><span class="params">(ServletContextEvent arg0)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"应用启动了....HelloListener"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.Filter;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterChain;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.FilterConfig;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebFilter;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebFilter</span>(urlPatterns=<span class="string">"/*"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"HelloFilter............放行之前"</span>);</span><br><span class="line">        arg2.doFilter(arg0, arg1);</span><br><span class="line">        System.out.println(<span class="string">"HelloFilter............放行之后"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig arg0)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本不用</span></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="meta">@WebServlet</span>(urlPatterns=<span class="string">"/my"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        resp.getWriter().write(<span class="string">"MyServlet do......."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -584,6 +722,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="../../19/SpringSecurity/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          SpringSecurity
+        
+      </div>
+    </a>
   
   
     <a href="../../09/canal%E7%AC%94%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
@@ -733,15 +880,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -769,6 +916,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">springsecurity</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
@@ -777,7 +932,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -786,6 +941,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">bug</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -825,6 +988,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
@@ -833,7 +1000,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
             
             <div class="clearfix"></div>

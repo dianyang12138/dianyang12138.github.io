@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>Flink笔记 | dian的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高】良好的容错性  有状态：指有些需要保存下来比对的数据">
+  <meta name="description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高，良好的容错性  有状态：指有些需要保存下来比对的数据">
 <meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink笔记">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;index.html">
 <meta property="og:site_name" content="dian的博客">
-<meta property="og:description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高】良好的容错性  有状态：指有些需要保存下来比对的数据">
+<meta property="og:description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高，良好的容错性  有状态：指有些需要保存下来比对的数据">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;running_img.png">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_6.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_7.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;e2e.png">
-<meta property="og:updated_time" content="2019-12-10T11:41:50.900Z">
+<meta property="og:updated_time" content="2019-12-26T02:36:42.008Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
   
@@ -199,7 +199,7 @@
       
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。</p>
 <p>Flink比spark更快，延迟更低</p>
-<p>高吞吐，低延迟，准确性高】良好的容错性</p>
+<p>高吞吐，低延迟，准确性高，良好的容错性</p>
 <blockquote>
 <p>有状态：指有些需要保存下来比对的数据</p>
 </blockquote>
@@ -256,7 +256,7 @@
 <p><code>bin/start-cluster.sh</code>群起</p>
 <p>访问flink的web页面<code>http://Masterip:8081</code></p>
 <h4 id="运行jar包"><a href="#运行jar包" class="headerlink" title="运行jar包"></a>运行jar包</h4><h5 id="图形界面"><a href="#图形界面" class="headerlink" title="图形界面"></a>图形界面</h5><p>将打包好的jar包通过页面的<code>Submit new job</code>-&gt;<code>add new</code>提交。</p>
-<p>选中，填写参数</p>
+<p>打勾选中，填写参数</p>
 <ul>
 <li>Entry class：填要运行的main函数的路径。就是导包的路径</li>
 <li>Parallelism：并行度</li>
@@ -1281,15 +1281,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">后端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1317,6 +1317,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">springsecurity</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
@@ -1325,7 +1333,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1334,6 +1342,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">bug</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1373,6 +1389,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
@@ -1381,7 +1401,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
             
             <div class="clearfix"></div>
