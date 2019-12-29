@@ -18,7 +18,8 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;24&#x2F;docker%E7%AC%94%E8%AE%B0&#x2F;docker_1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;24&#x2F;docker%E7%AC%94%E8%AE%B0&#x2F;docker_2.png">
-<meta property="og:updated_time" content="2019-12-27T07:19:02.777Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;24&#x2F;docker%E7%AC%94%E8%AE%B0&#x2F;docker_3.png">
+<meta property="og:updated_time" content="2019-12-28T02:07:03.731Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;24&#x2F;docker%E7%AC%94%E8%AE%B0&#x2F;docker_1.png">
   
@@ -207,6 +208,7 @@
 <blockquote>
 <p>尽管有了控制组和namespace。但是隔离性还是远不如主机级虚拟化好。</p>
 </blockquote>
+<p>6中名称空间：UTS，User，Mount，IPC，Pid，Net</p>
 <p>为了更方便的调用系统(clone()、setns()等函数)，将它做成一种工具，就提出了LXC(LinuxX Container)。</p>
 <p>LXC：最早一批，完整的把容器技术，用一组简易使用的工具，和模板，极大的简化了容器技术使用的工具</p>
 <ul>
@@ -264,6 +266,9 @@
 </ul>
 </li>
 <li><p>阿里云加速器</p>
+<ul>
+<li>在<code>https://cr.console.aliyun.com/</code>可以复制自己的私人镜像加速</li>
+</ul>
 </li>
 <li><p>中国科技大学</p>
 </li>
@@ -304,6 +309,10 @@
 <li><code>docker stop</code>：</li>
 <li><code>docker kill</code>：</li>
 <li><code>docker rm</code>：</li>
+<li><code>docker inspect</code>： 获取容器/镜像的元数据。<ul>
+<li>Cmd：表示打开默认允许命令</li>
+</ul>
+</li>
 </ul>
 <p>版本推荐<code>alpine</code>是用于构建非常小的镜像文件的一个微型发行版，基础环境建议用这个</p>
 <p>busybox：很忙的程序，可以通过链接成别的程序，可以实现别的命令如<code>ls、cat、vim等</code></p>
@@ -334,6 +343,171 @@
 <p><code>docker logs 容器</code>：获取日志，因为只有一个程序，所以日志直接打到控制台上</p>
 <p>下图，描绘了大部分docker的生命周期和命令</p>
 <p><img src="/2019/12/24/docker%E7%AC%94%E8%AE%B0/docker_2.png" alt></p>
+<h2 id="镜像管理"><a href="#镜像管理" class="headerlink" title="镜像管理"></a>镜像管理</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><p>Docker镜像含有启动容器所需要的文件系统及其内容，因此，其用于创建并启动docker容器</p>
+<ul>
+<li>采用分层构建机制，最底层为bootfs，其之为rootfs<ul>
+<li>bootfs：用于系统引导的文件系统，包括bootloader和kernel，容器启动完成后会被卸载以节约内存资源</li>
+<li>rootfs：位于bootfs之上，表现为docker容器的根文件系统<ul>
+<li>传统模式中，系统启动之时，内核挂载rootfs时会首先将其挂载为“只读”模式，完整性自检完成后将其重新挂载为读写模式</li>
+<li>docker中，rootfs由内核挂载为“只读”模式，而后通过“联合挂载”技术额外挂载一个“可写”层</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>位于下层的镜像称为父镜像，最底层的称为基础镜像</p>
+<p>最上层为“可读写”层，其下的均为“只读”层</p>
+<p><strong>Aufs</strong></p>
+<p>aufs(advanced multi-layered unification filesystem)高级多层统一文件系统，是最早被docker拿来实现挂载的文件系统</p>
+<p>aufs是UnionFS的重新实现</p>
+<p><strong>overlayfs</strong></p>
+<p>在3.18版本开始被整合入Linux内核</p>
+<blockquote>
+<p>docker的分层，镜像支持aufs、docker、btrfs、devecemapper</p>
+</blockquote>
+<blockquote>
+<p>在centos7上用的是devicemapper，ubuntu系统用的是aufs</p>
+</blockquote>
+<blockquote>
+<p>新版centos7用的overlayfs。overlayfs也已经升级到overlay2fs了。所以Devicemapper（性能差，不稳定）就不需要了解</p>
+</blockquote>
+<p>可以通过<code>docker info</code>查看使用的文件系统<code>Storage Driver: overlay2</code></p>
+<p>``Backing Filesystem: xfs`表示overlay2的后端文件系统，overlay2是在此之上的</p>
+<h3 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h3><p>只支持https协议，如果要用http协议，必须确认安全。</p>
+<p><strong>分类</strong></p>
+<ul>
+<li>Sponsor Registry：第三方的registry，供客户和Docker社区使用</li>
+<li>Mirror Registry：第三方registry，只让客户使用<ul>
+<li>阿里云等</li>
+</ul>
+</li>
+<li>Vendor Registry：由发布Docker镜像的供应商提供的registry<ul>
+<li>红帽registry等</li>
+</ul>
+</li>
+<li>Private Registry：通过设有防火墙和额外的安全层的私有实体提供的rregistry</li>
+</ul>
+<p><strong>组成</strong></p>
+<ul>
+<li>Repository<ul>
+<li>由某个特定的docker镜像和所有迭代版本组成的镜像仓库</li>
+<li>一个Registry中可以存在多个Repository<ul>
+<li>Repository可分为“顶层仓库”和”用户仓库“</li>
+<li>用户仓库名称格式为“用户名/仓库名”</li>
+</ul>
+</li>
+<li>每个仓库可以包含多个Tag（标签），每个标签对应一个镜像，一个镜像可以有多个Tag</li>
+</ul>
+</li>
+<li>Index<ul>
+<li>维护用户账户、镜像的校验以及公共命名空间的信息</li>
+<li>相当于为Registry提供了一个完整用户认证等功能的检索接口</li>
+</ul>
+</li>
+</ul>
+<p>Registry中的镜像通常由开发人员制作，然后推送到“公共/私有”Registry上保存，供他人使用</p>
+<p>多数情况下，做镜像往往是基于别人已有的。</p>
+<p><strong>Docker Hub</strong></p>
+<ul>
+<li>Image Repositories：可以自己创建镜像仓库</li>
+<li>Automated Builds：自动构建</li>
+<li>Webhooks：自动构建的特征</li>
+<li>Organizations：工作组</li>
+<li>GitHub and Bitbucket Integration：工作整合</li>
+</ul>
+<p><code>docker pull &lt;registry&gt;[:&lt;port&gt;]/[&lt;namespace&gt;/]&lt;name&gt;:&lt;tag&gt;</code></p>
+<ul>
+<li>registry：哪个docker服务器</li>
+<li>port：服务器的端口号。默认443</li>
+<li>namespace：名称空间：哪个用户的仓库<ul>
+<li>组织名</li>
+<li>用户名</li>
+<li>角色名</li>
+</ul>
+</li>
+<li>name：仓库名</li>
+<li>tag</li>
+</ul>
+<h3 id="制作镜像"><a href="#制作镜像" class="headerlink" title="制作镜像"></a>制作镜像</h3><p><img src="/2019/12/24/docker%E7%AC%94%E8%AE%B0/docker_3.png" alt></p>
+<p>automated build是基于Dockerfile实现的</p>
+<p>基于容器制作镜像</p>
+<p>使用：<code>docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]</code></p>
+<ul>
+<li><p>CONTAINER：指定制作哪个容器</p>
+</li>
+<li><p><code>-c</code>：更改参数</p>
+<p>如<code>-c &#39;CMD[&quot;/bin/httpd&quot;,&quot;-f&quot;,&quot;-h&quot;,&quot;/data/html&quot;]&#39;</code></p>
+</li>
+<li><p><code>-p</code>：暂停状态</p>
+</li>
+<li><p><code>-a</code>：制定作者</p>
+</li>
+</ul>
+<p>给镜像打标签<code>docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]</code></p>
+<ul>
+<li><p>可以用标签引用如果没有标签就用ID引用</p>
+</li>
+<li><p>仓库名+标签名</p>
+</li>
+</ul>
+<p><code>docker login -u 用户名</code>：登录docker，然后就可以push自己的镜像</p>
+<p><a href="https://cr.console.aliyun.com/" target="_blank" rel="noopener">配置到阿里云</a>上面有很清楚的介绍</p>
+<h3 id="镜像的导入、导出"><a href="#镜像的导入、导出" class="headerlink" title="镜像的导入、导出"></a>镜像的导入、导出</h3><p><code>docker save [OPTIONS] IMAGE [IMAGE...]</code></p>
+<ul>
+<li>-o：保存到何处</li>
+</ul>
+<p><code>docker load [OPTIONS]</code></p>
+<ul>
+<li>-i：指定导入文件</li>
+</ul>
+<h2 id="容器虚拟化网络"><a href="#容器虚拟化网络" class="headerlink" title="容器虚拟化网络"></a>容器虚拟化网络</h2><p>Linux内核支持两种级别的模拟：</p>
+<ul>
+<li>二层设备<ul>
+<li>成对出现，可以模拟为一根网线的两头</li>
+<li>原生支持实现软件交换机</li>
+<li>在一台机子上模拟：一端接着名称空间，一端接着交换机，就可以实现虚拟化网络</li>
+</ul>
+</li>
+<li>三层设备</li>
+</ul>
+<p>OVS：OpenVSwitch开源的虚拟交换机</p>
+<p>​    用纯软件技术实现交换机，可以模拟实现非常高级的三层网络设备。由网络设备生产公司研发</p>
+<p>SDN：软件驱动（定义）的网络</p>
+<p>​    在硬件和软件上虚拟网络。</p>
+<p>Linux内核可以模拟实现路由</p>
+<p>Overlay Network：可以减少转发的效率问题</p>
+<p>Docker提供了三种网路</p>
+<ul>
+<li><p>bridge：桥接网络，在本机之上自动创建纯粹的软交换机，也可以当网卡使用。</p>
+<ul>
+<li>每次启动容器就会给容器自动分配一对网卡的设备，一端在容器，一端在宿主机上。插在bridge上</li>
+<li>docker0桥就是net桥</li>
+</ul>
+<blockquote>
+<p><code>yum -y install bridge-utils</code>安装后，用<code>brctl show</code>可以查看四个接口</p>
+</blockquote>
+</li>
+<li><p>host：宿主机</p>
+<ul>
+<li>让容器使用宿主机网络名称空间</li>
+</ul>
+</li>
+<li><p>null：无网卡</p>
+<ul>
+<li>没有网络</li>
+</ul>
+</li>
+</ul>
+<p>两个容器可以直接通讯。</p>
+<p>外部访问，默认无法访问。可以映射到宿主机端口，也可以共享网络名称空间。</p>
+<p><code>docker container inspect web1</code>查看network时名词：</p>
+<ul>
+<li>bridge：模式</li>
+<li>Gareway：网关</li>
+<li>IPAddress：IP地址</li>
+<li>IPPrefixLen：掩码长度</li>
+<li>MacAddress：虚拟网卡的mac地址</li>
+</ul>
 
       
 
@@ -704,11 +878,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">spring</a>
+                <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
               <li class="article-tag-list-item">
