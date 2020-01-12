@@ -17,7 +17,7 @@
 <meta property="og:description" content="变量、常量、注释变量名推荐  驼峰体：ageOfName 下划线：age_of_name">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;python%E7%AC%94%E8%AE%B0&#x2F;python_1.png">
-<meta property="og:updated_time" content="2019-12-29T09:49:21.219Z">
+<meta property="og:updated_time" content="2020-01-09T09:18:49.562Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;22&#x2F;python%E7%AC%94%E8%AE%B0&#x2F;python_1.png">
   
@@ -697,6 +697,15 @@
 <p>标准装饰器</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(*args,**kwargs)</span>:</span></span><br><span class="line">        <span class="string">'''执行被装饰函数之前的操作'''</span></span><br><span class="line">        r= func(*args,**kwargs)</span><br><span class="line">        <span class="string">'''执行被装饰函数之后的操作'''</span></span><br><span class="line">        <span class="keyword">return</span>  r</span><br><span class="line">    <span class="keyword">return</span> inner</span><br></pre></td></tr></table></figure>
 
+<p>带参装饰器</p>
+<p>就是在原来的装饰器基础上再包装一层，用来传参，返回装饰器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xxx</span><span class="params">(*args)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(*args,**kwargs)</span>:</span></span><br><span class="line">            ret = func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">return</span> ret</span><br><span class="line">        <span class="keyword">return</span> inner</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@xxx('参数')  #  == @wrapper</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>样例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用装饰器传入值，能控制写到哪个文件夹</span></span><br><span class="line"><span class="comment"># 写了很多的函数</span></span><br><span class="line"><span class="comment"># 添加日志 : 在 时间 调用了什么函数</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logger</span><span class="params">(path)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">(*args,**kwargs)</span>:</span></span><br><span class="line">            ret = func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">with</span> open(path,mode=<span class="string">'a'</span>,encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                msg = <span class="string">'%s 执行了%s'</span>%(time.strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>),func.__name__)</span><br><span class="line">                f.write(msg)</span><br><span class="line">            <span class="keyword">return</span> ret</span><br><span class="line">        <span class="keyword">return</span> inner</span><br><span class="line">    <span class="keyword">return</span> log</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger('auth.log')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'登录的逻辑'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger('auth.log')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'注册的逻辑'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger('auth.log')     # ret = log('auth.log')   show_goods = ret(show_goods)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_goods</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'查看所有商品信息'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger('buy.log')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_goods</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'商品加入购物车'</span>)</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
 <li><p>内置模块</p>
 </li>
@@ -886,7 +895,521 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line">tp = collections.namedtuple(<span class="string">'这里是描述信息'</span>, [<span class="string">'元组的参数1'</span>, <span class="string">'参数2'</span>, <span class="string">'参数3'</span>])</span><br><span class="line">t = tp(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)  <span class="comment"># 设置值</span></span><br><span class="line">print(t.元组的参数<span class="number">1</span>)  <span class="comment"># 通过参数名引用</span></span><br><span class="line">print(t[<span class="number">1</span>])  <span class="comment"># 通过索引引用</span></span><br><span class="line">d = collections.defaultdict(int, name=<span class="string">'Andy'</span>, age=<span class="number">10</span>)  <span class="comment"># 第一个参数，确认返回值</span></span><br><span class="line">print(d[<span class="string">'asdas'</span>])  <span class="comment"># 取不到返回第一个参数构造的值，并且添加进去</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span></span><br><span class="line"></span><br><span class="line">collections.defaultdict(a)  <span class="comment"># 用自己的方法传入</span></span><br><span class="line"><span class="comment"># 传入可hash的，返回计数</span></span><br><span class="line">c = collections.Counter(<span class="string">'asdassadsadasdasdsa'</span>)</span><br><span class="line">print(c)  <span class="comment"># Counter(&#123;'a': 7, 's': 7, 'd': 5&#125;)</span></span><br><span class="line">c.most_common(<span class="number">2</span>)  <span class="comment"># 以列表的方式返回(值，数)的元组</span></span><br></pre></td></tr></table></figure>
 
+<h3 id="shutil"><a href="#shutil" class="headerlink" title="shutil"></a>shutil</h3><ul>
+<li><code>shutil.copyfileobj(fsrc, fdst[, length])</code>：将文件内容拷贝到另一个文件中</li>
+<li><code>shutil.copyfile(src, dst)</code>：拷贝文件</li>
+<li><code>shutil.copymode(src, dst)</code>：仅拷贝权限。内容、组、用户均不变</li>
+<li><code>shutil.copystat(src, dst)</code>：仅拷贝状态的信息，包括：mode bits, atime, mtime, flags</li>
+<li><code>shutil.copy(src, dst)</code>：拷贝文件和权限</li>
+<li><code>shutil.copy2(src, dst)</code>：拷贝文件和状态信息</li>
+<li><code>shutil.ignore_patterns(*patterns)</code>：忽略什么文件，往往作为参数传入</li>
+<li><code>shutil.copytree(src, dst, symlinks=False, ignore=None)</code>：递归的去拷贝文件夹</li>
+<li><code>shutil.rmtree(path[, ignore_errors[, onerror]])</code>：递归的去删除文件</li>
+<li><code>shutil.move(src, dst)</code>：递归的去移动文件，它类似mv命令。</li>
+<li><code>shutil.make_archive(base_name, format,...)</code>：创建压缩包并返回文件路径<ul>
+<li>base_name： 压缩包的文件名，也可以是压缩包的路径。只是文件名时，则保存至当前目录，否则保存至指定路径</li>
+<li>format： 压缩包种类，“zip”, “tar”, “bztar”，“gztar”</li>
+<li>root_dir： 要压缩的文件夹路径（默认当前目录）</li>
+<li>owner： 用户，默认当前用户</li>
+<li>group： 组，默认当前组</li>
+<li>logger： 用于记录日志，通常是logging.Logger对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"></span><br><span class="line">shutil.copy2(<span class="string">'D:\python_learn\lianjia.html'</span>,</span><br><span class="line">             <span class="string">'D:\python_learn\lianjia_bk.html'</span>)<span class="comment">#拷贝</span></span><br><span class="line"></span><br><span class="line">shutil.copytree(<span class="string">"outer"</span>,</span><br><span class="line">                <span class="string">"outer3"</span>,</span><br><span class="line">                ignore=shutil.ignore_patterns(<span class="string">"__init__.py"</span>,<span class="string">"sag"</span>))<span class="comment">#忽略文件，可以放规则</span></span><br><span class="line"></span><br><span class="line">shutil.rmtree(<span class="string">"folder1"</span>,ignore_errors=<span class="literal">True</span>)<span class="comment">#忽略错误</span></span><br><span class="line">shutil.move(<span class="string">'folder1'</span>, <span class="string">'folder2'</span>)</span><br><span class="line">shutil.move(<span class="string">"folder1"</span>,<span class="string">"folder2"</span>, copy_function=shutil.copy2)<span class="comment">#移动文件，</span></span><br><span class="line"></span><br><span class="line">total, used, free = shutil.disk_usage(<span class="string">"."</span>)<span class="comment">#查看磁盘使用空间，也可以传c:\\</span></span><br><span class="line">print(<span class="string">"当前磁盘共: %iGB, 已使用: %iGB, 剩余: %iGB"</span>%(total / <span class="number">1073741824</span>, used / <span class="number">1073741824</span>, free / <span class="number">1073741824</span>))</span><br><span class="line"></span><br><span class="line">shutil.make_archive(<span class="string">'压缩文件夹的名字'</span>, <span class="string">'zip'</span>,<span class="string">'待压缩的文件夹l路径'</span>)</span><br><span class="line"></span><br><span class="line">shutil.unpack_archive(<span class="string">'要解压的文件'</span>,<span class="string">r'解压到的路径'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="comment"># 输出内容是有等级的 : 默认处理warning级别以上的所有信息</span></span><br><span class="line">logging.debug(<span class="string">'debug message'</span>)          <span class="comment"># 调试</span></span><br><span class="line">logging.info(<span class="string">'info message'</span>)            <span class="comment"># 信息</span></span><br><span class="line">logging.warning(<span class="string">'warning message'</span>)      <span class="comment"># 警告</span></span><br><span class="line">logging.error(<span class="string">'error message'</span>)          <span class="comment"># 错误</span></span><br><span class="line">logging.critical(<span class="string">'critical message'</span>)    <span class="comment"># 批判性的</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.无论你希望日志里打印哪些内容,都得你自己写,没有自动生成日志这种事儿</span></span><br><span class="line">logging.basicconfig</span><br><span class="line"><span class="comment"># 输出到屏幕</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s[line :%(lineno)d]-%(module)s:  %(message)s'</span>,</span><br><span class="line">    datefmt=<span class="string">'%Y-%m-%d %H:%M:%S %p'</span>,</span><br><span class="line">)</span><br><span class="line">logging.warning(<span class="string">'warning message test2'</span>)</span><br><span class="line">logging.error(<span class="string">'error message test2'</span>)</span><br><span class="line">logging.critical(<span class="string">'critical message test2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出到文件,并且设置信息的等级</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s[line :%(lineno)d]-%(module)s:  %(message)s'</span>,</span><br><span class="line">    datefmt=<span class="string">'%Y-%m-%d %H:%M:%S %p'</span>,</span><br><span class="line">    filename=<span class="string">'tmp.log'</span>,</span><br><span class="line">    level=logging.DEBUG  <span class="comment"># 默认追加可以用filemode改成覆盖</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 同时向文件和屏幕上输出 和 乱码</span></span><br><span class="line">fh = logging.FileHandler(<span class="string">'tmp.log'</span>, encoding=<span class="string">'utf-8'</span>)  <span class="comment"># 输出到文件</span></span><br><span class="line">sh = logging.StreamHandler()  <span class="comment"># 输出到屏幕</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s[line :%(lineno)d]-%(module)s:  %(message)s'</span>,</span><br><span class="line">    datefmt=<span class="string">'%Y-%m-%d %H:%M:%S %p'</span>,</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    handlers=[fh, sh]  <span class="comment"># 这里可以配置多个，可以输出到多个文件</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># logging.debug('debug 信息错误 test2')</span></span><br><span class="line"><span class="comment"># logging.info('warning 信息错误 test2')</span></span><br><span class="line"><span class="comment"># logging.warning('warning message test2')</span></span><br><span class="line"><span class="comment"># logging.error('error message test2')</span></span><br><span class="line"><span class="comment"># logging.critical('critical message test2')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 做日志的切分</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> logging <span class="keyword">import</span> handlers</span><br><span class="line"></span><br><span class="line">sh = logging.StreamHandler()</span><br><span class="line">rh = handlers.RotatingFileHandler(<span class="string">'myapp.log'</span>, maxBytes=<span class="number">1024</span>*<span class="number">1024</span>, backupCount=<span class="number">5</span>)  <span class="comment"># 按照大小做切割1024kb，只保留5个文件，如果切到第六个，就删除第一个文件</span></span><br><span class="line">fh = handlers.TimedRotatingFileHandler(filename=<span class="string">'x2.log'</span>, when=<span class="string">'s'</span>, interval=<span class="number">5</span>, encoding=<span class="string">'utf-8'</span>)<span class="comment">#按时间切割when表示按秒切，h为按小时。</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    format=<span class="string">'%(asctime)s - %(name)s - %(levelname)s[line :%(lineno)d]-%(module)s:  %(message)s'</span>,</span><br><span class="line">    datefmt=<span class="string">'%Y-%m-%d %H:%M:%S %p'</span>,</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    handlers=[fh, rh, sh]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>logging.basicConfig()函数中可通过具体参数来更改logging模块默认行为，可用参数有：</p>
+<ul>
+<li>filename：用指定的文件名创建FiledHandler，这样日志会被存储在指定的文件中。</li>
+<li>filemode：文件打开方式，在指定了filename时使用这个参数，默认值为“a”还可指定为“w”。</li>
+<li>format：指定handler使用的日志显示格式。</li>
+<li>datefmt：指定日期时间格式。</li>
+<li>level：设置rootlogger（后边会讲解具体概念）的日志级别</li>
+<li>stream：用指定的stream创建StreamHandler。可以指定输出到sys.stderr,sys.stdout或者文件</li>
+<li>(f=open(‘test.log’,’w’))，默认为sys.stderr。若同时列出了filename和stream两个参数，则stream参数会被忽略。</li>
+</ul>
+<p>format参数中可能用到的格式化串：</p>
+<ul>
+<li>%(name)s Logger的名字</li>
+<li>%(levelno)s 数字形式的日志级别</li>
+<li>%(levelname)s 文本形式的日志级别</li>
+<li>%(pathname)s 调用日志输出函数的模块的完整路径名，可能没有</li>
+<li>%(filename)s 调用日志输出函数的模块的文件名</li>
+<li>%(module)s 调用日志输出函数的模块名</li>
+<li>%(funcName)s 调用日志输出函数的函数名</li>
+<li>%(lineno)d 调用日志输出函数的语句所在的代码行</li>
+<li>%(created)f 当前时间，用UNIX标准的表示时间的浮 点数表示</li>
+<li>%(relativeCreated)d 输出日志信息时的，自Logger创建以 来的毫秒数</li>
+<li>%(asctime)s 字符串形式的当前时间。默认格式是 “2003-07-08 16:49:45,896”。逗号后面的是毫秒</li>
+<li>%(thread)d 线程ID。可能没有</li>
+<li>%(threadName)s 线程名。可能没有</li>
+<li>%(process)d 进程ID。可能没有</li>
+<li>%(message)s用户输出的消息</li>
+</ul>
+<p>logger对象配置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger()</span><br><span class="line"><span class="comment"># 创建一个handler，用于写入日志文件</span></span><br><span class="line">fh = logging.FileHandler(<span class="string">'test.log'</span>,encoding=<span class="string">'utf-8'</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment"># 再创建一个handler，用于输出到控制台 </span></span><br><span class="line">ch = logging.StreamHandler() </span><br><span class="line">formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)</span><br><span class="line">fh.setLevel(logging.DEBUG)</span><br><span class="line"></span><br><span class="line">fh.setFormatter(formatter) </span><br><span class="line">ch.setFormatter(formatter) </span><br><span class="line">logger.addHandler(fh) <span class="comment">#logger对象可以添加多个fh和ch对象 </span></span><br><span class="line">logger.addHandler(ch) </span><br><span class="line"></span><br><span class="line">logger.debug(<span class="string">'logger debug message'</span>) </span><br><span class="line">logger.info(<span class="string">'logger info message'</span>) </span><br><span class="line">logger.warning(<span class="string">'logger warning message'</span>) </span><br><span class="line">logger.error(<span class="string">'logger error message'</span>) </span><br><span class="line">logger.critical(<span class="string">'logger critical message'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>logger配置文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">logging配置</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> logging.config</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义三种日志输出格式 开始</span></span><br><span class="line"></span><br><span class="line">standard_format = <span class="string">'[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]'</span> \</span><br><span class="line">                  <span class="string">'[%(levelname)s][%(message)s]'</span> <span class="comment">#其中name为getlogger指定的名字</span></span><br><span class="line"></span><br><span class="line">simple_format = <span class="string">'[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'</span></span><br><span class="line"></span><br><span class="line">id_simple_format = <span class="string">'[%(levelname)s][%(asctime)s] %(message)s'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义日志输出格式 结束</span></span><br><span class="line"></span><br><span class="line">logfile_dir = os.path.dirname(os.path.abspath(__file__))  <span class="comment"># log文件的目录</span></span><br><span class="line"></span><br><span class="line">logfile_name = <span class="string">'all2.log'</span>  <span class="comment"># log文件名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果不存在定义的日志目录就创建一个</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.isdir(logfile_dir):</span><br><span class="line">    os.mkdir(logfile_dir)</span><br><span class="line"></span><br><span class="line"><span class="comment"># log文件的全路径</span></span><br><span class="line">logfile_path = os.path.join(logfile_dir, logfile_name)</span><br><span class="line"></span><br><span class="line"><span class="comment"># log配置字典</span></span><br><span class="line">LOGGING_DIC = &#123;</span><br><span class="line">    <span class="string">'version'</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">'disable_existing_loggers'</span>: <span class="literal">False</span>,</span><br><span class="line">    <span class="string">'formatters'</span>: &#123;</span><br><span class="line">        <span class="string">'standard'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: standard_format</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'simple'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>: simple_format</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'filters'</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">'handlers'</span>: &#123;</span><br><span class="line">        <span class="comment">#打印到终端的日志</span></span><br><span class="line">        <span class="string">'console'</span>: &#123;</span><br><span class="line">            <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">            <span class="string">'class'</span>: <span class="string">'logging.StreamHandler'</span>,  <span class="comment"># 打印到屏幕</span></span><br><span class="line">            <span class="string">'formatter'</span>: <span class="string">'simple'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">#打印到文件的日志,收集info及以上的日志</span></span><br><span class="line">        <span class="string">'default'</span>: &#123;</span><br><span class="line">            <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">            <span class="string">'class'</span>: <span class="string">'logging.handlers.RotatingFileHandler'</span>,  <span class="comment"># 保存到文件</span></span><br><span class="line">            <span class="string">'formatter'</span>: <span class="string">'standard'</span>,</span><br><span class="line">            <span class="string">'filename'</span>: logfile_path,  <span class="comment"># 日志文件</span></span><br><span class="line">            <span class="string">'maxBytes'</span>: <span class="number">1024</span>*<span class="number">1024</span>*<span class="number">5</span>,  <span class="comment"># 日志大小 5M</span></span><br><span class="line">            <span class="string">'backupCount'</span>: <span class="number">5</span>,</span><br><span class="line">            <span class="string">'encoding'</span>: <span class="string">'utf-8'</span>,  <span class="comment"># 日志文件的编码，再也不用担心中文log乱码了</span></span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'loggers'</span>: &#123;</span><br><span class="line">        <span class="comment">#logging.getLogger(__name__)拿到的logger配置</span></span><br><span class="line">        <span class="string">''</span>: &#123;</span><br><span class="line">            <span class="string">'handlers'</span>: [<span class="string">'default'</span>, <span class="string">'console'</span>],  <span class="comment"># 这里把上面定义的两个handler都加上，即log数据既写入文件又打印到屏幕</span></span><br><span class="line">            <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">            <span class="string">'propagate'</span>: <span class="literal">True</span>,  <span class="comment"># 向上（更高level的logger）传递</span></span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_my_logging_cfg</span><span class="params">()</span>:</span></span><br><span class="line">    logging.config.dictConfig(LOGGING_DIC)  <span class="comment"># 导入上面定义的logging配置</span></span><br><span class="line">    logger = logging.getLogger(__name__)  <span class="comment"># 生成一个log实例</span></span><br><span class="line">    logger.info(<span class="string">'It works!'</span>)  <span class="comment"># 记录该文件的运行状态</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    load_my_logging_cfg()</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- bin</span><br><span class="line"> - start.py</span><br><span class="line">- conf</span><br><span class="line">- core</span><br><span class="line">- db</span><br><span class="line">- <span class="class"><span class="keyword">lib</span></span></span><br><span class="line">- log</span><br></pre></td></tr></table></figure>
+
+<h2 id="re模块、正则表达式"><a href="#re模块、正则表达式" class="headerlink" title="re模块、正则表达式"></a>re模块、正则表达式</h2><h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p><a href="http://tool.chinaz.com/regex" target="_blank" rel="noopener">正则测试网站</a></p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>匹配内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\w</td>
+<td>匹配一位字母（包含中文）或数字或下划线</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配一位非字母（包含中文）或数字或下划线</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意的空白符（\t，空格等）</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意非空白符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配一位数字</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>p匹配非数字</td>
+</tr>
+<tr>
+<td>\A</td>
+<td>从字符串开头匹配</td>
+</tr>
+<tr>
+<td>\z</td>
+<td>匹配字符串的结束，如果是换行，只匹配到换行前的结果</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个制表符</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配字符串的结尾</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意字符，除了换行符，当re.DOTALL标记被指定时，则可以匹配包括换行符的任意字符。</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td>匹配字符组中的字符</td>
+</tr>
+<tr>
+<td>[^…]</td>
+<td>匹配除了字符组中的字符的所有字符</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配0个或者多个左边的字符。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配一个或者多个左边的字符。</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配0个或者1个左边的字符，{}后非贪婪方式。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>精准匹配n个前面的表达式。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配n到m次由前面的正则表达式定义的片段，贪婪方式</td>
+</tr>
+<tr>
+<td>a|b</td>
+<td>匹配a或者b。</td>
+</tr>
+<tr>
+<td>()</td>
+<td>匹配括号内的表达式，也表示一个组</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>单词结尾</td>
+</tr>
+<tr>
+<td>\</td>
+<td>转义</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>[xxx]</code>：一个[]表示只匹配一个，内部写要匹配的字符。根据ascii进行范围比对。如果要匹配<code>abc</code>中的任意一个，就是<code>[abc]</code>或者<ul>
+<li><code>[0-9]</code>表示匹配0到9任一字符</li>
+<li>[a-zA-Z]：所有大小写</li>
+</ul>
+</li>
+<li><code>^ab&amp;</code>：表示匹配<code>ab</code>其他都不匹配</li>
+<li><code>ing\b</code>：以ing结尾的单词</li>
+<li><code>W{}</code>：用来约束左边的符号。</li>
+<li><code>\d{2,}</code>：匹配数字至少2个</li>
+<li>贪婪匹配：在量词允许的情况下，按最多的匹配内容<ul>
+<li><code>\d{3,}4</code>：如果一个字符串出现多个4，一直会匹配到最后一个4</li>
+<li><code>\d{3,}?4</code>：在量词后加<code>?</code>表示非贪婪模式。匹配到第一个4</li>
+</ul>
+</li>
+<li><code>\</code>：转义如<code>\\</code>表示<code>\</code></li>
+<li>在<code>[]</code>里，<code>.</code>、<code>()</code>等没有特殊意义，就表示该符号，但是<code>-</code>需要转义要用<code>\-</code></li>
+<li><code>?</code>问号常用到非贪婪匹配</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">res = re.findall(<span class="string">'9(\d)(\d)'</span>, <span class="string">'19740asdsa596115rrs'</span>)  <span class="comment"># 找到所有</span></span><br><span class="line">print(res)  <span class="comment"># [('7', '4'), ('6', '1')]</span></span><br><span class="line">res = re.search(<span class="string">'9(\d)(\d)'</span>, <span class="string">'19740asdsa56115rrs'</span>)  <span class="comment"># 找到第一个对象就返回</span></span><br><span class="line"><span class="keyword">if</span> res:</span><br><span class="line">    print(res)  <span class="comment"># &lt;re.Match object; span=(1, 4), match='974'&gt;</span></span><br><span class="line">    print(res.group(<span class="number">0</span>))  <span class="comment"># 974</span></span><br><span class="line">    print(res.group(<span class="number">1</span>))  <span class="comment"># 7</span></span><br><span class="line">    print(res.group(<span class="number">2</span>))  <span class="comment"># 4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="re模块"><a href="#re模块" class="headerlink" title="re模块"></a>re模块</h3><ul>
+<li>findall：按照完整的正则进行匹配，但只显示括号里匹配到的内容。没有括号显示所有<ul>
+<li>如果多个括号列表返回，元素为匹配到的括号元组</li>
+</ul>
+</li>
+<li>search：按照完整的正则进行匹配。反对一个对象<ul>
+<li>group()：返回第一个匹配到完整显示</li>
+<li>group(1)：返回匹配到的第一个括号，2、3…按照顺序</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><code>?:</code>是可以不显示</p>
+<p><code>?P&lt;name&gt;</code>：取名</p>
+<p><code>(?P=name)</code>：引用取名的，如果不相同就匹配不上</p>
+<p><code>\1</code>：表示引用第一组的内容，但是\1有特殊含义，所有往往在字符串前加r。用的少</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (?P&lt;名字&gt;正则表达式)</span></span><br><span class="line"><span class="comment"># ret.group('名字')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分组命名的引用</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">exp= <span class="string">'&lt;abc&gt;akd7008&amp;(&amp;*)hgdwuih&lt;/abb&gt;008&amp;(&amp;*)hgdwuih&lt;/abd&gt;'</span></span><br><span class="line">ret= re.search(<span class="string">'&lt;(?P&lt;tag&gt;\w+)&gt;.*?&lt;/(?P=tag)&gt;'</span>,exp)</span><br><span class="line">print(ret)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">exp= <span class="string">'&lt;abc&gt;akd7008&amp;(&amp;*)hgdwuih&lt;/abc&gt;008&amp;(&amp;*)hgdwuih&lt;/abd&gt;'</span></span><br><span class="line">ret= re.search(<span class="string">r'&lt;(\w+)&gt;.*?&lt;/\1&gt;'</span>,exp)</span><br><span class="line">ret= re.search(<span class="string">'&lt;(\w+)&gt;.*?&lt;/\\1&gt;'</span>,exp)</span><br><span class="line">print(ret)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">ret=re.findall(<span class="string">r"\d+\.\d+|(\d+)"</span>,<span class="string">"1-2*(60+(-40.35/5)-(-4*3))"</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = [<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'60'</span>, <span class="string">''</span>, <span class="string">'5'</span>, <span class="string">'4'</span>, <span class="string">'3'</span>,<span class="string">''</span>,<span class="string">''</span>]</span><br><span class="line">ret.remove(<span class="string">''</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = filter(<span class="keyword">lambda</span> n:n,ret)</span><br><span class="line">print(list(ret))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分组命名(?P&lt;组名&gt;正则) (?P=组名)</span></span><br><span class="line"><span class="comment"># 有的时候我们要匹配的内容是包含在不想要的内容之中的,</span></span><br><span class="line"><span class="comment"># 只能先把不想要的内容匹配出来,然后再想办法从结果中去掉</span></span><br></pre></td></tr></table></figure>
+
+<p>re不常用方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">re.split(<span class="string">'[|]'</span>,<span class="string">'sa|dsadd'</span>)<span class="comment">#根据正则表达式切割保留，带括号会保留</span></span><br><span class="line">re.sub(<span class="string">'\d+'</span>,<span class="string">'数字'</span>,<span class="string">'sads45dfs566dd3556sadsa'</span>,<span class="number">2</span>)<span class="comment">#根据正则替换2次。sads数字dfs数字dd3556sadsa</span></span><br><span class="line">re.subn(<span class="string">'\d+'</span>,<span class="string">'数字'</span>,<span class="string">'sads45dfs566dd3556sadsa'</span>)<span class="comment">#返回替换后的和次数元组('sads数字dfs数字dd数字sadsa', 3)</span></span><br><span class="line">re.match(<span class="string">'\d+'</span>,<span class="string">'123sdasa'</span>)<span class="comment">#相当于在正则之前加了^。&lt;re.Match object; span=(0, 3), match='123'&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>re编译和迭代</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">ret = re.compile(<span class="string">'\d+'</span>)  <span class="comment"># 编译正则表达式</span></span><br><span class="line">ret.search(<span class="string">"传入字符串\'sadsa56165\'"</span>)</span><br><span class="line"><span class="comment"># 节省时间</span></span><br><span class="line">ret = re.finditer(<span class="string">'\d+'</span>, <span class="string">"sad516das11d56as4dsa561das531fa6w465s3a21d321as5f1ds531gs56ad1ads65f4a684fa9d"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ret:</span><br><span class="line">    print(i.group())</span><br><span class="line"><span class="comment"># 两个可以结合使用</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><p>python最大递归深度1000层</p>
+<p>修改最大递归深度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.setrecursionlimit(<span class="number">100000</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h3><p>对象初始化调用<code>__init__</code>方法，通过<code>self.属性名</code>添加属性。</p>
+<p>属性的增删改查</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    print(<span class="number">11</span>)  <span class="comment"># 类内部会依次执行，方法不会执行</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, sex, job)</span>:</span>  <span class="comment"># 必须这么叫，不能改变，属性都写在这</span></span><br><span class="line">        print(<span class="string">'init我被调用了'</span>)</span><br><span class="line">        self.name = name</span><br><span class="line">        self.sex = sex</span><br><span class="line">        self.job = job</span><br><span class="line"></span><br><span class="line">it = Person(<span class="string">"蔡徐坤"</span>, <span class="string">"女性"</span>, <span class="string">"艺人"</span>)  <span class="comment"># 类名()会调用__init__方法。会将self返回</span></span><br><span class="line">print(it.name)</span><br><span class="line">print(it.__dict__[<span class="string">'sex'</span>])</span><br><span class="line">it.sss=<span class="number">1</span><span class="comment">#可以增加属性</span></span><br><span class="line">print(it.__dict__)</span><br><span class="line"><span class="keyword">del</span> it.sss</span><br><span class="line">print(it.__dict__)</span><br></pre></td></tr></table></figure>
+
+<p><strong>实例化所经历的步骤</strong></p>
+<ol>
+<li>类名() 之后的第一个事儿 :开辟一块儿内存空间</li>
+<li>调用<code>__init__</code>把空间的内存地址作为self参数传递到函数内部</li>
+<li>所有的这一个对象需要使用的属性都需要和self关联起来</li>
+<li>执行完init中的逻辑之后,self变量会自动的被返回到调用处(发生实例化的地方)</li>
+</ol>
+<p>对象会存储类指针，指向类</p>
+<p>类中的变量是静态变量对象中的变量只属于对象本身,每个对象有属于自己的空间来存储对象的变量当使用对象名去调用某一个属性的时候会优先在自己的空间中寻找,找不到再去对应的类中寻找如果自己没有就引用类的,如果类也没有就报错对于类来说,类中的变量所有的对象都是可以读取的,并且读取的是同一份变量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, sex, job)</span>:</span></span><br><span class="line">        print(<span class="string">'init我被调用了'</span>)</span><br><span class="line">        self.name = name</span><br><span class="line">        self.sex = sex</span><br><span class="line">        self.job = job</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">xd</span><span class="params">(self, action)</span>:</span>  <span class="comment"># 这个self就是实例化的对象</span></span><br><span class="line">        print(self.name + <span class="string">"在"</span> + str(action))</span><br><span class="line">it = Person(<span class="string">"蔡徐坤"</span>, <span class="string">"女性"</span>, <span class="string">"艺人"</span>)</span><br><span class="line">it.xd(<span class="string">"舔狗"</span>)  <span class="comment"># 会自动传入self</span></span><br><span class="line">Person.xd(it, <span class="string">"舔狗"</span>)  <span class="comment"># 这样也是可以调用的</span></span><br></pre></td></tr></table></figure>
+
+<p>组合：就是对象作为另一个对象的属性</p>
+<p>直接写在类下的是静态变量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    Country = <span class="string">'中国'</span>     <span class="comment"># 静态变量/静态属性 存储在类的命名空间里的</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,age,country)</span>:</span>  <span class="comment"># 绑定方法 存储在类的命名空间里的</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">        self.country = country</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func4</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func5</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">a = A(<span class="string">'alex'</span>,<span class="number">83</span>,<span class="string">'印度'</span>)</span><br><span class="line">b = A(<span class="string">'wusir'</span>,<span class="number">74</span>,<span class="string">'泰国人'</span>)</span><br><span class="line">a.Country = <span class="string">'日本人'</span><span class="comment">#对象调用静态变量无法修改，这里是增加属性</span></span><br><span class="line">print(a.Country)<span class="comment">#日本人</span></span><br><span class="line">print(b.Country)<span class="comment">#中国</span></span><br><span class="line">print(A.Country)<span class="comment">#中国</span></span><br></pre></td></tr></table></figure>
+
+<p>单继承</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'in D'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(D)</span>:</span><span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(C)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'in A'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span><span class="keyword">pass</span></span><br><span class="line">B().func()</span><br></pre></td></tr></table></figure>
+
+<p>多继承</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#多继承</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span>print(<span class="string">'in B'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">     <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span>print(<span class="string">'in A'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(B,A)</span>:</span><span class="keyword">pass</span></span><br><span class="line">C().func()</span><br></pre></td></tr></table></figure>
+
+<p>调用父类的方法时要用,<code>父类名.方法名(self,其他参数)</code>。</p>
+<p>一个类有多个父类,在调用父类方法的时候,按照继承顺序,先继承的就先寻找</p>
+<p>方法和函数的区别</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> types <span class="keyword">import</span> FunctionType,MethodType</span><br><span class="line"><span class="comment"># FunctionType : 函数</span></span><br><span class="line"><span class="comment"># MethodType : 方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'in func'</span>)</span><br><span class="line"></span><br><span class="line">print(A.func)  <span class="comment"># 函数</span></span><br><span class="line">a = A()</span><br><span class="line">print(a.func)  <span class="comment"># 方法</span></span><br><span class="line">print(isinstance(a.func,FunctionType))</span><br><span class="line">print(isinstance(a.func,MethodType))</span><br><span class="line">print(isinstance(A.func,FunctionType))</span><br><span class="line">print(isinstance(A.func,MethodType))</span><br></pre></td></tr></table></figure>
+
+<p>特殊的类属性</p>
+<ul>
+<li><code>类名.__name__</code>：类的名字</li>
+<li><code>类名.__doc__</code>：类的文档字符串</li>
+<li><code>类名.__base__</code>：类的第一个父类</li>
+<li><code>类名.__bases__</code>：类的所有父类（元组）</li>
+<li><code>类名.__dict__</code>：类的字典属性</li>
+<li><code>类名.__module__</code>：类定义所在的模块</li>
+<li><code>类名.__class__</code>：实例对于的类</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    role = <span class="string">'法师'</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>:</span><span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span><span class="params">(B,A)</span>:</span><span class="keyword">pass</span></span><br><span class="line">print(A.__base__)<span class="comment">#&lt;class 'object'&gt;</span></span><br><span class="line">print(C.__base__)<span class="comment">#&lt;class '__main__.B'&gt;</span></span><br><span class="line">print(C.__bases__)<span class="comment">#(&lt;class '__main__.B'&gt;, &lt;class '__main__.A'&gt;)</span></span><br><span class="line">print(A.__dict__)</span><br><span class="line">print(A.__name__)<span class="comment">#A</span></span><br><span class="line">print(A.__class__)<span class="comment">#&lt;class 'type'&gt;大部分类的类型都是type</span></span><br><span class="line">print(B.__class__)<span class="comment">#&lt;class 'type'&gt;</span></span><br><span class="line">print(C.__class__)<span class="comment">#&lt;class 'type'&gt;</span></span><br><span class="line">print(C.__module__)<span class="comment">#__main__</span></span><br></pre></td></tr></table></figure>
+
+<p>object类 类祖宗所有在python3当中的类都是继承object类的，object中有init所有的类都默认的继承object。</p>
+<p>用pickle将对象存储与读取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Course</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,period,price)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.period = period</span><br><span class="line">        self.price = price</span><br><span class="line"></span><br><span class="line">python = Course(<span class="string">'python'</span>,<span class="string">'6 moneth'</span>,<span class="number">21800</span>)</span><br><span class="line">linux = Course(<span class="string">'linux'</span>,<span class="string">'5 moneth'</span>,<span class="number">19800</span>)</span><br><span class="line">go = Course(<span class="string">'go'</span>,<span class="string">'4 moneth'</span>,<span class="number">12800</span>)</span><br><span class="line"><span class="keyword">import</span>  pickle</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'pickle_file'</span>,<span class="string">'ab'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    pickle.dump(linux,f)</span><br><span class="line">    pickle.dump(go,f)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'pickle_file'</span>,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            obj = pickle.load(f)</span><br><span class="line">            print(obj.name,obj.period)</span><br><span class="line">        <span class="keyword">except</span> EOFError:</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对象必须在python已定义，不然会报错</p>
+</blockquote>
+<h3 id="进阶语法"><a href="#进阶语法" class="headerlink" title="进阶语法"></a>进阶语法</h3><ul>
+<li><p>新式类：继承Object对象的</p>
+</li>
+<li><p>经典类：不继承Object对象的</p>
+</li>
+</ul>
+<blockquote>
+<p>python3默认继承Object，python3没有经典类</p>
+</blockquote>
+<p>多继承时</p>
+<ul>
+<li>新式类：C3算法</li>
+<li>经典类：深度搜索，一条道走到黑，再回头</li>
+</ul>
+<p>C3算法<br>如果是单继承 那么总是按照从子类-&gt;父类的顺序来计算查找顺序<br>如果是多继承 需要按照自己本类,父类1的继承顺序,父类2的继承顺序,…<br><strong>merge的规则</strong> :如果一个类出现在从左到右所有顺序的最左侧,并且没有在其他位置出现,那么先提出来作为继承顺序中的一个<br>或 一个类出现在从左到右顺序的最左侧,并没有在其他顺序中出现,那么先提出来作为继承顺序中的一个<br>如果从左到右第一个顺序中的第一个类出现在后面且不是第一个,那么不能提取,顺序向后继续找其他顺序中符合上述条件的类</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">A为B、C的父类</span><br><span class="line">B为D的父类</span><br><span class="line">C为B的父类</span><br><span class="line">D、E为F的父类</span><br><span class="line">F(D,E) = merge(D(B) + E(C))</span><br><span class="line">         = <span class="string">[F]</span> + <span class="string">[DBAO]</span> + <span class="string">[ECAO]</span></span><br><span class="line">       F = <span class="string">[DBAO]</span> + <span class="string">[ECAO]</span></span><br><span class="line">    FD   = <span class="string">[BAO]</span> + <span class="string">[ECAO]</span></span><br><span class="line">    FDB  = <span class="string">[AO]</span> + <span class="string">[ECAO]</span></span><br><span class="line">    FDBE = <span class="string">[AO]</span> + <span class="string">[CAO]</span></span><br><span class="line">    FDBEC= <span class="string">[AO]</span> + <span class="string">[AO]</span></span><br><span class="line">    FDBECA= <span class="string">[O]</span> + <span class="string">[O]</span></span><br><span class="line">    FDBECAO</span><br></pre></td></tr></table></figure>
+
+<p>步骤解读</p>
+<ol>
+<li>本身永远在最前面</li>
+<li>然后看找第一个是D，然后往后找，发现没有重复的D，就提出D</li>
+<li>然后左边第一个是B，再往后找，没有重复的B，提出B</li>
+<li>然后左边第一个是A，有重复。再找，就是E，往后E无重复。提出E</li>
+<li>然后左边第一个是A，有重复，再找，就是C，往后C无重复，提出C</li>
+<li>左边第一个是A，并且后面所有列的第一个都是A，那么提出A</li>
+<li>左边第一个是O，并且后面所有列的第一个都是O，那么提出O</li>
+</ol>
+<blockquote>
+<p>只要知道经典类和新式类继承方式不同，如果一个类的继承顺序看不懂，可以用<code>类名.mro()</code>。查看继承顺序</p>
+</blockquote>
+<p><strong>抽象类</strong></p>
+<p>类似Java的接口类，用来规定开发规范</p>
+<ul>
+<li>通过未实现抛异常的方式，若子类继承，未实现的话，调用方法会抛异常</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Payment</span>:</span>     <span class="comment"># 抽象类</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pay</span><span class="params">(self,money)</span>:</span></span><br><span class="line">        <span class="string">'''只要你见到了项目中有这种类,你要知道你的子类中必须实现和pay同名的方法'''</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError(<span class="string">'请在子类中重写同名pay方法'</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用abc模块，约束实现。用装饰器的方式，约束子类。如果子类继承却未实现接口，那么子类就无法被实例化</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> abc <span class="keyword">import</span> ABCMeta,abstractmethod</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Payment</span><span class="params">(metaclass=ABCMeta)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pay</span><span class="params">(self,money)</span>:</span></span><br><span class="line">        <span class="string">'''只要你见到了项目中有这种类,你要知道你的子类中必须实现和pay同名的方法'''</span></span><br><span class="line">        <span class="keyword">raise</span> NotImplementedError(<span class="string">'请在子类中重写同名pay方法'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Alipay</span><span class="params">(Payment)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pay</span><span class="params">(self,money)</span>:</span></span><br><span class="line">        dic = &#123;<span class="string">'uname'</span>:self.name,<span class="string">'price'</span>:money&#125;</span><br><span class="line">        <span class="comment"># 想办法调用支付宝支付 url连接 把dic传过去</span></span><br><span class="line">        print(<span class="string">'%s通过支付宝支      付%s钱成功'</span>%(self.name,money))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>推荐用抛异常的方式，因为依赖abc模块有依赖性，如果abc模块没了，项目就跑不动了</p>
+</blockquote>
+<p><strong>鸭子类型</strong></p>
+<p>我们把实现了一个类型的方法，叫做鸭子类型</p>
+<p>如实现了<code>__iter__</code>、<code>__next__</code>叫做迭代器。就可以迭代。就是鸭子类型</p>
+<p>如实现了<code>__len__</code>方法就可以调用<code>len()</code>就是鸭子类型                      </p>
+<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><h3 id="环境的准备"><a href="#环境的准备" class="headerlink" title="环境的准备"></a>环境的准备</h3><p>安装<a href="https://www.anaconda.com/distribution/#download-section" target="_blank" rel="noopener">anaconda</a>，直接取官网下载，然后一步一步安装即可。</p>
+<p>安装jupyter直接<code>pip install jupyter</code>然后用<code>jupyter notebook</code>启动。</p>
+<ul>
+<li>Anaconda是一个集成环境（基于机器学习和数据分析的开发环境）<ul>
+<li>基于浏览器的一种可视化开发工具：jupyter notebook</li>
+<li>可以在指定目录的终端中录入jupyter notebook指令，然后启动服务。</li>
+</ul>
+</li>
+<li>cell是分为不同模式的：<ul>
+<li>Code:编写python代码</li>
+<li>markDown：编写笔记</li>
+</ul>
+</li>
+<li>快捷键：<ul>
+<li>添加cell：a，b</li>
+<li>删除cell：x</li>
+<li>执行：shift+enter</li>
+<li>tab：</li>
+<li>切换cell的模式：<ul>
+<li>m</li>
+<li>y</li>
+</ul>
+</li>
+<li>打开帮助文档：shift+tab</li>
+</ul>
+</li>
+</ul>
+<p>Anaconda的使用，Anaconda如果有菜单有图标就代表安装成功，命令行没有可能是环境没配</p>
+<p>在Anaconda中启动jupyter无法选择路径，要在Environments-&gt;base(root)选择启动按钮–&gt;open Terminal，然后在终端打开</p>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><p>爬虫：就是通过编写程序模拟浏览器上网，然后让其去互联网上爬取数据的过程<br>爬虫的分类：</p>
+<ul>
+<li>通用爬虫：抓取互联网中的一整张页面数据</li>
+<li>聚焦爬虫：抓取页面中的局部数据</li>
+<li>增量式爬虫：用来监测网站数据更新的情况，以便爬取到网站最新更新出来的数据<br>反爬机制<br>反反爬策略</li>
+</ul>
+<p>爬虫合法问题</p>
+<ul>
+<li><p>爬取数据的行为风险的体现：</p>
+<ul>
+<li>爬虫干扰了被访问网站的正常运营；</li>
+<li>爬虫抓取了受到法律保护的特定类型的数据或信息。</li>
+</ul>
+</li>
+<li><p>规避风险：</p>
+<ul>
+<li>严格遵守网站设置的robots协议；</li>
+<li>在规避反爬虫措施的同时，需要优化自己的代码，避免干扰被访问网站的正常运行；</li>
+<li>在使用、传播抓取到的信息时，应审查所抓取的内容，如发现属于用户的个人信息、隐私或者他人的商业秘密的，应及时停止并删除。<br>robots协议：文本协议</li>
+</ul>
+<blockquote>
+<p>在网站<code>www.xxx.com/robots.txt</code>查看文本协议</p>
+</blockquote>
+</li>
+</ul>
+<p>robots协议特性：防君子不防小人的文本协议</p>
+<h3 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h3><p>requests模块是Python中封装好的一个基于网络请求的模块。</p>
+<p>requests模块可以用来模拟浏览器发请求</p>
+<p>requests模块的环境安装：<code>pip install requests</code></p>
+<p>requests模块的编码流程：</p>
+<ul>
+<li>1.指定url</li>
+<li>2.发起请求</li>
+<li>3.获取响应数据</li>
+<li>4.持久化存储</li>
+</ul>
+<p>简单爬取搜狗</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解决UA检测</span></span><br><span class="line">url = <span class="string">'https://www.sogou.com/web'</span></span><br><span class="line"><span class="comment">#实现参数动态化</span></span><br><span class="line">wd = input(<span class="string">'enter a key:'</span>)</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'query'</span>:wd<span class="comment">#指定携带的参数</span></span><br><span class="line">&#125;</span><br><span class="line">headers = &#123;<span class="comment">#请求头消息</span></span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#在请求中需要将请求参数对应的字典作用到params这个get方法的参数中</span></span><br><span class="line">response = requests.get(url=url,params=params,headers=headers)</span><br><span class="line">response.encoding = <span class="string">'utf-8'</span> <span class="comment">#修改响应数据的编码格式</span></span><br><span class="line">page_text = response.text</span><br><span class="line">fileName = wd+<span class="string">'.html'</span></span><br><span class="line"><span class="keyword">with</span> open(fileName,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    fp.write(page_text)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>UA检测：门户网站通过检测请求载体的身份标识判定改请求是否为爬虫发起的请求</li>
+<li>UA伪装：<code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36</code></li>
+</ul>
+<p>在请求的页面搜索内容，如果没有对应内容。那么全球的内容应该是动态加载。直接全局搜索对应内容，找到ajax请求。然后分析请求</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#豆瓣爬取样例</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">'https://movie.douban.com/j/chart/top_list'</span></span><br><span class="line">start = <span class="number">0</span><span class="comment">#input('您想从第几部电影开始获取:')</span></span><br><span class="line">limit = <span class="number">2000</span><span class="comment">#input('您想获取多少电影数据:')</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span></span><br><span class="line">&#125;</span><br><span class="line">dic = &#123;</span><br><span class="line">    <span class="string">'type'</span>: <span class="string">'13'</span>,</span><br><span class="line">    <span class="string">'interval_id'</span>: <span class="string">'100:90'</span>,</span><br><span class="line">    <span class="string">'action'</span>: <span class="string">''</span>,</span><br><span class="line">    <span class="string">'start'</span>: start,</span><br><span class="line">    <span class="string">'limit'</span>: limit,</span><br><span class="line">&#125;</span><br><span class="line">response = requests.get(url=url,params=dic,headers=headers)</span><br><span class="line">page_text = response.json() <span class="comment">#json()返回的是序列化好的实例对象</span></span><br><span class="line"><span class="keyword">for</span> dic <span class="keyword">in</span> page_text:</span><br><span class="line">    print(dic[<span class="string">'title'</span>]+<span class="string">':'</span>+dic[<span class="string">'score'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据解析"><a href="#数据解析" class="headerlink" title="数据解析"></a>数据解析</h3><p>数据解析的作用：</p>
+<ul>
+<li>可以帮助我们实现聚焦爬虫</li>
+<li>数据解析的实现方式：<ul>
+<li>正则</li>
+<li>bs4</li>
+<li>xpath：重点</li>
+<li>pyquery：自己拓展，跟jq很像</li>
+</ul>
+</li>
+</ul>
+<p>数据解析的通用原理（聚焦爬虫爬取的数据都被存储在了相关的标签之中and相关标签的属性中）</p>
+<ul>
+<li>先定位标签</li>
+<li>然后取文本或者取属性</li>
+</ul>
+<p>文件头</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#如何爬取图片</span></span><br><span class="line">url = <span class="string">'https://pic.qiushibaike.com/system/pictures/12223/122231866/medium/IZ3H2HQN8W52V135.jpg'</span></span><br><span class="line">img_data = requests.get(url,headers=headers).content <span class="comment">#byte类型数据</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./img.jpg'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    fp.write(img_data)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#直接利用已有方法写到本地</span></span><br><span class="line"><span class="comment">#弊端：不能使用UA伪装</span></span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> request</span><br><span class="line">url = <span class="string">'https://pic.qiushibaike.com/system/pictures/12223/122231866/medium/IZ3H2HQN8W52V135.jpg'</span></span><br><span class="line">request.urlretrieve(url,filename=<span class="string">'./qiutu.jpg'</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#糗图爬取1-3页所有的图片</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment">#1.使用通用爬虫将前3页对应的页面源码数据进行爬取</span></span><br><span class="line"><span class="comment">#通用的url模板(不可变)</span></span><br><span class="line">dirName = <span class="string">'./imgLibs'</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dirName):</span><br><span class="line">    os.mkdir(dirName)</span><br><span class="line">url = <span class="string">'https://www.qiushibaike.com/pic/page/%d/'</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">4</span>):</span><br><span class="line">    new_url = format(url%page)</span><br><span class="line">    page_text = requests.get(new_url,headers=headers).text <span class="comment">#每一个页码对应的页面源码数据</span></span><br><span class="line">    <span class="comment">#在通用爬虫的基础上实现聚焦爬虫（每一个页码对应页面源码数据中解析出图片地址）</span></span><br><span class="line">    ex = <span class="string">'&lt;div class="thumb"&gt;.*?&lt;img src="(.*?)" alt.*?&lt;/div&gt;'</span></span><br><span class="line">    img_src_list = re.findall(ex,page_text,re.S)<span class="comment">#re.S忽略回车</span></span><br><span class="line">    <span class="keyword">for</span> src <span class="keyword">in</span> img_src_list:</span><br><span class="line">        src = <span class="string">'https:'</span>+src</span><br><span class="line">        img_name = src.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">        img_path = dirName+<span class="string">'/'</span>+img_name <span class="comment">#./imgLibs/xxxx.jpg</span></span><br><span class="line">        request.urlretrieve(src,filename=img_path)</span><br><span class="line">        print(img_name,<span class="string">'下载成功！！！'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>bs4解析</p>
+<ul>
+<li><p>bs4解析的原理：</p>
+<ul>
+<li>实例化一个BeautifulSoup的对象，需要将即将被解析的页面源码数据加载到该对象中</li>
+<li>调用BeautifulSoup对象中的相关方法和属性进行标签定位和数据提取</li>
+</ul>
+</li>
+<li><p>环境的安装：</p>
+<ul>
+<li><code>pip install bs4</code></li>
+<li><code>pip install lxml</code></li>
+</ul>
+</li>
+<li><p>BeautifulSoup的实例化：</p>
+<ul>
+<li>BeautifulSoup(fp,’lxml’):将本地存储的一个html文档中的数据加载到实例化好的BeautifulSoup对象中</li>
+<li>BeautifulSoup(page_text,’lxml’):将从互联网上获取的页面源码数据加载到实例化好的BeautifulSoup对象中</li>
+</ul>
+</li>
+<li><p>定位标签的操作：</p>
+<ul>
+<li>soup.tagName：定位到第一个出现的tagName标签</li>
+<li>属性定位：soup.find(‘tagName’,attrName=’value’)</li>
+<li>属性定位:soup.find_all(‘tagName’,attrName=’value’),返回值为列表</li>
+<li>选择器定位：soup.select(‘选择器’)<ul>
+<li>层级选择器：&gt;表示一个层级  空格表示多个层级</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>取文本</p>
+<ul>
+<li>.string:获取直系的文本内容，比如div包p标签再有内容无法获取，而text可以获取</li>
+<li>.text:获取所有的文本内容</li>
+</ul>
+</li>
+<li><p>取属性</p>
+<ul>
+<li>tagName[‘attrName’]</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#bs4解析定位样例</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">fp = open(<span class="string">'./test.html'</span>,<span class="string">'r'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">soup = BeautifulSoup(fp,<span class="string">'lxml'</span>)</span><br><span class="line">soup.div</span><br><span class="line">soup.find(<span class="string">'div'</span>,class_=<span class="string">'song'</span>)</span><br><span class="line">soup.find(<span class="string">'a'</span>,id=<span class="string">"feng"</span>)<span class="comment">#id属性就是id</span></span><br><span class="line">soup.find_all(<span class="string">'div'</span>,class_=<span class="string">"song"</span>)</span><br><span class="line">soup.select(<span class="string">'#feng'</span>)<span class="comment">#id为feng如果定位class则为.xxx</span></span><br><span class="line">soup.select(<span class="string">'.tang &gt; ul &gt; li'</span>)<span class="comment">#class为tang的标签下的ul下的li</span></span><br><span class="line">soup.select(<span class="string">'.tang li'</span>) <span class="comment">#class为tang属性下的li。li和tang可以隔多个标签</span></span><br><span class="line">a_tag = soup.select(<span class="string">'#feng'</span>)[<span class="number">0</span>]</span><br><span class="line">a_tag.text</span><br><span class="line">div = soup.div</span><br><span class="line">div.string</span><br><span class="line">div = soup.find(<span class="string">'div'</span>,class_=<span class="string">"song"</span>)<span class="comment">#因为class是关键字，这里就是class_</span></span><br><span class="line">div.string<span class="comment">#获取标签的</span></span><br><span class="line">a_tag = soup.select(<span class="string">'#feng'</span>)[<span class="number">0</span>]</span><br><span class="line">a_tag[<span class="string">'href'</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用bs4爬取</span></span><br><span class="line"><span class="comment">#爬取三国整篇内容（章节名称+章节内容）http://www.shicimingju.com/book/sanguoyanyi.html</span></span><br><span class="line">fp = open(<span class="string">'sanguo.txt'</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">main_url = <span class="string">'http://www.shicimingju.com/book/sanguoyanyi.html'</span></span><br><span class="line">page_text = requests.get(main_url,headers=headers).text</span><br><span class="line"><span class="comment">#解析出章节名称和章节详情页的url</span></span><br><span class="line">soup = BeautifulSoup(page_text,<span class="string">'lxml'</span>)</span><br><span class="line">a_list = soup.select(<span class="string">'.book-mulu &gt; ul &gt; li &gt; a'</span>) <span class="comment">#返回的列表中存储的是一个个a标签</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> a_list:</span><br><span class="line">    title = a.string</span><br><span class="line">    detail_url = <span class="string">'http://www.shicimingju.com'</span>+a[<span class="string">'href'</span>]</span><br><span class="line">    detail_page_text = requests.get(detail_url,headers=headers).text</span><br><span class="line">    <span class="comment">#解析详情页中的章节内容</span></span><br><span class="line">    soup = BeautifulSoup(detail_page_text,<span class="string">'lxml'</span>)</span><br><span class="line">    content = soup.find(<span class="string">'div'</span>,class_=<span class="string">'chapter_content'</span>).text</span><br><span class="line">    fp.write(title+<span class="string">':'</span>+content+<span class="string">'\n'</span>)</span><br><span class="line">    print(title,<span class="string">'下载成功！'</span>)</span><br><span class="line">fp.close()</span><br></pre></td></tr></table></figure>
+
+<p>xpath解析</p>
+<ul>
+<li><p>xpath解析的实现原理</p>
+<ul>
+<li>1.实例化一个etree的对象，然后将即将被解析的页面源码加载到改对象中</li>
+<li>2.使用etree对象中的xpath方法结合着不同形式的xpath表达式实现标签定位和数据提取</li>
+<li>在xpath里，html会被解析为一个树</li>
+</ul>
+</li>
+<li><p>环境安装：</p>
+<ul>
+<li><code>pip install lxml</code></li>
+</ul>
+</li>
+<li><p>etree对象的实例化：</p>
+<ul>
+<li>etree.parse(‘test.html’)</li>
+<li>etree.HTML(page_text)</li>
+</ul>
+</li>
+<li><p>xpath表达式:xpath方法的返回值一定是一个列表</p>
+<ul>
+<li>最左侧的<code>/</code>表示：xpath表达式一定要从根标签逐层进行标签查找和定位</li>
+<li>最左侧的<code>//</code>表示：xpath表达式可以从任意位置定位标签</li>
+<li>非最左侧的<code>/</code>:表示一个层级</li>
+<li>非最左侧的<code>//</code>：表示跨多个层级</li>
+<li>属性定位：//tagName[@attrName=”value”]</li>
+<li>索引定位：//tagName[index] 索引是从1开始</li>
+</ul>
+</li>
+<li><p>取文本：</p>
+<ul>
+<li>/text():直系文本内容</li>
+<li>//text():所有的文本内容</li>
+</ul>
+</li>
+<li><p>取属性：</p>
+<ul>
+<li>/@attrName</li>
+</ul>
+</li>
+</ul>
+<p><strong>谷歌浏览器提供了复制xpath的功能</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#xpath使用示范</span></span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">tree = etree.parse(<span class="string">'./test.html'</span>)<span class="comment">#xpath下都是列表，如果只有一个元素列表就一个元素</span></span><br><span class="line">tree.xpath(<span class="string">'/html/head/title'</span>)<span class="comment">#html标签下的head下的title</span></span><br><span class="line">tree.xpath(<span class="string">'//title'</span>)<span class="comment">#和/html/head/title一样</span></span><br><span class="line">tree.xpath(<span class="string">'/html/body//p'</span>)</span><br><span class="line">tree.xpath(<span class="string">'//p'</span>)</span><br><span class="line">tree.xpath(<span class="string">'//div[@class="song"]'</span>)<span class="comment">#属性定位</span></span><br><span class="line">tree.xpath(<span class="string">'//li[7]'</span>)<span class="comment">#找到li的第七个</span></span><br><span class="line">tree.xpath(<span class="string">'//a[@id="feng"]/text()'</span>)[<span class="number">0</span>]<span class="comment">#这是一个列表，0表示取第一个元素</span></span><br><span class="line">tree.xpath(<span class="string">'//div[@class="song"]//text()'</span>)</span><br><span class="line">tree.xpath(<span class="string">'//a[@id="feng"]/@href'</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用xpath爬取糗百中的段子内容和作者名称</span></span><br><span class="line">url = <span class="string">'https://www.qiushibaike.com/text/'</span></span><br><span class="line">page_text = requests.get(url,headers=headers).text</span><br><span class="line"></span><br><span class="line"><span class="comment">#解析内容</span></span><br><span class="line">tree = etree.HTML(page_text)</span><br><span class="line">div_list = tree.xpath(<span class="string">'//div[@id="content-left"]/div'</span>)</span><br><span class="line"><span class="keyword">for</span> div <span class="keyword">in</span> div_list:</span><br><span class="line">    author = div.xpath(<span class="string">'./div[1]/a[2]/h2/text()'</span>)[<span class="number">0</span>]<span class="comment">#实现局部解析#点表示从改div的子标签开始，如果是/表示全局开始</span></span><br><span class="line">    content = div.xpath(<span class="string">'./a[1]/div/span//text()'</span>)</span><br><span class="line">    content = <span class="string">''</span>.join(content)</span><br><span class="line">    </span><br><span class="line">    print(author,content)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#乱码问题示例</span></span><br><span class="line"><span class="comment">#http://pic.netbian.com/4kmeinv/中文乱码的处理  </span></span><br><span class="line">dirName = <span class="string">'./meinvLibs'</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dirName):</span><br><span class="line">    os.mkdir(dirName)</span><br><span class="line">url = <span class="string">'http://pic.netbian.com/4kmeinv/index_%d.html'</span></span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">11</span>):</span><br><span class="line">    <span class="keyword">if</span> page == <span class="number">1</span>:</span><br><span class="line">        new_url = <span class="string">'http://pic.netbian.com/4kmeinv/'</span> </span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        new_url = format(url%page)</span><br><span class="line">    page_text = requests.get(new_url,headers=headers).text</span><br><span class="line">    tree = etree.HTML(page_text)</span><br><span class="line">    a_list = tree.xpath(<span class="string">'//div[@class="slist"]/ul/li/a'</span>)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> a_list:</span><br><span class="line">        img_src = <span class="string">'http://pic.netbian.com'</span>+a.xpath(<span class="string">'./img/@src'</span>)[<span class="number">0</span>]</span><br><span class="line">        img_name = a.xpath(<span class="string">'./b/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">        img_name = img_name.encode(<span class="string">'iso-8859-1'</span>).decode(<span class="string">'gbk'</span>)<span class="comment">#如果全部页面都编码浪费性能，这里就只编码了name。用iso这样通用的</span></span><br><span class="line">        img_data = requests.get(img_src,headers=headers).content</span><br><span class="line">        imgPath = dirName+<span class="string">'/'</span>+img_name+<span class="string">'.jpg'</span></span><br><span class="line">        <span class="keyword">with</span> open(imgPath,<span class="string">'wb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">            fp.write(img_data)</span><br><span class="line">            print(img_name,<span class="string">'下载成功！！！'</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用|提高通用性</span></span><br><span class="line"><span class="comment">#https://www.aqistudy.cn/historydata/所有城市名称</span></span><br><span class="line">page_text = requests.get(<span class="string">'https://www.aqistudy.cn/historydata/'</span>,headers=headers).text</span><br><span class="line">tree = etree.HTML(page_text)</span><br><span class="line"><span class="comment"># hot_cities = tree.xpath('//div[@class="bottom"]/ul/li/a/text()')</span></span><br><span class="line"><span class="comment"># all_cities = tree.xpath('//div[@class="bottom"]/ul/div[2]/li/a/text()')</span></span><br><span class="line">cities = tree.xpath(<span class="string">'//div[@class="bottom"]/ul/div[2]/li/a/text() | //div[@class="bottom"]/ul/li/a/text()'</span>) <span class="comment">#表示两种都可以，有哪一种就用哪一种。两者都有就用提高xpath的通用性</span></span><br><span class="line">cities</span><br></pre></td></tr></table></figure>
 
 
       
@@ -1056,7 +1579,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2019 dian
+    		&copy; 2020 dian
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -1155,7 +1678,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1164,18 +1699,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">后端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,19 +1726,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,11 +1746,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color4">服务器</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1255,10 +1774,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">流程</a>
               </li>
              
@@ -1267,11 +1782,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">spring</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Flink</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1280,6 +1799,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
             
             <div class="clearfix"></div>
