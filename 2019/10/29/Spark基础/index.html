@@ -5,29 +5,29 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://yoursite.com">
+  <link rel="dns-prefetch" href="">
   <title>Spark | dian的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Spark简介起源Hadoop1.x的缺陷： mr式基于数据集的计算，所以面向数据  基本运算规则从存储介质中获取（采集）数据，然后进行计算，最后将结果存储到介质中，所以主要应用于一次性计算不适合于数据挖掘和机器学习和图形挖掘计算这样的迭代计算 MR基于文件存储介质的操作，性能非常慢 MR和Hadoop紧密耦合，无法动态替换">
 <meta name="keywords" content="Spark,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;index.html">
+<meta property="og:url" content="&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;index.html">
 <meta property="og:site_name" content="dian的博客">
 <meta property="og:description" content="Spark简介起源Hadoop1.x的缺陷： mr式基于数据集的计算，所以面向数据  基本运算规则从存储介质中获取（采集）数据，然后进行计算，最后将结果存储到介质中，所以主要应用于一次性计算不适合于数据挖掘和机器学习和图形挖掘计算这样的迭代计算 MR基于文件存储介质的操作，性能非常慢 MR和Hadoop紧密耦合，无法动态替换">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Hadoop1.x.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;MR.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Spark_work.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Spark_mold.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;RDD.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Yarn-spark.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;yarn-spark2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;log_web.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Standalone-spark.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Hadoop1.x.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;MR.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Spark_work.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Spark_mold.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;RDD.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Yarn-spark.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;yarn-spark2.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;log_web.png">
+<meta property="og:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Standalone-spark.png">
 <meta property="og:updated_time" content="2019-10-30T07:48:23.765Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Hadoop1.x.png">
+<meta name="twitter:image" content="&#x2F;29&#x2F;Spark%E5%9F%BA%E7%A1%80&#x2F;Hadoop1.x.png">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
   
@@ -56,7 +56,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/assets/me.jpg" class="js-avatar">
+			<img src="" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">dian</a></h1>
@@ -69,6 +69,8 @@
 			<ul>
 			
 				<li><a href="../../../../index.html">主页</a></li>
+	        
+				<li><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -114,7 +116,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/assets/me.jpg" class="js-avatar">
+				<img src="" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">dian</h1>
@@ -123,6 +125,8 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>死肥宅<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
 			
 				
 			
@@ -146,7 +150,9 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 100%"><a href="../../../../index.html">主页</a></li>
+					<li style="width: 50%"><a href="../../../../index.html">主页</a></li>
+		        
+					<li style="width: 50%"><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -190,10 +196,10 @@
 </ol>
 <a id="more"></a>
 
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/Hadoop1.x.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/Hadoop1.x.png" alt></p>
 <p>改进</p>
 <p>由RM调度资源，AM<code>ApplicationMaster</code>调度任务。提供了一个<code>Driver</code>来于<code>Task</code>关联。RM于NM关联。AM起到Driver和RM中间人。降低耦合。<code>Contoiner</code>来协调NM和<code>Task</code></p>
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/MR.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/MR.png" alt></p>
 <h3 id="历史"><a href="#历史" class="headerlink" title="历史"></a>历史</h3><p>13年6月份发布</p>
 <p>Spark基于Hadoop1.x结构思想，采用自己的方式来改善Hadoop1.x中的问题</p>
 <ol>
@@ -205,9 +211,9 @@
 <blockquote>
 <p>RM，NM可以替代这俩个</p>
 </blockquote>
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/Spark_work.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/Spark_work.png" alt></p>
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>Spark是一种基于内存的快速、通用、可扩展的大数据分析引擎</p>
-<h3 id="Spark的内置模块"><a href="#Spark的内置模块" class="headerlink" title="Spark的内置模块"></a>Spark的内置模块</h3><p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/Spark_mold.png" alt></p>
+<h3 id="Spark的内置模块"><a href="#Spark的内置模块" class="headerlink" title="Spark的内置模块"></a>Spark的内置模块</h3><p><img src="/29/Spark%E5%9F%BA%E7%A1%80/Spark_mold.png" alt></p>
 <ul>
 <li><p><strong>Spark Core</strong>：实现了Spark的基本功能，包含任务调度、内存管理、错误恢复、与存储系统交互等模块。Spark Core中还包含了对弹性分布式数据集(Resilient Distributed DataSet，简称RDD)的API定义。 </p>
 </li>
@@ -226,9 +232,9 @@
 <li><strong>易用</strong>：支持Java、Python、Scala的API。还支持80多种算法。而且支持交互式的Python和Scala的Shell</li>
 <li><strong>兼容性</strong>：可以使用Hadoop的Yarn和Apache Mesos作为他的资源管理和调度器。可以处理所以Hadoop支持的数据，HDFS和HBase等。</li>
 </ul>
-<h2 id="Spark运用"><a href="#Spark运用" class="headerlink" title="Spark运用"></a>Spark运用</h2><h3 id="Spark安装地址"><a href="#Spark安装地址" class="headerlink" title="Spark安装地址"></a>Spark安装地址</h3><p><a href="http://spark.apache.org/" target="_blank" rel="noopener">官网地址</a></p>
-<p><a href="https://spark.apache.org/docs/2.1.1/" target="_blank" rel="noopener">文档查看地址</a></p>
-<p><a href="https://spark.apache.org/downloads.html" target="_blank" rel="noopener">下载地址</a></p>
+<h2 id="Spark运用"><a href="#Spark运用" class="headerlink" title="Spark运用"></a>Spark运用</h2><h3 id="Spark安装地址"><a href="#Spark安装地址" class="headerlink" title="Spark安装地址"></a>Spark安装地址</h3><p><a href="http://spark.apache.org/">官网地址</a></p>
+<p><a href="https://spark.apache.org/docs/2.1.1/">文档查看地址</a></p>
+<p><a href="https://spark.apache.org/downloads.html">下载地址</a></p>
 <h3 id="重要角色"><a href="#重要角色" class="headerlink" title="重要角色"></a>重要角色</h3><ul>
 <li><p>Driver（驱动器）:Spark的驱动器是执行开发程序中的main方法的进程。它负责开发人员编写的用来创建SparkContext、创建RDD，以及进行RDD的转化操作和行动操作代码的执行。如果你是用spark shell，那么当你启动Spark shell的时候，系统后台自启了一个Spark驱动器程序，就是在Spark shell中预加载的一个叫作 sc的SparkContext对象。如果驱动器程序终止，那么Spark应用也就结束了。主要负责：</p>
 <ul>
@@ -277,7 +283,7 @@
 </blockquote>
 <h5 id="启动spark-shell"><a href="#启动spark-shell" class="headerlink" title="启动spark-shell"></a>启动spark-shell</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 spark]$ bin/spark-shell</span><br><span class="line">Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties</span><br><span class="line">Setting default log level to "WARN".</span><br><span class="line">To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).</span><br><span class="line">18/09/29 08:50:52 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable</span><br><span class="line">18/09/29 08:50:58 WARN ObjectStore: Failed to get database global_temp, returning NoSuchObjectException</span><br><span class="line">Spark context Web UI available at http://192.168.9.102:4040</span><br><span class="line">Spark context available as 'sc' (master = local[*], app id = local-1538182253312).</span><br><span class="line">Spark session available as 'spark'.</span><br><span class="line">Welcome to</span><br><span class="line">      ____              __</span><br><span class="line">     / __/__  ___ _____/ /__</span><br><span class="line">    _\ \/ _ \/ _ `/ __/  '_/</span><br><span class="line">   /___/ .__/\_,_/_/ /_/\_\   version 2.1.1</span><br><span class="line">      /_/</span><br><span class="line">         </span><br><span class="line">Using Scala version 2.11.8 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_144)</span><br><span class="line">Type in expressions to have them evaluated.</span><br><span class="line">Type :help for more information.</span><br></pre></td></tr></table></figure>
 
-<p><a href="http://192.168.9.102:4040" target="_blank" rel="noopener">UI界面</a></p>
+<p><a href="http://192.168.9.102:4040">UI界面</a></p>
 <p>sc：可用变量    参数：master = local[*], app id = local-1538182253312</p>
 <p>app id：应用id。每个应用对yarn都有一个全局的唯一Id，当前的是临时生成的</p>
 <h4 id="WordCount案例"><a href="#WordCount案例" class="headerlink" title="WordCount案例"></a>WordCount案例</h4><p>在spark根目录下创建input文件夹，在内创建文件，输入单词以空格隔开</p>
@@ -295,13 +301,13 @@
 
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.bigdaata.spark</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.rdd.<span class="type">RDD</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">WordCount</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="comment">//local模式</span></span><br><span class="line">    <span class="comment">//设置环境</span></span><br><span class="line">    <span class="comment">//1.创建SparkConf并设置App名称</span></span><br><span class="line">    <span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setMaster(<span class="string">"local[*]"</span>).setAppName(<span class="string">"WC"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.创建SparkContext，该对象是提交Spark App的入口</span></span><br><span class="line">    <span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//读取文件，一行一行读取</span></span><br><span class="line">    <span class="comment">//文件放在项目当前项目根目录的in文件夹内</span></span><br><span class="line">    <span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"in"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.使用sc创建RDD并执行相应的transformation和action</span></span><br><span class="line">    <span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = lines.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">    <span class="comment">//    .reduceByKey(_ + _, 1).sortBy(_._2, false).saveAsTextFile(args(1))</span></span><br><span class="line">    <span class="keyword">val</span> wordToOne: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map((_, <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">val</span> wordToSum: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = wordToOne.reduceByKey(_ + _, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">val</span> result: <span class="type">Array</span>[(<span class="type">String</span>,<span class="type">Int</span>)] = wordToSum.collect</span><br><span class="line">    result.foreach(println)</span><br><span class="line">    <span class="comment">//4.关闭连接</span></span><br><span class="line">    sc.stop()</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="RDD简述"><a href="#RDD简述" class="headerlink" title="RDD简述"></a>RDD简述</h4><p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/RDD.png" alt="img"></p>
+<h4 id="RDD简述"><a href="#RDD简述" class="headerlink" title="RDD简述"></a>RDD简述</h4><p><img src="/29/Spark%E5%9F%BA%E7%A1%80/RDD.png" alt="img"></p>
 <p>只有在collect的时候才会真正开始运行，前面都只是封装逻辑</p>
 <h3 id="Yarn模式（重点）"><a href="#Yarn模式（重点）" class="headerlink" title="Yarn模式（重点）"></a>Yarn模式（重点）</h3><p>Spark客户端直接连接Yarn，不需要额外构建Spark集群。有yarn-client和yarn-cluster两种模式，主要区别在于：Driver程序的运行节点。</p>
 <p>yarn-client：Driver程序运行在客户端，适用于交互、调试，希望立即看到app的输出</p>
 <p><strong>yarn-cluster</strong>：Driver程序运行在由RM（ResourceManager）启动的AP（APPMaster）适用于生产环境。</p>
-<h4 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h4><p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/Yarn-spark.png" alt></p>
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/yarn-spark2.png" alt></p>
+<h4 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h4><p><img src="/29/Spark%E5%9F%BA%E7%A1%80/Yarn-spark.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/yarn-spark2.png" alt></p>
 <h4 id="安装使用-1"><a href="#安装使用-1" class="headerlink" title="安装使用"></a>安装使用</h4><p>修改hadoop配置文件yarn-site.xml <code>vi yarn-site.xml</code></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--添加--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--是否启动一个线程检查每个任务正使用的物理内存量，如果任务超出分配值，则直接将其杀掉，默认是true --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.pmem-check-enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--是否启动一个线程检查每个任务正使用的虚拟内存量，如果任务超出分配值，则直接将其杀掉，默认是true --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.vmem-check-enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -321,9 +327,9 @@
 <p>重启spark历史服务</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sbin/stop-history-server.sh </span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sbin/start-history-server.sh</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/log_web.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/log_web.png" alt></p>
 <h3 id="Standalone模式"><a href="#Standalone模式" class="headerlink" title="Standalone模式"></a>Standalone模式</h3><p>由Master+Slave构成的Spark集群，也就是Spark自己运行</p>
-<p><img src="/2019/10/29/Spark%E5%9F%BA%E7%A1%80/Standalone-spark.png" alt></p>
+<p><img src="/29/Spark%E5%9F%BA%E7%A1%80/Standalone-spark.png" alt></p>
 <h4 id="安装使用-2"><a href="#安装使用-2" class="headerlink" title="安装使用"></a>安装使用</h4><p>在conf文件夹下</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mv slaves.template slaves</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mv spark-env.sh.template spark-env.sh</span></span><br></pre></td></tr></table></figure>
 
@@ -337,7 +343,7 @@
 
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> xcall jps</span></span><br><span class="line">================atguigu@hadoop102================</span><br><span class="line">3330 Jps</span><br><span class="line">3238 Worker</span><br><span class="line">3163 Master</span><br><span class="line">================atguigu@hadoop103================</span><br><span class="line">2966 Jps</span><br><span class="line">2908 Worker</span><br><span class="line">================atguigu@hadoop104================</span><br><span class="line">2978 Worker</span><br><span class="line">3036 Jps</span><br></pre></td></tr></table></figure>
 
-<p><a href="http://hadoop102:8080" target="_blank" rel="noopener">网页查看</a></p>
+<p><a href="http://hadoop102:8080">网页查看</a></p>
 <blockquote>
 <p>如果遇到 “JAVA_HOME not set” 异常，可以在sbin目录下的spark-config.sh 文件中</p>
 <p>加入：</p>
@@ -359,19 +365,9 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>让我恰<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/AliPay.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/WeChatPay.png">
-                      <span class="reward-type">微信</span>
-                    </div>
                     
                   </div>
                 </span>
@@ -450,7 +446,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/29/Spark%E5%9F%BA%E7%A1%80/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http:/2019/10/29/Spark%E5%9F%BA%E7%A1%80/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -601,6 +597,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
@@ -609,11 +613,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,14 +633,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
@@ -641,11 +641,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -653,7 +653,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -665,15 +665,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,15 +685,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+                <a href="javascript:void(0)" class="js-tag color3">marjora</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">virtualbox</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -705,11 +709,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">英语</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">作文</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -721,10 +725,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
@@ -733,15 +733,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
             
             <div class="clearfix"></div>
@@ -790,13 +790,41 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-friends" q-show="friends">
   		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
+            </li>
+          
+        </ul>
+  		
     	</section>
     
 
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">挣扎的笨比&lt;br&gt;</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     

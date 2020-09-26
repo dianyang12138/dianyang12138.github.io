@@ -5,22 +5,22 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://yoursite.com">
+  <link rel="dns-prefetch" href="">
   <title>PHP基础笔记 | dian的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="PHP运行环境目录 1234- wamp	- php	- apache	- mysql   文件名、路径不要出现中文和空格">
 <meta name="keywords" content="PHP,后端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP基础笔记">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:url" content="&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;index.html">
 <meta property="og:site_name" content="dian的博客">
 <meta property="og:description" content="PHP运行环境目录 1234- wamp	- php	- apache	- mysql   文件名、路径不要出现中文和空格">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;error_php.ini.png">
+<meta property="og:image" content="&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
+<meta property="og:image" content="&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;error_php.ini.png">
 <meta property="og:updated_time" content="2019-12-09T07:10:01.916Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
+<meta name="twitter:image" content="&#x2F;04&#x2F;PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0&#x2F;php_apache_1.png">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
   
@@ -49,7 +49,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/assets/me.jpg" class="js-avatar">
+			<img src="" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">dian</a></h1>
@@ -62,6 +62,8 @@
 			<ul>
 			
 				<li><a href="../../../../index.html">主页</a></li>
+	        
+				<li><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -107,7 +109,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/assets/me.jpg" class="js-avatar">
+				<img src="" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">dian</h1>
@@ -116,6 +118,8 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>死肥宅<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
 			
 				
 			
@@ -139,7 +143,9 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 100%"><a href="../../../../index.html">主页</a></li>
+					<li style="width: 50%"><a href="../../../../index.html">主页</a></li>
+		        
+					<li style="width: 50%"><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -182,7 +188,7 @@
 </blockquote>
 <a id="more"></a>
 
-<h3 id="Apace"><a href="#Apace" class="headerlink" title="Apace"></a>Apace</h3><h4 id="Apache安装"><a href="#Apache安装" class="headerlink" title="Apache安装"></a>Apache安装</h4><p><a href="https://www.apachehaus.com/cgi-bin/download.plx" target="_blank" rel="noopener">下载地址</a></p>
+<h3 id="Apace"><a href="#Apace" class="headerlink" title="Apace"></a>Apace</h3><h4 id="Apache安装"><a href="#Apache安装" class="headerlink" title="Apache安装"></a>Apache安装</h4><p><a href="https://www.apachehaus.com/cgi-bin/download.plx">下载地址</a></p>
 <p>创建，解压<code>httpd-……</code>，将Apache24改名为apache放到wamp目录下。</p>
 <p>修改<code>wamp\apache\conf\httpd.conf</code>文件将<code>Define SRVROOT &quot;/Apache24&quot;</code>修改为<code>Define SRVROOT &quot;apache的绝对路径&quot;</code></p>
 <blockquote>
@@ -196,9 +202,9 @@
 <p>删除服务：httpd.exe  -k uninstall</p>
 </blockquote>
 <p>双击打开如下文件并启动服务<code>apche/bin/ApacheMonitor.exe</code>双击打开</p>
-<p><img src="/2019/12/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/php_apache_1.png" alt></p>
+<p><img src="/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/php_apache_1.png" alt></p>
 <p>点击图标，start。启动</p>
-<p>打开<a href="http://localhost/" target="_blank" rel="noopener">网址</a>测试。</p>
+<p>打开<a href="http://localhost/">网址</a>测试。</p>
 <h4 id="Apache目录介绍"><a href="#Apache目录介绍" class="headerlink" title="Apache目录介绍"></a>Apache目录介绍</h4><table>
 <thead>
 <tr>
@@ -263,7 +269,7 @@
 <h4 id="Apache的启动和停止"><a href="#Apache的启动和停止" class="headerlink" title="Apache的启动和停止"></a>Apache的启动和停止</h4><p>需要管理员身份</p>
 <p>启动：net  start  apache2.4</p>
 <p>停止：net  stop  apache2.4</p>
-<h3 id="PHP安装配置"><a href="#PHP安装配置" class="headerlink" title="PHP安装配置"></a>PHP安装配置</h3><p><a href="https://windows.php.net/download#php-7.4" target="_blank" rel="noopener">PHP下载</a></p>
+<h3 id="PHP安装配置"><a href="#PHP安装配置" class="headerlink" title="PHP安装配置"></a>PHP安装配置</h3><p><a href="https://windows.php.net/download#php-7.4">PHP下载</a></p>
 <p>将文件内容解压到wamp/php下</p>
 <h4 id="配置php到apache"><a href="#配置php到apache" class="headerlink" title="配置php到apache"></a>配置php到apache</h4><p>在apache\conf\httpd.conf文件内，在<code>&lt;IfModule unixd_module&gt;</code>前配置</p>
 <p>​    LoadModule   php7_module   php7apache2_4.dll这个文件的完整路径（在php文件夹中）</p>
@@ -274,7 +280,7 @@
 <p>在httpd -t检查语法 加载模块报错，我电脑64位下载也是64位的，会报错，换成32位的包就不报错</p>
 </blockquote>
 <p>在apache\htdocs下创建文件hello.php</p>
-<p>如果能正常打开<a href="http://localhost/hello.php" target="_blank" rel="noopener">网页</a>并正确显示则配置正确</p>
+<p>如果能正常打开<a href="http://localhost/hello.php">网页</a>并正确显示则配置正确</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"icon"</span> <span class="attr">href</span>=<span class="string">"/favicon.ico"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Test Page for Apache Installation<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">  <span class="keyword">echo</span> <span class="string">'&lt;h1&gt;hello world&lt;/h1&gt;'</span>;</span></span><br><span class="line"><span class="php">  <span class="keyword">echo</span> date(<span class="string">"Y-m-d H:i:s"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>以上代码会发现时间不对。因为php默认时间和东八区差了8个小时。</p>
@@ -915,7 +921,7 @@
 </blockquote>
 <blockquote>
 <p>可以在php.ini中使用（设置）他们的显示级别，如下所示：</p>
-<p><img src="/2019/12/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/error_php.ini.png" alt></p>
+<p><img src="/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/error_php.ini.png" alt></p>
 </blockquote>
 <h3 id="错误触发"><a href="#错误触发" class="headerlink" title="错误触发"></a>错误触发</h3><ul>
 <li><p>程序本身有错，则运行时就会触发错误（并提示）。</p>
@@ -1204,19 +1210,9 @@ $query )</code></li>
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>让我恰<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/AliPay.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/WeChatPay.png">
-                      <span class="reward-type">微信</span>
-                    </div>
                     
                   </div>
                 </span>
@@ -1295,7 +1291,7 @@ $query )</code></li>
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/12/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http:/2019/12/04/PHP%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -1446,6 +1442,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
@@ -1454,11 +1458,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1470,14 +1478,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
@@ -1486,11 +1486,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1498,7 +1498,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1510,15 +1510,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1530,15 +1530,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+                <a href="javascript:void(0)" class="js-tag color3">marjora</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">virtualbox</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1550,11 +1554,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">英语</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">作文</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1566,10 +1570,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
@@ -1578,15 +1578,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
             
             <div class="clearfix"></div>
@@ -1635,13 +1635,41 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-friends" q-show="friends">
   		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
+            </li>
+          
+        </ul>
+  		
     	</section>
     
 
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">挣扎的笨比&lt;br&gt;</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     

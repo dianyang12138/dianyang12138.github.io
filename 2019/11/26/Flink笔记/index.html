@@ -5,45 +5,45 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://yoursite.com">
+  <link rel="dns-prefetch" href="">
   <title>Flink笔记 | dian的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高，良好的容错性  有状态：指有些需要保存下来比对的数据">
 <meta name="keywords" content="大数据,Flink">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink笔记">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;index.html">
+<meta property="og:url" content="&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;index.html">
 <meta property="og:site_name" content="dian的博客">
 <meta property="og:description" content="简介介绍Apache Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行有状态计算。 Flink比spark更快，延迟更低 高吞吐，低延迟，准确性高，良好的容错性  有状态：指有些需要保存下来比对的数据">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;running_img.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_yarn.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_p.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;TM_Sl.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;TM_Sl_share.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;DataFlow_2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;DataFlow_1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;ExecutionGraph.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Parallelism.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Parallelism_2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;spilt.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Connect.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;CoMap.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;session_window.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;time.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;watermark.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_4.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_5.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_6.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_7.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;e2e.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;running_img.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_yarn.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_p.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;TM_Sl.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;TM_Sl_share.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;DataFlow_2.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;DataFlow_1.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;ExecutionGraph.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Parallelism.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Parallelism_2.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;spilt.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;Connect.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;CoMap.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;session_window.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;time.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;watermark.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_1.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_2.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_3.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_4.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_5.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_6.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;checkpoint_7.png">
+<meta property="og:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;e2e.png">
 <meta property="og:updated_time" content="2019-12-26T02:36:42.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
+<meta name="twitter:image" content="&#x2F;26&#x2F;Flink%E7%AC%94%E8%AE%B0&#x2F;run_part.png">
   
     <link rel="alternative" href="/atom.xml" title="dian的博客" type="application/atom+xml">
   
@@ -72,7 +72,7 @@
 <div class="intrude-less">
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
-			<img src="/assets/me.jpg" class="js-avatar">
+			<img src="" class="js-avatar">
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/">dian</a></h1>
@@ -85,6 +85,8 @@
 			<ul>
 			
 				<li><a href="../../../../index.html">主页</a></li>
+	        
+				<li><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -130,7 +132,7 @@
 	<div class="intrude-less">
 		<header id="header" class="inner">
 			<div class="profilepic">
-				<img src="/assets/me.jpg" class="js-avatar">
+				<img src="" class="js-avatar">
 			</div>
 			<hgroup>
 			  <h1 class="header-author js-header-author">dian</h1>
@@ -139,6 +141,8 @@
 			<p class="header-subtitle"><i class="icon icon-quo-left"></i>死肥宅<i class="icon icon-quo-right"></i></p>
 			
 			
+			
+				
 			
 				
 			
@@ -162,7 +166,9 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 100%"><a href="../../../../index.html">主页</a></li>
+					<li style="width: 50%"><a href="../../../../index.html">主页</a></li>
+		        
+					<li style="width: 50%"><a href="../../../../tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -303,7 +309,7 @@
 </li>
 </ol>
 <h3 id="K8S"><a href="#K8S" class="headerlink" title="K8S"></a>K8S</h3><p>也是一种重要的基于docker的部署方式。知道即可</p>
-<h2 id="Flink运行组件和原理"><a href="#Flink运行组件和原理" class="headerlink" title="Flink运行组件和原理"></a>Flink运行组件和原理</h2><h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/run_part.png" alt></p>
+<h2 id="Flink运行组件和原理"><a href="#Flink运行组件和原理" class="headerlink" title="Flink运行组件和原理"></a>Flink运行组件和原理</h2><h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/run_part.png" alt></p>
 <p>重点：JobManager和TaskManager</p>
 <ul>
 <li>JobManager<ul>
@@ -333,12 +339,12 @@
 </ul>
 </li>
 </ul>
-<h3 id="提交流程"><a href="#提交流程" class="headerlink" title="提交流程"></a>提交流程</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/running_img.png" alt></p>
-<h4 id="yarn模式-1"><a href="#yarn模式-1" class="headerlink" title="yarn模式"></a>yarn模式</h4><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/run_yarn.png" alt></p>
+<h3 id="提交流程"><a href="#提交流程" class="headerlink" title="提交流程"></a>提交流程</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/running_img.png" alt></p>
+<h4 id="yarn模式-1"><a href="#yarn模式-1" class="headerlink" title="yarn模式"></a>yarn模式</h4><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/run_yarn.png" alt></p>
 <p>这里的RM是yarn的RM</p>
-<h4 id="调度原理"><a href="#调度原理" class="headerlink" title="调度原理"></a>调度原理</h4><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/run_p.png" alt></p>
+<h4 id="调度原理"><a href="#调度原理" class="headerlink" title="调度原理"></a>调度原理</h4><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/run_p.png" alt></p>
 <p>Flink Program：我们写的代码通过转化，提交</p>
-<h3 id="TaskManager和Slots"><a href="#TaskManager和Slots" class="headerlink" title="TaskManager和Slots"></a>TaskManager和Slots</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/TM_Sl.png" alt></p>
+<h3 id="TaskManager和Slots"><a href="#TaskManager和Slots" class="headerlink" title="TaskManager和Slots"></a>TaskManager和Slots</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/TM_Sl.png" alt></p>
 <ul>
 <li><p>Flink中每个TaskManager都是一个JVM进程，它会在独立的线程上执行一个或多个subtask</p>
 </li>
@@ -351,7 +357,7 @@
 <blockquote>
 <p>一般内存是够用的，为了防止cpu复用，往往可以按照cpu数来划分</p>
 </blockquote>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/TM_Sl_share.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/TM_Sl_share.png" alt></p>
 <ul>
 <li>默认情况下，Flink允许子任务共享slot，即使它们是不同任务的子任务。这样的结果是，一个slot可以保存作业的整个管道</li>
 <li>Task Slot是静态概念，是指TaskManager具有并发执行能力</li>
@@ -361,18 +367,18 @@
 <p>这样不仅能防止资源倾斜，Flink只用计算最大任务的并行度即可，无需计算总和</p>
 </blockquote>
 <p>可以通过修改配置文件，运行时-p参数，代码内设置子任务并行度，代码内设置环境并行度来修改并行度</p>
-<h2 id="数据流与执行图"><a href="#数据流与执行图" class="headerlink" title="数据流与执行图"></a>数据流与执行图</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/DataFlow_2.png" alt></p>
+<h2 id="数据流与执行图"><a href="#数据流与执行图" class="headerlink" title="数据流与执行图"></a>数据流与执行图</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/DataFlow_2.png" alt></p>
 <ul>
 <li>所有Flink程序都是由三部分组成，Source、Transformation和Sink</li>
 <li>Source负责读取数据源，Transformation利用各种算子进行处理加工，Sink负责输出</li>
 </ul>
-<h3 id="程序与数据流"><a href="#程序与数据流" class="headerlink" title="程序与数据流"></a>程序与数据流</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/DataFlow_1.png" alt></p>
+<h3 id="程序与数据流"><a href="#程序与数据流" class="headerlink" title="程序与数据流"></a>程序与数据流</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/DataFlow_1.png" alt></p>
 <ul>
 <li>运行时，Flink上运行的程序会被映射成”逻辑数据流”(dataflows)，它包含三部分</li>
 <li>每个dataflow以一个或多个sources开始，以一个或多个sinks结束。dataflow类似于任意的有向无环图(DAG)</li>
 <li>在大部分情况下，程序中的转换运算(transformations)和dataflow中的算子(operator)是一一对应的</li>
 </ul>
-<h4 id="执行图-ExecutionGraph"><a href="#执行图-ExecutionGraph" class="headerlink" title="执行图(ExecutionGraph)"></a>执行图(ExecutionGraph)</h4><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/ExecutionGraph.png" alt></p>
+<h4 id="执行图-ExecutionGraph"><a href="#执行图-ExecutionGraph" class="headerlink" title="执行图(ExecutionGraph)"></a>执行图(ExecutionGraph)</h4><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/ExecutionGraph.png" alt></p>
 <p>Flink中的执行图分为四层：StreamGraph-&gt;JobGraph-&gt;ExecutionGraph-&gt;物理执行图</p>
 <ul>
 <li>StreamGraph：是根据用户通过Stream API编写代码生成的最初的图。用来表示程序的拓扑结构。</li>
@@ -384,7 +390,7 @@
 <p>在客户端提交的时候就生成了JobGraph。</p>
 <p>ExecutionGraph传给TaskManager就可以执行了</p>
 </blockquote>
-<h4 id="并行度（-Parallelism）"><a href="#并行度（-Parallelism）" class="headerlink" title="并行度（ Parallelism）"></a>并行度（ Parallelism）</h4><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/Parallelism.png" alt></p>
+<h4 id="并行度（-Parallelism）"><a href="#并行度（-Parallelism）" class="headerlink" title="并行度（ Parallelism）"></a>并行度（ Parallelism）</h4><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/Parallelism.png" alt></p>
 <ul>
 <li>一个特定算子的子任务(subtask)的个数被称之为其并行度(parallelism)。一般情况下，一个stream的并行度，可以认为就是其所有算子中最大的并行度</li>
 </ul>
@@ -392,7 +398,7 @@
 <p>Flink里的并行非常的灵活</p>
 </blockquote>
 <p>这张图就体现了灵活的并行度</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/Parallelism_2.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/Parallelism_2.png" alt></p>
 <blockquote>
 <p>太多的并行可能会影响效率，这时候就要通过修改共享组来减少并行，提高效率</p>
 </blockquote>
@@ -461,18 +467,18 @@
 <li>split和 Select</li>
 </ul>
 <p><code>Split</code>：将strean转化为SplitStream，SplitStream里面有俩个组。但是无法对里面的流进行操作。必须用select摘取出来，才能操作。</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/spilt.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/spilt.png" alt></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//分流，根据温度是否大于30度划分</span></span><br><span class="line"><span class="keyword">val</span> splitStream = dataStream</span><br><span class="line">  .split(sensorData =&gt; &#123;<span class="comment">//seq是TraversableOnce的实现类，返回一个戳标记一下</span></span><br><span class="line">    <span class="keyword">if</span> (sensorData.temperature &gt; <span class="number">30</span>) <span class="type">Seq</span>(<span class="string">"high"</span>) <span class="keyword">else</span> <span class="type">Seq</span>(<span class="string">"low"</span>)</span><br><span class="line">  &#125;)</span><br><span class="line"><span class="comment">//用select选出来</span></span><br><span class="line"><span class="keyword">val</span> highTempStream = splitStream.select(<span class="string">"high"</span>)</span><br><span class="line"><span class="keyword">val</span> lowTempStream = splitStream.select(<span class="string">"low"</span>)</span><br><span class="line"><span class="keyword">val</span> allTempStream = splitStream.select(<span class="string">"high"</span>, <span class="string">"low"</span>)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>Connect</li>
 </ul>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/Connect.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/Connect.png" alt></p>
 <p>两个流被放在了一个同一个流中，内部依然保持各自的数据和形式不发生任何变化，两个流相互独立。</p>
 <ul>
 <li>CoMap</li>
 </ul>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/CoMap.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/CoMap.png" alt></p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> warningStream = highTempStream.map(sensorData =&gt; (sensorData.id, sensorData.temperature))</span><br><span class="line"><span class="keyword">val</span> connectedStreams = warningStream.connect(lowTempStream)</span><br><span class="line"><span class="keyword">val</span> coMapStream: <span class="type">DataStream</span>[<span class="type">Product</span>] = connectedStreams.map(</span><br><span class="line">  warningData =&gt; (warningData._1, warningData._2, <span class="string">"high temperature warning"</span>),</span><br><span class="line">  lowData =&gt; (lowData.id, <span class="string">"healthy"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -570,7 +576,7 @@
 <blockquote>
 <p>会话窗口，就是数据流如果超过一段时间，就会隔断</p>
 </blockquote>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/session_window.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/session_window.png" alt></p>
 <h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>窗口分配器——window()方法</p>
 <ul>
 <li>window方法只能用于keyedStream。</li>
@@ -630,7 +636,7 @@
 <li>.sideOutputLateData()——将迟到的数据放入侧输出流：</li>
 <li>.getSideOutput()——获得侧输出流</li>
 </ul>
-<h3 id="时间语义和watermark"><a href="#时间语义和watermark" class="headerlink" title="时间语义和watermark"></a>时间语义和watermark</h3><h4 id="时间语义"><a href="#时间语义" class="headerlink" title="时间语义"></a>时间语义</h4><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/time.png" alt></p>
+<h3 id="时间语义和watermark"><a href="#时间语义和watermark" class="headerlink" title="时间语义和watermark"></a>时间语义和watermark</h3><h4 id="时间语义"><a href="#时间语义" class="headerlink" title="时间语义"></a>时间语义</h4><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/time.png" alt></p>
 <ul>
 <li>Event Time：事件创建的时间</li>
 <li>Ingestion Time：数据进入Flink的事件</li>
@@ -649,7 +655,7 @@
 <li>watermark必须单调递增，来确保任务的事件时间时钟在向前推进</li>
 <li>watermark与数据的时间戳相关</li>
 </ul>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/watermark.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/watermark.png" alt></p>
 <p>每个时间窗口，内部都有事件时间的时钟。由watermark推进时钟</p>
 <p>一个分区对应一个分区watermark</p>
 <p>task的watermark以最小的分区watermark为准</p>
@@ -873,23 +879,23 @@
 </li>
 <li>分界线之前到来的数据导致的状态更改，都会保存到当前分界线所属的检查点中。分界线后的数据更改，会保存到之后的检查点</li>
 </ul>
-<h3 id="检查点流程"><a href="#检查点流程" class="headerlink" title="检查点流程"></a>检查点流程</h3><p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_1.png" alt></p>
+<h3 id="检查点流程"><a href="#检查点流程" class="headerlink" title="检查点流程"></a>检查点流程</h3><p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_1.png" alt></p>
 <p>该图共分为：输入、根据奇偶重排，分别计算奇数和偶数和、输出</p>
 <p>有俩个流并行运作</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_2.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_2.png" alt></p>
 <p>JobManager向每个source任务发送带有新检查点ID的消息，通过这种方式，启动检查点</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_3.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_3.png" alt></p>
 <ol>
 <li>收到检查点，任务会停止然后数据源会将它们的状态写入检查点，并会发出检查点barrier，</li>
 <li>在存入检查点之后，会返回通知给source任务，source任务会向JobManager确认检查点完成</li>
 </ol>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_4.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_4.png" alt></p>
 <p>barrier会向下游传递，sum任务会等待所有输入分区的barrier到达，比如黄色检查点到达后，黄色的数据再来就会被存入缓存。还未到达的检查点的分区数据会继续处理</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_5.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_5.png" alt></p>
 <p>所有输入分区的barrier都到达后，任务就将状态保存到转台后端的检查点。然后将barrier向下发送</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_6.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_6.png" alt></p>
 <p>发送后，任务继续正常处理</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_7.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/checkpoint_7.png" alt></p>
 <p>Sink任务向JobManager确认状态保存到checkpoint完毕。</p>
 <p>当所有任务都确认成功保存，检查点建立完毕</p>
 <h4 id="保存点"><a href="#保存点" class="headerlink" title="保存点"></a>保存点</h4><p>原理和算法几乎和检查点一样。用法不同</p>
@@ -965,7 +971,7 @@
 </li>
 </ul>
 <p>提交事务必须是幂等操作</p>
-<p><img src="/2019/11/26/Flink%E7%AC%94%E8%AE%B0/e2e.png" alt></p>
+<p><img src="/26/Flink%E7%AC%94%E8%AE%B0/e2e.png" alt></p>
 <h3 id="Flink-Kafka端到端状态一致性"><a href="#Flink-Kafka端到端状态一致性" class="headerlink" title="Flink+Kafka端到端状态一致性"></a>Flink+Kafka端到端状态一致性</h3><ul>
 <li><p>source：kafka consumer作为source，可以将偏移量保留，如果后续任务出故障，恢复可以由连接器重置偏移量，重新消费</p>
 </li>
@@ -1019,19 +1025,9 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>让我恰<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/AliPay.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/WeChatPay.png">
-                      <span class="reward-type">微信</span>
-                    </div>
                     
                   </div>
                 </span>
@@ -1110,7 +1106,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/11/26/Flink%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http:/2019/11/26/Flink%E7%AC%94%E8%AE%B0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -1261,6 +1257,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Scala</a>
               </li>
              
@@ -1269,11 +1273,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nosql</a>
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elasticsearch</a>
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1285,14 +1293,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">scala</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">PHP</a>
               </li>
              
@@ -1301,11 +1301,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Shell</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spark</a>
+                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1313,7 +1313,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">SQL</a>
+                <a href="javascript:void(0)" class="js-tag color1">scala</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1325,15 +1325,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wordpress</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1345,15 +1345,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+                <a href="javascript:void(0)" class="js-tag color3">marjora</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">virtualbox</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1365,11 +1369,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">英语</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">作文</a>
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1381,10 +1385,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Flink</a>
               </li>
              
@@ -1393,15 +1393,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">前端</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vue</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
             
             <div class="clearfix"></div>
@@ -1450,13 +1450,41 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-friends" q-show="friends">
   		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接2</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接3</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
+            </li>
+          
+        </ul>
+  		
     	</section>
     
 
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">挣扎的笨比&lt;br&gt;</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     
