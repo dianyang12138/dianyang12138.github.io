@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="后端Java工程师"><title>爬虫 | dian的博客</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">爬虫</h1><a id="logo" href="/.">dian的博客</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">爬虫</h1><div class="post-meta">2021-04-27</div><div class="post-content"><a id="more"></a>
+
+<h1 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h1><p>web请求分析</p>
+<ul>
+<li>服务器渲染：服务器将数据写好，一块返回</li>
+<li>客户端渲染：先请求页面框架，再请求数据</li>
+</ul>
+<p>http协议</p>
+<ul>
+<li><p>请求：</p>
+<ul>
+<li>请求行：请求方式 url 协议</li>
+<li>请求头：服务器要用的附加信息</li>
+<li>请求体：请求参数</li>
+</ul>
+</li>
+<li><p>响应：</p>
+<ul>
+<li>状态行：协议 状态码</li>
+<li>响应头：放一些客户端使用的附加信息</li>
+<li>响应体：html，json等</li>
+</ul>
+</li>
+</ul>
+<h2 id="requests模块"><a href="#requests模块" class="headerlink" title="requests模块"></a>requests模块</h2><p>安装</p>
+<ul>
+<li><code>pip install requests</code>：原生python</li>
+<li><code>conda install requests</code>：anaconda下安装</li>
+</ul>
+<blockquote>
+<p>如果太慢可以用<a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/" target="_blank" rel="noopener">清华源</a></p>
+<p><code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 下载的包</code></p>
+</blockquote>
+<h2 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h2><p>可以用F12中network的<code>XHR</code>筛选出第二次请求的数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string"># get请求</span></span><br><span class="line"><span class="string">url = "https://www.sogou.com/web?query=周杰伦"</span></span><br><span class="line"><span class="string">headers = &#123;</span></span><br><span class="line"><span class="string">    "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">resp = requests.get(url,headers=headers)</span></span><br><span class="line"><span class="string">print(resp)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">print(resp.text) # 拿到页面文本</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string"># post请求</span></span><br><span class="line"><span class="string">url = "https://fanyi.baidu.com/sug"</span></span><br><span class="line"><span class="string">data = &#123;</span></span><br><span class="line"><span class="string">    "kw":"dog"</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">resp = requests.post(url,data=data)</span></span><br><span class="line"><span class="string">print(resp.json())</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line">url = <span class="string">"https://movie.douban.com/j/chart/top_list?type=24&amp;interval_id=100%3A90&amp;action=&amp;start=0&amp;limit=20"</span></span><br><span class="line">param = &#123;</span><br><span class="line">    <span class="string">"type"</span>: <span class="string">"24"</span>,</span><br><span class="line">    <span class="string">"interval_id"</span>: <span class="string">"100:90"</span>,</span><br><span class="line">    <span class="string">"action"</span>: <span class="string">""</span>,</span><br><span class="line">    <span class="string">"start"</span>: <span class="string">"0"</span>, <span class="comment">#从第0条开始 20条</span></span><br><span class="line">    <span class="string">"limit"</span>: <span class="string">"20"</span></span><br><span class="line">&#125;</span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"</span></span><br><span class="line">&#125;</span><br><span class="line">resp = requests.get(url=url, params=param, headers=headers)</span><br><span class="line">print(resp.request.url)</span><br><span class="line">print(resp.json())</span><br><span class="line">resp.close() <span class="comment">#访问次数过多可能会报错，因为会保留访问连接</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><h3 id="re解析"><a href="#re解析" class="headerlink" title="re解析"></a>re解析</h3><h4 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h4><p><a href="https://tool.oschina.net/regex" target="_blank" rel="noopener">试验正则的网站</a></p>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>匹配内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\w</td>
+<td>匹配一位字母（包含中文）或数字或下划线</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配一位非字母（包含中文）或数字或下划线</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意的空白符（\t，空格等）</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意非空白符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配一位数字</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>p匹配非数字</td>
+</tr>
+<tr>
+<td>\A</td>
+<td>从字符串开头匹配</td>
+</tr>
+<tr>
+<td>\z</td>
+<td>匹配字符串的结束，如果是换行，只匹配到换行前的结果</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个制表符</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配字符串的结尾</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意字符，除了换行符，当re.DOTALL标记被指定时，则可以匹配包括换行符的任意字符。</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td>匹配字符组中的字符</td>
+</tr>
+<tr>
+<td>[^…]</td>
+<td>匹配除了字符组中的字符的所有字符</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配0个或者多个左边的字符。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配一个或者多个左边的字符。</td>
+</tr>
+<tr>
+<td>？</td>
+<td>匹配0个或者1个左边的字符，{}后非贪婪方式。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>精准匹配n个前面的表达式。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>匹配n到m次由前面的正则表达式定义的片段，贪婪方式</td>
+</tr>
+<tr>
+<td>a|b</td>
+<td>匹配a或者b。</td>
+</tr>
+<tr>
+<td>()</td>
+<td>匹配括号内的表达式，也表示一个组</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>单词结尾</td>
+</tr>
+<tr>
+<td>\</td>
+<td>转义</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>[xxx]</code>：一个[]表示只匹配一个，内部写要匹配的字符。根据ascii进行范围比对。如果要匹配<code>abc</code>中的任意一个，就是<code>[abc]</code>或者<ul>
+<li><code>[0-9]</code>表示匹配0到9任一字符</li>
+<li>[a-zA-Z]：所有大小写</li>
+</ul>
+</li>
+<li><code>^ab&amp;</code>：表示匹配<code>ab</code>其他都不匹配</li>
+<li><code>ing\b</code>：以ing结尾的单词</li>
+<li><code>W{}</code>：用来约束左边的符号。</li>
+<li><code>\d{2,}</code>：匹配数字至少2个</li>
+<li>贪婪匹配：在量词允许的情况下，按最多的匹配内容<ul>
+<li><code>\d{3,}4</code>：如果一个字符串出现多个4，一直会匹配到最后一个4</li>
+<li><code>\d{3,}?4</code>：在量词后加<code>?</code>表示非贪婪模式。匹配到第一个4</li>
+</ul>
+</li>
+<li><code>\</code>：转义如<code>\\</code>表示<code>\</code></li>
+<li>在<code>[]</code>里，<code>.</code>、<code>()</code>等没有特殊意义，就表示该符号，但是<code>-</code>需要转义要用<code>\-</code></li>
+<li><code>?</code>问号常用到非贪婪匹配</li>
+</ul>
+<p><strong>re模块</strong></p>
+<p>用<code>(?P&lt;名字&gt;具体正则)</code>给组起名，在group方法时，可以传名字来拿</p>
+<ul>
+<li>findall：按照完整的正则进行匹配，但只显示括号里匹配到的内容。没有括号显示所有<ul>
+<li>如果多个括号列表返回，元素为匹配到的括号元组</li>
+</ul>
+</li>
+<li>finditer：匹配字符串所有内容，返回迭代器</li>
+<li>search：按照完整的正则进行匹配。反对一个match对象<ul>
+<li>group()：返回第一个匹配到完整显示</li>
+<li>group(1)：返回匹配到的第一个括号，2、3…按照顺序</li>
+</ul>
+</li>
+<li>match：默认在正则前加了<code>^</code></li>
+<li>预加载正则：complie</li>
+</ul>
+<p>方法可以传入<code>re.S</code>表示.可以匹配换行符</p>
+<blockquote>
+<p><code>?:</code>是可以不显示</p>
+<p><code>?P&lt;name&gt;</code>：取名</p>
+<p><code>(?P=name)</code>：引用取名的，如果不相同就匹配不上</p>
+<p><code>\1</code>：表示引用第一组的内容，但是\1有特殊含义，所有往往在字符串前加r。用的少</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># (?P&lt;名字&gt;正则表达式)</span></span><br><span class="line"><span class="comment"># ret.group('名字')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分组命名的引用</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">exp= <span class="string">'&lt;abc&gt;akd7008&amp;(&amp;*)hgdwuih&lt;/abb&gt;008&amp;(&amp;*)hgdwuih&lt;/abd&gt;'</span></span><br><span class="line">ret= re.search(<span class="string">'&lt;(?P&lt;tag&gt;\w+)&gt;.*?&lt;/(?P=tag)&gt;'</span>,exp)</span><br><span class="line">print(ret)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">exp= <span class="string">'&lt;abc&gt;akd7008&amp;(&amp;*)hgdwuih&lt;/abc&gt;008&amp;(&amp;*)hgdwuih&lt;/abd&gt;'</span></span><br><span class="line">ret= re.search(<span class="string">r'&lt;(\w+)&gt;.*?&lt;/\1&gt;'</span>,exp)</span><br><span class="line">ret= re.search(<span class="string">'&lt;(\w+)&gt;.*?&lt;/\\1&gt;'</span>,exp)</span><br><span class="line">print(ret)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">ret=re.findall(<span class="string">r"\d+\.\d+|(\d+)"</span>,<span class="string">"1-2*(60+(-40.35/5)-(-4*3))"</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = [<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'60'</span>, <span class="string">''</span>, <span class="string">'5'</span>, <span class="string">'4'</span>, <span class="string">'3'</span>,<span class="string">''</span>,<span class="string">''</span>]</span><br><span class="line">ret.remove(<span class="string">''</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = filter(<span class="keyword">lambda</span> n:n,ret)</span><br><span class="line">print(list(ret))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分组命名(?P&lt;组名&gt;正则) (?P=组名)</span></span><br><span class="line"><span class="comment"># 有的时候我们要匹配的内容是包含在不想要的内容之中的,</span></span><br><span class="line"><span class="comment"># 只能先把不想要的内容匹配出来,然后再想办法从结果中去掉</span></span><br></pre></td></tr></table></figure>
+
+<p>re不常用方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">re.split(<span class="string">'[|]'</span>,<span class="string">'sa|dsadd'</span>)<span class="comment">#根据正则表达式切割保留，带括号会保留</span></span><br><span class="line">re.sub(<span class="string">'\d+'</span>,<span class="string">'数字'</span>,<span class="string">'sads45dfs566dd3556sadsa'</span>,<span class="number">2</span>)<span class="comment">#根据正则替换2次。sads数字dfs数字dd3556sadsa</span></span><br><span class="line">re.subn(<span class="string">'\d+'</span>,<span class="string">'数字'</span>,<span class="string">'sads45dfs566dd3556sadsa'</span>)<span class="comment">#返回替换后的和次数元组('sads数字dfs数字dd数字sadsa', 3)</span></span><br><span class="line">re.match(<span class="string">'\d+'</span>,<span class="string">'123sdasa'</span>)<span class="comment">#相当于在正则之前加了^。&lt;re.Match object; span=(0, 3), match='123'&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>re编译和迭代</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">ret = re.compile(<span class="string">'\d+'</span>)  <span class="comment"># 编译正则表达式</span></span><br><span class="line">ret.search(<span class="string">"传入字符串\'sadsa56165\'"</span>)</span><br><span class="line"><span class="comment"># 节省时间</span></span><br><span class="line">ret = re.finditer(<span class="string">'\d+'</span>, <span class="string">"sad516das11d56as4dsa561das531fa6w465s3a21d321as5f1ds531gs56ad1ads65f4a684fa9d"</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ret:</span><br><span class="line">    print(i.group())</span><br><span class="line"><span class="comment"># 两个可以结合使用</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h4><p>豆瓣案例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line">url = <span class="string">"https://movie.douban.com/top250"</span></span><br><span class="line">header = &#123;</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"</span></span><br><span class="line">&#125;</span><br><span class="line">resp = requests.get(url, headers=header)</span><br><span class="line">page_context = resp.text</span><br><span class="line">obj = re.compile(<span class="string">r'&lt;li&gt;.*?&lt;div class="item"&gt;.*?&lt;span class="title"&gt;(?P&lt;name&gt;.*?)'</span></span><br><span class="line">                 <span class="string">r'&lt;/span&gt;.*?&lt;p class=""&gt;.*?&lt;br&gt;(?P&lt;year&gt;.*?)&amp;nbsp.*?&lt;span '</span></span><br><span class="line">                 <span class="string">r'class="rating_num" property="v:average"&gt;(?P&lt;score&gt;.*?)&lt;/span&gt;.*?'</span></span><br><span class="line">                 <span class="string">r'&lt;span&gt;(?P&lt;num&gt;.*?)人评价&lt;/span&gt;'</span>, re.S)</span><br><span class="line">result = obj.finditer(page_context)</span><br><span class="line">f = open(<span class="string">"data.csv"</span>, mode=<span class="string">"w"</span>,encoding=<span class="string">"UTF-8"</span>)</span><br><span class="line">cvswriter = csv.writer(f)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> it <span class="keyword">in</span> result:</span><br><span class="line">    dic = it.groupdict()</span><br><span class="line">    dic[<span class="string">'year'</span>] = dic[<span class="string">'year'</span>].strip()</span><br><span class="line">    cvswriter.writerow(dic.values())</span><br><span class="line"></span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>电影天堂</p>
+<h3 id="bs4解析"><a href="#bs4解析" class="headerlink" title="bs4解析"></a>bs4解析</h3><p><code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple bs4</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">url = <span class="string">"http://xinfadi.com.cn/marketanalysis/0/list/1.shtml"</span></span><br><span class="line">res = requests.get(url)</span><br><span class="line">page = BeautifulSoup(res.text, <span class="string">"html.parser"</span>)  <span class="comment"># 指定html解析器</span></span><br><span class="line"><span class="comment"># find(标签,属性=值) class为关键字加_，返回一个 find_all返回所有</span></span><br><span class="line"><span class="comment"># table = page.find("table", class_="hq_table")</span></span><br><span class="line"><span class="comment"># 都可</span></span><br><span class="line">table = page.find(<span class="string">"table"</span>, attrs=&#123;</span><br><span class="line">    <span class="string">"class"</span>: <span class="string">"hq_table"</span></span><br><span class="line">&#125;)</span><br><span class="line">trs = table.find_all(<span class="string">"tr"</span>)[<span class="number">1</span>:]</span><br><span class="line"><span class="keyword">for</span> tr <span class="keyword">in</span> trs:</span><br><span class="line">    tds = tr.find_all(<span class="string">"td"</span>)</span><br><span class="line">    name = tds[<span class="number">0</span>].text</span><br><span class="line">    low = tds[<span class="number">1</span>].text</span><br><span class="line">    avg = tds[<span class="number">2</span>].text</span><br><span class="line">    high = tds[<span class="number">3</span>].text</span><br><span class="line">    gui = tds[<span class="number">4</span>].text</span><br><span class="line">    kind = tds[<span class="number">5</span>].text</span><br><span class="line">    date = tds[<span class="number">6</span>].text</span><br><span class="line">    print(name, low, avg, high, gui, kind, date)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">url = <span class="string">"https://www.umei.cc/bizhitupian/weimeibizhi/"</span></span><br><span class="line">resp = requests.get(url)</span><br><span class="line">resp.encoding = <span class="string">'utf-8'</span></span><br><span class="line">main_page = BeautifulSoup(resp.text, <span class="string">'html.parser'</span>)</span><br><span class="line">alist = main_page.find(<span class="string">"div"</span>, class_=<span class="string">"TypeList"</span>).find_all(<span class="string">"a"</span>)</span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> alist:</span><br><span class="line">    href = a.get(<span class="string">'href'</span>)</span><br><span class="line">    child_page_resp = requests.get(href)</span><br><span class="line">    child_page_resp.encoding = <span class="string">'utf-8'</span></span><br><span class="line">    child_page_text = child_page_resp.text</span><br><span class="line">    child_page = BeautifulSoup(child_page_text, <span class="string">"html.parser"</span>)</span><br><span class="line">    p = child_page.find(<span class="string">"p"</span>, align=<span class="string">"center"</span>)</span><br><span class="line">    img = p.find(<span class="string">"img"</span>)</span><br><span class="line">    src = img.get(<span class="string">"src"</span>)</span><br><span class="line">    img_resp = requests.get(src)</span><br><span class="line">    img_name = src.split(<span class="string">"/"</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"img/"</span> + img_name, mode=<span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(img_resp.content)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">print(<span class="string">"over_all"</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="xpath解析"><a href="#xpath解析" class="headerlink" title="xpath解析"></a>xpath解析</h3><p>安装lxml</p>
+<p><code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple lxml</code></p>
+<ul>
+<li><code>//</code>：表后代</li>
+<li><code>*</code>：通配符 任意</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">parser = etree.HTMLParser(encoding=<span class="string">"utf-8"</span>)</span><br><span class="line">tree = etree.parse(<span class="string">"a.html"</span>, parser=parser)</span><br><span class="line"></span><br><span class="line"><span class="comment"># result = tree.xpath("/html/body/ol/li/a[@href='dapao']/text()")#获取href属性是dapao的</span></span><br><span class="line"><span class="comment"># print(result)</span></span><br><span class="line"></span><br><span class="line">ol_li_list=tree.xpath(<span class="string">"/html/body/ol/li"</span>)</span><br><span class="line"><span class="keyword">for</span> li <span class="keyword">in</span> ol_li_list:</span><br><span class="line">    print(li.xpath(<span class="string">"./a/text()"</span>))</span><br><span class="line">    print(li.xpath(<span class="string">"./a/@href"</span>))</span><br><span class="line"></span><br><span class="line">print(tree.xpath(<span class="string">"/html/body/ul/li/a/@href"</span>))</span><br><span class="line">print(tree.xpath(<span class="string">"/html/body/div[1]"</span>))<span class="comment"># 浏览器F12 直接复制Xpath</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><ul>
+<li>模拟登录：处理cookie</li>
+<li>防盗链处理：抓梨视频<ul>
+<li><code>Referer</code></li>
+</ul>
+</li>
+<li>代理：放封IP</li>
+</ul>
+<p><strong>模拟登录</strong></p>
+<p>可以通过使用session进行请求，session过程中cookie不会丢失</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">"loginName"</span>:<span class="string">"18614075987"</span>,</span><br><span class="line">    <span class="string">"password"</span>:<span class="string">"q6035945"</span></span><br><span class="line">&#125;</span><br><span class="line">url = <span class="string">"https://passport.17k.com/ck/user/login"</span></span><br><span class="line">session=requests.session()</span><br><span class="line">resp=session.post(url,data=data)</span><br><span class="line">resp=session.get(<span class="string">"https://user.17k.com/ck/author/shelf?page=1&amp;appKey=2406394919"</span>)</span><br><span class="line">print(resp.json())<span class="comment">#也可以在headers里传入cookie</span></span><br></pre></td></tr></table></figure>
+
+<p>防盗链处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#梨视频案例</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">"https://www.pearvideo.com/video_1723346"</span></span><br><span class="line">contId = url.split(<span class="string">"_"</span>)[<span class="number">1</span>]</span><br><span class="line">videoStatusUrl = <span class="string">f"https://www.pearvideo.com/videoStatus.jsp?contId=<span class="subst">&#123;contId&#125;</span>&amp;mrd=0.9678561427651502"</span></span><br><span class="line"><span class="comment">#https://www.pearvideo.com/videoStatus.jsp?contId=1723346&amp;mrd=0.9678561427651502</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"</span>,</span><br><span class="line">    <span class="string">"Referer"</span>: <span class="string">f"http://www.pearvideo.com/video_<span class="subst">&#123;contId&#125;</span>"</span>  <span class="comment"># 来源地址</span></span><br><span class="line">&#125;</span><br><span class="line">print(videoStatusUrl)</span><br><span class="line">resp = requests.get(videoStatusUrl, headers=headers)</span><br><span class="line">dic = resp.json()</span><br><span class="line">srcUrl = dic[<span class="string">'videoInfo'</span>][<span class="string">'videos'</span>][<span class="string">'srcUrl'</span>]</span><br><span class="line">systemTime = dic[<span class="string">'systemTime'</span>]</span><br><span class="line">srcUrl = srcUrl.replace(systemTime, <span class="string">f"cont-<span class="subst">&#123;contId&#125;</span>"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"a.mp4"</span>, mode=<span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(requests.get(srcUrl).content)</span><br></pre></td></tr></table></figure>
+
+<p><strong>代理</strong></p>
+<p>通过第三方的机器发送请求</p>
+<p>百度找免费代理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">proxies = &#123;</span><br><span class="line">    <span class="string">"https"</span>:<span class="string">"https://ip地址"</span><span class="comment">#有些直接ip地址就行，看版本，是http还是https看要爬取的网站</span></span><br><span class="line">&#125;</span><br><span class="line">resp = requests.get(<span class="string">"http://www.baidu.com"</span>,proxies=proxies)</span><br><span class="line">resp.encoding=<span class="string">'utf-8'</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="网易云项目"><a href="#网易云项目" class="headerlink" title="网易云项目"></a>网易云项目</h2><p>查看调用栈，从下往上依次调用。</p>
+<p><img src="/2021/04/27/%E7%88%AC%E8%99%AB/image-20210331200916211.png" alt="image-20210331200916211"></p>
+<p>点进去后，左下角的按钮，能使代码更美观</p>
+<p><img src="/2021/04/27/%E7%88%AC%E8%99%AB/image-20210331201122656.png" alt="image-20210331201122656"></p>
+<p>在最后停的地方打断点，逐个查看请求。</p>
+<p>找到请求后，可以在call Stack查看调用栈。一直找到加密的位置。</p>
+<p><img src="/2021/04/27/%E7%88%AC%E8%99%AB/image-20210331201816093.png" alt="image-20210331201816093"></p>
+</div><div class="tags"><a href="/tags/%E7%88%AC%E8%99%AB/"><i class="fa fa-tag"></i>爬虫</a><a href="/tags/python/"><i class="fa fa-tag"></i>python</a></div><div class="post-nav"><a class="pre" href="/2021/05/07/JVM/">JVM</a><a class="next" href="/2020/09/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Scala/" style="font-size: 15px;">Scala</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 15px;">并发</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/nosql/" style="font-size: 15px;">nosql</a> <a href="/tags/elasticsearch/" style="font-size: 15px;">elasticsearch</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 15px;">后端</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 15px;">大数据</a> <a href="/tags/SQL/" style="font-size: 15px;">SQL</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/springsecurity/" style="font-size: 15px;">springsecurity</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/wordpress/" style="font-size: 15px;">wordpress</a> <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/marjora/" style="font-size: 15px;">marjora</a> <a href="/tags/virtualbox/" style="font-size: 15px;">virtualbox</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/bug/" style="font-size: 15px;">bug</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 15px;">服务器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15px;">算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">机器学习</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 15px;">计算机基础</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 15px;">爬虫</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E6%B5%81%E7%A8%8B/" style="font-size: 15px;">流程</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 15px;">开发</a> <a href="/tags/Flink/" style="font-size: 15px;">Flink</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 15px;">并发编程</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15px;">前端</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 15px;">数据结构</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/06/Redis/">Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">Git笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/07/JVM/">JVM</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/Git%E7%AC%94%E8%AE%B0/">Git笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/manjaro%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">manjaro配置开发环境</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/docker%E7%AC%94%E8%AE%B0/">docker笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">dian的博客.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>

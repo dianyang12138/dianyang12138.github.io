@@ -1,0 +1,1009 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="后端Java工程师"><title>操作系统 | dian的博客</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">操作系统</h1><a id="logo" href="/.">dian的博客</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">操作系统</h1><div class="post-meta">2020-06-13</div><div class="post-content"><a id="more"></a>
+
+<h2 id="系统的启动"><a href="#系统的启动" class="headerlink" title="系统的启动"></a>系统的启动</h2><p>x86 PC的开机流程</p>
+<ol>
+<li>x86 PC刚开机时CPU处于实模式<ul>
+<li>实模式和保护模式对应，实模式的寻址CS:IP和保护模式不一样</li>
+</ul>
+</li>
+<li>开机时，CS=0xFFFF IP=0x0000</li>
+<li>寻址0xFFFF0(ROM BIOS映射区)</li>
+<li>检查RAM、键盘、显示器等</li>
+<li>将磁盘0磁道0扇区读入内存的0x7c00处。就是引导扇区</li>
+<li>设置cs=0x07c0，ip=0x0000</li>
+</ol>
+<blockquote>
+<p>0x7c00处存放的代码就是从磁盘引导扇区读入的512个字节</p>
+<p>引导扇区就是启动设备的第一个扇区</p>
+</blockquote>
+<p><strong>boot模块</strong></p>
+<p>引导扇区代码：bootsect.s</p>
+<p><code>.s</code>为汇编代码</p>
+<ul>
+<li>如果采用C语言经过编译可能会产生出无法控制的东西，如不能控制int变量具体在内存的哪个位置。</li>
+<li>汇编的每条指令都变成了真正的机器指令</li>
+</ul>
+<p>程序说明：这段程序是先将引导扇区的代码读入，再将setup的代码读入。</p>
+<p>第一个扇区是boot扇区，后面紧跟着4个setup扇区，然后再是OS扇区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">.globl begtext,begdata,begbss,endtext,enddata,endbss</span><br><span class="line">.text &#x2F;&#x2F;文本段，.text等是伪操作符，告诉编译器产生文本段，.text用于标识文本段的开始位置。此处的.text .data .bss表明3个段重叠，不分段</span><br><span class="line">begtext:</span><br><span class="line">.data &#x2F;&#x2F;数据段</span><br><span class="line">begdata:</span><br><span class="line">.bss &#x2F;&#x2F;未初始化数据段</span><br><span class="line">begbss:</span><br><span class="line">entry start &#x2F;&#x2F;关键字entry告诉链接器 程序入口</span><br><span class="line">start: &#x2F;&#x2F;SETUPSEG&#x3D;0x0920</span><br><span class="line">	mov ax,#BOOTSEG	 mov ds,ax &#x2F;&#x2F;BOOTSEG&#x3D;0x07c0，将ds置为7c0</span><br><span class="line">	mov ax,#INITSEG  mov es,ax &#x2F;&#x2F;INITSEG&#x3D;0x9000，将es置为9000</span><br><span class="line">	mov cx,#256</span><br><span class="line">	sub si,si  		 sub di,di &#x2F;&#x2F;将si和di置0</span><br><span class="line">	rep movw &#x2F;&#x2F;重复移动256个字，cx为256。就是将0x07c0:0x000的256个字移动到0x9000:0x0000，为了给后面os模块留位置</span><br><span class="line">	jmpi go,INITSEG &#x2F;&#x2F;将go赋给ip，INITSGE赋给CS。go指的是go段的偏移地址</span><br><span class="line">go: mov ax,cs &#x2F;&#x2F;cs&#x3D;0x9000</span><br><span class="line">	mov ds,ax  mov es,ax  mov ss,ax  mov sp,#0xff00</span><br><span class="line">loadsetup: &#x2F;&#x2F;载入setup模块</span><br><span class="line">	mov dx,#0x000  mov cx,#0x0002  mov bx,0x0200</span><br><span class="line">	mov ax,#0x0200+SETUPLEN  int 0x13  &#x2F;&#x2F;BIOS中断，0x13是BIOS读磁盘扇区的中断：ah&#x3D;0x02-读磁盘，al&#x3D;扇区数量(SETUPLEN&#x3D;4)，ch&#x3D;柱面号，cl&#x3D;开始扇区号，dh&#x3D;磁头号，dl&#x3D;驱动器号，es:bx&#x3D;内存地址</span><br><span class="line">	jnc ok_load_setup &#x2F;&#x2F;&#x2F;读到0x90200也就是0x90000的512字节后</span><br><span class="line">	mov dx,#0x0000</span><br><span class="line">	mov dx,#0x0000</span><br><span class="line">	int 0x13</span><br><span class="line">	j   load_setup </span><br><span class="line">ok_load_setup: &#x2F;&#x2F;载入setup模块</span><br><span class="line">	mov dl,#0x00  mov ax,#0x0800</span><br><span class="line">	int 0x13  mov ch,#0x00  mov sectors,cx</span><br><span class="line">	mov ah,#0x03  xor bh,bh  int  0x10&#x2F;&#x2F;读光标</span><br><span class="line">	mov cx,#24   mov bx,#0x0007</span><br><span class="line">	mov bp,#msg1 mov ax,#1301  int 0x10&#x2F;&#x2F;显示字符，显示的内容是bp所在的内存数据,可以通过修改msg1位置的内容显示不同的效果</span><br><span class="line">	mov ax,#SYSSEG  &#x2F;&#x2F;SYSSEG&#x3D;0x1000</span><br><span class="line">	mov es,ax</span><br><span class="line">	call read_it &#x2F;&#x2F;读入systm模块</span><br><span class="line">	jmpi 0,SETUPSEG</span><br><span class="line">	</span><br><span class="line">read_it:  mov ax,es  cmp ax,#ENDSEG  jb ok1_read</span><br><span class="line">	ret</span><br><span class="line">ok1_read:</span><br><span class="line">	mov ax,sectors</span><br><span class="line">	sub ax,sread &#x2F;&#x2F;sread是当前磁道已读扇区数</span><br><span class="line">	call read_track &#x2F;&#x2F;读磁道</span><br></pre></td></tr></table></figure>
+
+<p>msg1:内容是”loading system”</p>
+<p><strong>setup模块</strong></p>
+<p>setup.s，将完成os启动前的设置。用来获取硬件信息。操作系统要开始建立</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">start: mov ax,#INITSEG  mov ds,ax  mov ah,#0x03</span><br><span class="line">	xor bh,bh  int 0x10&#x2F;&#x2F;取光标位置dx  mov [0],dx</span><br><span class="line">	mov ah,#0x88  int 0x15  mov [2].ax ... &#x2F;&#x2F;用ah的参数使用15中断(获取物理内存)然后放入ax，再赋给[2]用来间接寻址，段地址是9000，所以最后是90002</span><br><span class="line">	cli  &#x2F;&#x2F;不允许中断</span><br><span class="line">	mov ax,#0x0000  cld</span><br><span class="line">do_move: mov es,ax  add ax,#0x1000</span><br><span class="line">	cmp ax,#0x9000  jz end_move</span><br><span class="line">	mov ds,ax  sub di,di</span><br><span class="line">	sub si,si</span><br><span class="line">	mov cx,#0x8000</span><br><span class="line">	rep  &#x2F;&#x2F;将system模块移到0地址</span><br><span class="line">	movsw</span><br><span class="line">	jmp do_move</span><br><span class="line">	</span><br><span class="line">end_move: mov ax,#SETUPSEG  mov ds,ax</span><br><span class="line">	lidt idt_48  lgdt gdt_48 &#x2F;&#x2F;设置保护模式的中断和寻址(初始化表)</span><br><span class="line">	</span><br><span class="line">&#x2F;&#x2F;这里省略了很多</span><br><span class="line">idt_48:.word 0  .word 0,0</span><br><span class="line">gdt_48:.word 0x800  .word 512+gdt,0x9</span><br><span class="line">gdt: .word 0,0,0,0  &#x2F;&#x2F;一个word16位，4个word，每个表项64位</span><br><span class="line">	 .word 0x07FF,0x0000,0x9A00,0x00c0</span><br><span class="line">	 .word 0x07FF,0x0000,0x9200,0x00c0</span><br><span class="line">	</span><br><span class="line">&#x2F;&#x2F;setup在最后进入保护模式</span><br><span class="line">mov ax,#0x0001  mov cr0,ax  &#x2F;&#x2F;cr0的最后一位如果是0就16位模式，如果是1保护模式</span><br><span class="line">jmpi 0,8 &#x2F;&#x2F;把0赋给ip 8赋给cs，如果跳到80就是操作系统开始的地址，会死机，非法指令。应该跳到0地址。在保护模式下，找的应该是第八个表项的0地址</span><br></pre></td></tr></table></figure>
+
+<p>cs:ip的寻址方式(16位机)，最多只能寻址1M，远远不够。所以需要改变寻址方式，启动32位的寻址模式，也就是保护模式</p>
+<p>保护模式下的地址翻译和中断处理：</p>
+<ul>
+<li>寻址方式：用gdt来做，是硬件上的(软件也可以做到，但是硬件更快)。cs为选择子用来放查表(GDT表)的下标(索引)，真正的基址放在表项中，在加上IP<ul>
+<li>表中内容解释由<strong>硬件规定</strong>好</li>
+</ul>
+</li>
+<li>中断处理：保护模式下，int n，也是在表项(IDT表)下去找，找到中断处理函数的入口地址</li>
+</ul>
+<p>GDT的低位是从右下到左上。根据图可知0x07FF 0x<strong>0000</strong> 0x9A<strong>00</strong> 0x<strong>00</strong>C0得出的基址是0x00000000。就是0地址，这时候0地址已经是system模块，操作系统开始的位置。</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210216130555097.png" alt="image-20210216130555097"></p>
+<blockquote>
+<p>16位模式和32位模式本质区别是CPU内部的解释程序不一样</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>内存地址</th>
+<th>长度</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x90000</td>
+<td>2</td>
+<td>光标位置</td>
+</tr>
+<tr>
+<td>0x90002</td>
+<td>2</td>
+<td>扩展内存数(1M以后的内存)</td>
+</tr>
+<tr>
+<td>0x9000C</td>
+<td>2</td>
+<td>显卡参数</td>
+</tr>
+<tr>
+<td>0x901FC</td>
+<td>2</td>
+<td>根设备号</td>
+</tr>
+</tbody></table>
+<p><strong>system模块</strong></p>
+<p>system是由许多文件编辑而成，我们需要控制文件先后执行的顺序就需要用到makefile。</p>
+<p>通常把操作系统编译后的东西叫做镜像(image)，</p>
+<p>head.s为system的第一个文件。再次初始化idt和gdt表。setup因为需要``jmpi 0,8`所以临时初始化idt和gdt表。这次是真正工作。</p>
+<p>进入保护模式后，32位汇编和16位汇编不一样了。</p>
+<p>汇编：</p>
+<ul>
+<li>as86汇编：能产生16位代码的intel 8086(386)汇编</li>
+<li>GNU as汇编：产生32位代码，使用AT&amp;T系统V语法</li>
+<li>内嵌汇编：在gcc编译x.c会产生中间结果as汇编文件x.s<ul>
+<li>在.c文件中有些指令需要严格控制，就要用到内嵌汇编</li>
+<li>内嵌汇编共四部分：汇编语句模板、输出部分、输入部分、破坏描述部分<ul>
+<li>各部分用<code>:</code>隔开，汇编语句模板必不可少，其他可选。使用了后面的部分而前面部分为空，也要用<code>:</code>，相应部分内容为空</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>head.s结束后跳转到main.c</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">after_page_tables:</span><br><span class="line">	push1 $0  push1 $0  push1 $0  push1 $L6&#x2F;&#x2F;设置main参数 3个0 分别是envp、argv、argc</span><br><span class="line">	push1 $_main  jmp set_paging &#x2F;&#x2F;进入mian</span><br><span class="line">L6: jmp L6 &#x2F;&#x2F;死循环，如果main结束了 就死机了</span><br><span class="line">setup_paging: 设置页表 ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    mem_init();</span><br><span class="line">    trap_init();</span><br><span class="line">    .....<span class="comment">//init用作内存、中断、cpu、设备、时钟等初始化</span></span><br><span class="line">    sti();</span><br><span class="line">    move_to_user_mode();</span><br><span class="line">    <span class="keyword">if</span>(!fork())&#123;init();&#125;<span class="comment">//永远不会停止</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化mem_map数组未使用的置为0</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mem_init</span><span class="params">(<span class="keyword">long</span> start_mem,<span class="keyword">long</span> end_mem)</span><span class="comment">//end_mem从前面的90002处拿到</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;PAGING_PAGES;i++)</span><br><span class="line">        mem_map[i] = USED;<span class="comment">//标记操作系统占用的内存</span></span><br><span class="line">    i = MAP_NR(start_mem);</span><br><span class="line">    end_mem -= start_mem;</span><br><span class="line">    end_mem &gt;&gt;=<span class="number">12</span>;<span class="comment">//4k</span></span><br><span class="line">    <span class="keyword">while</span>(end_mem -- &gt; <span class="number">0</span>) </span><br><span class="line">        mem_map[i++] = <span class="number">0</span>;<span class="comment">//每4K置0，作为一片</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="操作系统接口"><a href="#操作系统接口" class="headerlink" title="操作系统接口"></a>操作系统接口</h2><p>命令行：本质命令程序</p>
+<blockquote>
+<p>这部分我以前了解过，就省略了</p>
+</blockquote>
+<p><strong>图形按钮</strong></p>
+<p>图形按钮本质利用了消息队列</p>
+<p>图形界面：消息框架程序+消息处理程序</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210217124007329.png" alt="image-20210217124007329"></p>
+<p><strong>系统调用</strong></p>
+<p>POSIX：Portable Operating System Interface of Unix(IEEE制定的一个标准族)</p>
+<p>可以在网上查找POSIX手册，可以查到能够使用的系统调用</p>
+<blockquote>
+<p>X通常指Unix</p>
+</blockquote>
+<p>系统调用：系统的函数</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>POSIX定义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>任务管理</td>
+<td>fork</td>
+<td>创建一个进程</td>
+</tr>
+<tr>
+<td></td>
+<td>execl</td>
+<td>运行一个可执行程序</td>
+</tr>
+<tr>
+<td></td>
+<td>pthread_create</td>
+<td>创建一个线程</td>
+</tr>
+<tr>
+<td>文件系统</td>
+<td>open</td>
+<td>打开一个文件或目录</td>
+</tr>
+<tr>
+<td></td>
+<td>EACCES</td>
+<td>返回值，表示没有权限</td>
+</tr>
+<tr>
+<td></td>
+<td>mode_t st_mode</td>
+<td>文件头结构：文件属性</td>
+</tr>
+</tbody></table>
+<p><strong>系统调用的实现</strong></p>
+<p>不能让应用程序随意调用数据、jmp。</p>
+<p>将内核程序和用户程序隔离</p>
+<p>CS:IP的cs最低两位表示：0表示内核态3表示用户态 1、2表示os服务</p>
+<p>区分内核态和用户态：一种处理器“<strong>硬件</strong>设计”</p>
+<ul>
+<li>将内存分割成用户段和核心段</li>
+<li>内核态可以访问如何数据、用户态不能访问内核数据。对于指令也一样</li>
+</ul>
+<p>三个段寄存器：CPL(当前特权级)、DPL(目标内存段特权级)、RPL</p>
+<ul>
+<li>DPL用来描述目标段。就在系统初始化(head.s做的)的GDT表中。DPL=0；</li>
+<li>CPL：就是CS的低二位。用户程序的时候为3，系统调用时为0</li>
+<li>DPL≥CPL、DPL≥RPL：老师直接把我说懵了</li>
+</ul>
+<p>硬件也提供了“主动进入内核的方法”：中断指令 int (对于x</p>
+<p>86来说)</p>
+<ul>
+<li>int指令将cs中CPL改成0，”进入内核”。这是用户程序发起的调用内核代码的唯一方式(int 0x80)</li>
+</ul>
+<p>系统调用的核心：</p>
+<ul>
+<li>用户程序中包含一段包含int指令的代码</li>
+<li>操作系统写中断处理，获取想调程序的编号</li>
+<li>操作系统根据编号执行相应代码 </li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line">_syscall3(<span class="keyword">int</span>, <span class="built_in">write</span>, <span class="keyword">int</span>, fd, <span class="keyword">const</span> <span class="keyword">char</span> *buf, <span class="keyword">off_t</span>, count)</span><br></pre></td></tr></table></figure>
+
+<p><strong>以print为例看下执行流程</strong></p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210219002104556.png" alt="image-20210219002104556"></p>
+<p>这里需要补充下宏的知识和<a href="https://www.bbsmax.com/A/lk5abpvNd1/" target="_blank" rel="noopener">内嵌汇编知识</a></p>
+<p>write函数的实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _syscall3(type,name,atype,a,btype,b,ctype,c)\</span></span><br><span class="line">type name(atype a, btype b, ctype c) \</span><br><span class="line">&#123; <span class="keyword">long</span> __res;\</span><br><span class="line"><span class="function">__asm__ <span class="title">volatile</span><span class="params">(<span class="string">"int 0x80"</span>:<span class="string">"=a"</span>(__res):<span class="string">""</span>(__NR_##name),\</span></span></span><br><span class="line">"b"((long)(a)), "c"((long)(b)), "d"((long)(c)))); if (__res &gt;= 0) return\</span><br><span class="line">(type)__res; errno = -__res; <span class="keyword">return</span> <span class="number">-1</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个数字实际上是系统调用号。因为所有进入内核的指令都是int 80，该数字就是用来区分进入后具体操作</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NR_write 4 <span class="comment">//一堆连续正整数(数组下标, 函数表索引)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//宏展开之后</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* buf <span class="keyword">off_t</span>, count)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">	<span class="keyword">long</span> __res; </span><br><span class="line">    <span class="comment">//这里__NR__write前面空的限制字符的意思是与前面保持一致，也为=a</span></span><br><span class="line">	__asm__ volatile("int 0x80":"=a"(__res) : ""(__NR_write), "b"((long)(fd)), "c"((long)(off_t)), "d"((long)()))); </span><br><span class="line">	<span class="keyword">if</span> (__res &gt;= <span class="number">0</span>) </span><br><span class="line">		<span class="keyword">return</span>(<span class="keyword">int</span>)__res; </span><br><span class="line">	errno = -__res; </span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>int 0x80中断处理的实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sched_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; set_system_gate(<span class="number">0x80</span>,&amp;system_call); &#125;<span class="comment">//在初始化时就规定了int0x80执行system_call函数</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//该方法核心就是初始化idt表。</span></span><br><span class="line"><span class="comment">//gate指的是中断处理门，idt的每个表项就叫中断处理门</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> set_system_gate(n, addr) \</span></span><br><span class="line">_set_gate(&amp;idt[n],<span class="number">15</span>,<span class="number">3</span>,addr); <span class="comment">//idt是中断向量表基址是一个全局变量。用n来找到80对应地址。15,3分别转给type和dpl，addr就是上面的&amp;system_call</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _set_gate(gate_addr, type, dpl, addr)\</span></span><br><span class="line">__asm__(<span class="string">"movw %%dx,%%ax\n\t"</span> <span class="string">"movw %0,%%dx\n\t"</span>\ <span class="string">"movl %%eax,%1\n\t"</span> <span class="string">"movl %%edx,%2"</span>:\</span><br><span class="line">:<span class="string">"i"</span>((short)(<span class="number">0x8000</span>+(dpl&lt;&lt;<span class="number">13</span>)+type&lt;&lt;<span class="number">8</span>))),<span class="string">"o"</span>(*(( \</span><br><span class="line"><span class="keyword">char</span>*)(gate_addr))),<span class="string">"o"</span>(*(<span class="number">4</span>+(<span class="keyword">char</span>*)(gate_addr))),\</span><br><span class="line"><span class="string">"d"</span>((<span class="keyword">char</span>*)(addr),<span class="string">"a"</span>(<span class="number">0x00080000</span>))<span class="comment">//这一串内嵌汇编，就是用来将数值组成一个表项</span></span><br></pre></td></tr></table></figure>
+
+<p>这时cs为8，ip为system_call的地址。</p>
+<blockquote>
+<p>只能用int0x80进入内核时cpl肯定等于3。dpl也-3，所以能进入。</p>
+<p>cs=8时cpl=0，dpl=3</p>
+</blockquote>
+<p>中断处理程序system_call.s</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">nr_system_calls&#x3D;72</span><br><span class="line">.globl _system_call</span><br><span class="line">_system_call: cmpl $nr_system_calls-1,%eax</span><br><span class="line">ja bad_sys_call</span><br><span class="line">push %ds push %es push %fs</span><br><span class="line">pushl %edx pushl %ecx pushl %ebx &#x2F;&#x2F;调用的参数</span><br><span class="line">movl $0x10,%edx mov %dx,%ds mov %dx,%es &#x2F;&#x2F;内核数据。0x08是内核的代码段0x10是内核的数据段</span><br><span class="line">movl $0x17,%edx mov %dx,%fs &#x2F;&#x2F;fs可以找到用户数据</span><br><span class="line">call _sys_call_table(,%eax,4) &#x2F;&#x2F;a(,%eax,4)&#x3D;a+4*eax。eax保存的就是__NR__write</span><br><span class="line">pushl %eax &#x2F;&#x2F;返回值压栈，留着ret_from_sys_call时用</span><br><span class="line">... &#x2F;&#x2F;其他代码</span><br><span class="line">ret_from_sys_call: popl %eax, 其他pop, iret</span><br></pre></td></tr></table></figure>
+
+<p><code>_sys_call_table+4*%eax</code>就是相应系统调用处理函数入口 。</p>
+<ul>
+<li>*4是因为，每个函数的指针恰好是4个字节     </li>
+</ul>
+<p>一开始cpl=3，dpl=0是无法进入，然后调用int 0x80这时cpl=3，dpl=3就可以进入。再执行system_call再之后CPL=3就可以访问所有的内存地址</p>
+<h2 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h2><p>用PCB来描述进程和静态程序的不一样</p>
+<p>PCB用来记录进程信息的数据结构</p>
+<p>多进程的组织：PCB+状态+队列</p>
+<p>有一个进程中执行，有一些进程等待执行，有一些进程在等待某事件</p>
+<ul>
+<li>操作系统会有多个队列，就绪队列等待执行，磁盘等待队列 等</li>
+</ul>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210220190334030.png" alt="image-20210220190334030"></p>
+<p>如：启动磁盘读写：</p>
+<p><code>pCur.state=&#39;W&#39;</code>修改状态。将pCur放入DiskWaitQueue再<code>schedule()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schedule()&#123;</span><br><span class="line">    pNew = getNext(ReadyQueue);<span class="comment">//调度，找到下个进程</span></span><br><span class="line">    switch_to(pCur,pNew);<span class="comment">//切换进程，参数为当前PCB和新的PCB</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">switch_to(pCur,pNew) &#123;</span><br><span class="line">    pCur.ax = CPU.ax;</span><br><span class="line">    pCur.bx = CPU.bx;</span><br><span class="line">    ...</span><br><span class="line">    pCur.cs = CPU.cs;</span><br><span class="line">    pCur.retpc = CPU.pc;</span><br><span class="line">    CPU.ax = pNew.ax;</span><br><span class="line">    CPU.bx = pNew.bx;</span><br><span class="line">    ...</span><br><span class="line">    CPU.cs = pNew.cs;</span><br><span class="line">    CPU.retpc = pNew.pc; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>交替的三个部分：队列操作+调度+切换</p>
+<p>进程调度：</p>
+<ul>
+<li>FIFO：先进先出</li>
+<li>Priority：优先级</li>
+</ul>
+<p>多个进程可能会对同一块内存操作。解决办法：限制对目标地址的读写，多进程的地址空间分离(使用映射表)：内存管理的主要内存</p>
+<p>进程执行时的内存地址，不是真的地址，而是映射表基础上的地址</p>
+<p>多进程之间的合作：进程同步(合理的推进顺序)</p>
+<p>线程：保留了并发的优点，又避免了进程之间切换的代价</p>
+<blockquote>
+<p>线程之间是共享资源的，切换时不需要保存现场。 </p>
+</blockquote>
+<p>进程 = 资源 + 指令执行序列</p>
+<ul>
+<li>每个执行序列都要有自己的栈。将栈指针esp(CPU内的物理寄存器)存入TCB，一个全局的数据结构。</li>
+<li>进程的执行序列实际就是内核级线程</li>
+<li>显示调用yield，切换栈，和jmp。回来的yield不需要jmp</li>
+</ul>
+<blockquote>
+<p>内存的栈模型向下增长</p>
+</blockquote>
+<p>所以两个线程的样子：两TCB、两栈、切换的PC放入栈</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建线程的核心就是用程序做出TCB、栈、PC入栈。关联TCB和栈</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ThreadCreate</span><span class="params">(A)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    TCB *tcb=<span class="built_in">malloc</span>();</span><br><span class="line">    *<span class="built_in">stack</span>=<span class="built_in">malloc</span>();</span><br><span class="line">    *<span class="built_in">stack</span> = A;<span class="comment">//100</span></span><br><span class="line">    tcb.esp=<span class="built_in">stack</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用户级线程：总结：先创建两个线程，然后再执行的时候通过调用yield来切换线程。</p>
+<ul>
+<li><p>缺陷：一旦一个线程卡了，别的线程也卡，因为切换到别的进程去执行</p>
+</li>
+<li><p>优势：不涉及内核级线程，兼容性强些</p>
+</li>
+</ul>
+<p>内核级线程：</p>
+<ul>
+<li>优势：并发性更好，一个线程卡了可以执行另一个线程</li>
+</ul>
+<blockquote>
+<p>切换进程实际上就是切换内核级线程</p>
+</blockquote>
+<p>进程需要访问内存分配资源，都需要系统资源，内核态来进行，所以没有用户级进程</p>
+<blockquote>
+<p>只有操作系统支持核心级线程多核才有用</p>
+</blockquote>
+<p>每个CPU都有自己的mmu(内存映射)</p>
+<ul>
+<li>多处理器有多个mmu</li>
+<li>多核共享一个mmu</li>
+</ul>
+<blockquote>
+<p>i7却每个核都有一套mmu</p>
+<p>linux下并未对进程线程分别做抽象，都是利用task_struct来描述具体调度的一个单元</p>
+<p>多个执行序列用一套映射 就是线程</p>
+</blockquote>
+<p>一旦有中断，操作系统就通过硬件找到内核栈。将刚才的SS、SP、EFLAGS(标志寄存器)、CS、PC压栈。iret返回将五个寄存器弹出</p>
+<p>切换：通过TCB，切换TCB，再通过切换后的TCB找到内核栈指针，然后通过ret切换到某个内核程序，最后再用cs:pc切到用户程序</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ThreadCreate</span><span class="params">(...)</span></span>&#123; </span><br><span class="line">    TCB tcb=get_free_page();<span class="comment">//申请一段内存作TCB</span></span><br><span class="line">    *krlstack = ...;<span class="comment">//申请一段内存作内核栈，初始化(可以申请用户态内存作为用户栈，将指针置好)</span></span><br><span class="line">    *userstack传入; <span class="comment">//用户栈</span></span><br><span class="line">    填写两个<span class="built_in">stack</span>;</span><br><span class="line">    tcb.esp=krlstack;<span class="comment">//tcb关联内核栈</span></span><br><span class="line">    tcb.状态=就绪;</span><br><span class="line">    tcb入队; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>linux0.11不支持内核级线程，但和进程非常像，只是没有资源和映射表</p>
+<p>可以通过自己写yield代码，规定什么时候调度</p>
+<p>内核级线程switch_to五段论</p>
+<ol>
+<li>中断入口：进入切换</li>
+<li>中断处理：引发切换<ul>
+<li>启动磁盘读或时钟中断等可能会引起堵塞</li>
+</ul>
+</li>
+<li>sehedule：找到TCB</li>
+<li>switch_to：内核栈切换</li>
+<li>中断出口：二级切换<ul>
+<li>iret返回：从内核栈到用户栈</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210221182801978.png" alt="image-20210221182801978"></p>
+<p><strong>以fork()为例</strong></p>
+<p>fork()是创建线程系统调用，会引起中断</p>
+<ol>
+<li><p>在执行<code>A()</code>时，遇到fork函数，然后通过库调用中断INT 0x80。</p>
+<ul>
+<li>用户栈：ret指向B</li>
+<li>内核栈：执行INT后，SS:SP指向用户栈再将下条指令的CS:IP压入。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//伪代码示例</span></span><br><span class="line">main()&#123;</span><br><span class="line">    A();</span><br><span class="line">    B();</span><br><span class="line">&#125;</span><br><span class="line">A()&#123;</span><br><span class="line">    fork()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用system_call</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;将用户态的一系列寄存器压栈，这里刚调用INT进入内核态，所以要记录用户态信息。</span><br><span class="line">_system_call:</span><br><span class="line">    push %ds..%fs</span><br><span class="line">    pushl %edx...</span><br><span class="line">    call sys_fork</span><br><span class="line">    pushl %eax</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">movl _current,%eax &#x2F;&#x2F;当前线程置给eax，_current是PCB</span><br><span class="line">cmpl $0,state(%eax) &#x2F;&#x2F;state(%eax)是state+eax，也就是PCB中的state。这条指令就是看PCB中的state是否等于0。</span><br><span class="line">jne reschedule &#x2F;&#x2F;若非0则调度</span><br><span class="line">cmpl $0,counter(%eax) &#x2F;&#x2F;看counter(时间片)是否为0</span><br><span class="line">je reschedule &#x2F;&#x2F;若为0则调度</span><br><span class="line">ret_from_sys_call: &#x2F;&#x2F;切换完成后进行中断返回，来完成内核栈到用户栈的切换</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在linux0.11中，state=0是运行中，非0表示阻塞</p>
+<p>时间片用完也要进行切换，后面会学</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reschedule:</span><br><span class="line">    pushl $ret_from_sys_call</span><br><span class="line">    jmp _schedule</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调度</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">schedule</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123; </span><br><span class="line">    next=i;</span><br><span class="line">	switch_to(next); <span class="comment">//这时候next已经是下一个线程的TCB，或进程的PCB</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>switch_to这里用的是TSS(任务结构段)，而不是真的用内核态。详细看实验四</p>
+<ul>
+<li>TSS在写代码比较简单但执行时间相对较长</li>
+<li>TR：操作系统固有的寄存器，作TSS描述符的选择子。</li>
+<li>段内就是一个任务的内容，这里的任务内容就是指所有寄存器等信息。相当于给你计算机拍了快照</li>
+<li><code>ljmp</code>：长跳转指令，段之间跳转，先将是一个任务拍个快照放入当前指向的段中，再将新的段加载。 就是将选择符置给TR</li>
+<li>TSS实际就是PCB的一个子段</li>
+</ul>
+<blockquote>
+<p>EIP：返回本次调用后，下一条指令的地址</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> switch_to(n)  <span class="comment">//n就是下个进程对应的CS</span></span></span><br><span class="line">    &#123;<span class="class"><span class="keyword">struct</span> &#123;</span><span class="keyword">long</span> a,b;&#125;</span><br><span class="line">    __asm__(</span><br><span class="line">    <span class="string">"movw %%dx,%1\n\t"</span> </span><br><span class="line">    <span class="string">"ljmp %0\n\t"</span>  <span class="comment">//</span></span><br><span class="line">    ::<span class="string">"m"</span>(*&amp;__tmp.a), </span><br><span class="line">    <span class="string">"m"</span>(*&amp;__tmp.b),</span><br><span class="line">    <span class="string">"d"</span>(_TSS(n)) <span class="comment">//_TSS(n)是新的TR，置给edx</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210222164559746.png" alt="image-20210222164559746"></p>
+</li>
+<li><p>中断返回</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ret_from_sys_call:</span><br><span class="line">popl %eax &#x2F;&#x2F;返回值 popl %ebx ...</span><br><span class="line">pop %fs ...</span><br><span class="line">iret &#x2F;&#x2F;重要</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_sys_fork:</span><br><span class="line">push %gs; pushl %esi</span><br><span class="line">...</span><br><span class="line">pushl %eax</span><br><span class="line">call _copy_process  &#x2F;&#x2F;所需的参数都在内核栈</span><br><span class="line">addl $20,%esp</span><br><span class="line">ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copy_process</span><span class="params">(<span class="keyword">int</span> nr,<span class="keyword">long</span> ebp,</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">long</span> edi,<span class="keyword">long</span> esi,<span class="keyword">long</span> gs,<span class="keyword">long</span> </span></span></span><br><span class="line"><span class="function"><span class="params">none,<span class="keyword">long</span> ebx,<span class="keyword">long</span> ecx,<span class="keyword">long</span> edx, <span class="keyword">long</span> </span></span></span><br><span class="line"><span class="function"><span class="params">fs,<span class="keyword">long</span> es,<span class="keyword">long</span> ds,<span class="keyword">long</span> eip,<span class="keyword">long</span> </span></span></span><br><span class="line"><span class="function"><span class="params">cs,<span class="keyword">long</span> eflags,<span class="keyword">long</span> esp,<span class="keyword">long</span> ss)</span><span class="comment">//这里所需的参数也就是父进程在用户态的样子</span></span></span><br></pre></td></tr></table></figure>
+
+<p>copy_process细节：创建栈。</p>
+<ul>
+<li>需要申请内存空间、创建TCB、创建内核栈和用户栈、<del>填写两个stack</del>、关联栈和TCB</li>
+</ul>
+<blockquote>
+<p>填写这两个栈主要是将eip压栈，而这里用的是TSS，所以可以不需要</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">p=(struct task_struct *)get_free_page(); <span class="comment">//申请一页内存，不能用malloc他是用户态代码，现在在内核中。是指就是在mem_map中找到一个为0的项，用来做PCB</span></span><br><span class="line"><span class="comment">//申请内存空间 </span></span><br><span class="line">p-&gt;tss.esp0 = PAGE_SIZE + (<span class="keyword">long</span>) p;<span class="comment">//p是这一页的初始地址，PAGE_SIZE是4K</span></span><br><span class="line">p-&gt;tss.ss0 = <span class="number">0x10</span>;<span class="comment">//内核数据段</span></span><br><span class="line"><span class="comment">//创建内核栈 </span></span><br><span class="line">p-&gt;tss.ss = ss &amp; <span class="number">0xffff</span>;</span><br><span class="line">p-&gt;tss.esp = esp;</span><br><span class="line"><span class="comment">//创建用户栈(和父进程共用栈)</span></span><br><span class="line">p-&gt;tss.eip = eip;</span><br><span class="line">p-&gt;tss.cs = cs &amp; <span class="number">0xffff</span>;</span><br><span class="line"><span class="comment">//将执行地址cs:eip放在tss中 </span></span><br><span class="line">p-&gt;tss.eax = <span class="number">0</span>;</span><br><span class="line">p-&gt;tss.ecx = ecx; </span><br><span class="line"><span class="comment">//执行时的寄存器也放进去了 ，这下面是内存部分暂时不用理解</span></span><br><span class="line">p-&gt;tss.ldt = _LDT(nr);</span><br><span class="line">set_tss_desc(gdt+(nr&lt;&lt;<span class="number">1</span>) + FIRST_TSS_ENTRY, &amp;(p-&gt;tss));</span><br><span class="line">set_ldt_desc(gdt+(nr&lt;&lt;<span class="number">1</span>) + FIRST_LDT_ENTRY, &amp;(p-&gt;ldt));</span><br><span class="line"><span class="comment">//内存跟着切换 </span></span><br><span class="line">p-&gt;state = TASK_RUNNING;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>两个内核栈可以关联同一个用户栈</p>
+</blockquote>
+<blockquote>
+<p>子进程完成中断返回后，执行<code>mov res,%eax</code>时eax的值为0，但父进程中断返回后，执行该指令eax不为0(自己看代码)。</p>
+</blockquote>
+<blockquote>
+<p><code>if(!fork()) {...}</code>当父进程返回不为0就不会执行里面的代码，子进程返回为0就执行里面的代码</p>
+</blockquote>
+<p>linux0.11不支持创建内核态线程</p>
+<blockquote>
+<p>因为不支持，所以ThreadCreate(*A)传入A函数如何执行没有讲。只讲了如何创建进程运行自己的程序，就相当于执行A函数。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span></span>&#123; </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123; </span><br><span class="line">        <span class="built_in">scanf</span>(“%s”, cmd);</span><br><span class="line">        <span class="keyword">if</span>(!fork()) &#123;</span><br><span class="line">            exec(cmd);  <span class="comment">//这里执行cmd，就相当于创建线程传入的A函数</span></span><br><span class="line">        &#125; wait(<span class="number">0</span>); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>exec的系统调用</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system_call:</span><br><span class="line">    push %ds .. %fs</span><br><span class="line">    pushl %edx..</span><br><span class="line">    call sys_execve</span><br></pre></td></tr></table></figure>
+
+<p>在内核态中断返回的时候，fork的子程序应该执行新程序的入口部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;将中断返回之前的入口程序地址赋给eip，这样弹出栈的时候，执行入口程序地址</span><br><span class="line">_sys_execve:</span><br><span class="line">    lea EIP(%esp),%eax &#x2F;&#x2F;esp是当前栈顶指针，eip是偏移，相加赋给eax。这里EIP是0x1C，正好就是栈内eip的位置</span><br><span class="line">    pushl %eax &#x2F;&#x2F;eax压栈</span><br><span class="line">    call _do_execve</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">do_execve</span><span class="params">( * eip,...</span></span></span><br><span class="line"><span class="function"><span class="params">&#123; </span></span></span><br><span class="line"><span class="function"><span class="params">    p += change_ldt(...;</span></span></span><br><span class="line"><span class="function"><span class="params">	eip[<span class="number">0</span>] = ex.a_entry;  <span class="comment">//将入口地址置给eip。</span></span></span></span><br><span class="line"><span class="function"><span class="params">	eip[<span class="number">3</span>] = p; ...  	  <span class="comment">//将p置给esp，设置栈</span></span></span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>入口地址是从磁盘上的可执行程序的文件头中读取，文件头是编译的时候写好的</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">exec</span> &#123;</span> </span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> a_magic;</span><br><span class="line"><span class="keyword">unsigned</span> a_entry; <span class="comment">//这就是入口地址 </span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>L13</strong></p>
+<p>以实现交替打出A B为例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用户代码开始</span></span><br><span class="line">main()&#123;</span><br><span class="line">    <span class="keyword">if</span>(!fork())&#123;<span class="keyword">while</span>(<span class="number">1</span>)<span class="built_in">printf</span>(“A”);&#125;</span><br><span class="line">    <span class="keyword">if</span>(!fork())&#123;<span class="keyword">while</span>(<span class="number">1</span>)<span class="built_in">printf</span>(“B”);&#125;</span><br><span class="line">    wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;翻译成汇编就是</span><br><span class="line">main()&#123; </span><br><span class="line">    mov __NR_fork, %eax</span><br><span class="line">    int 0x80</span><br><span class="line">    100: mov %eax, res</span><br><span class="line">    cmpl res,0</span><br><span class="line">    jne 208</span><br><span class="line">    200: printf(“A”)</span><br><span class="line">    jmp 200</span><br><span class="line">    208: ...</span><br><span class="line">    304: wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_system_gate(0x80,&amp;system_call);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;int0x80 进入实际就是调用system_call</span><br><span class="line">system_call:</span><br><span class="line">    call sys_call_table(,%eax,4)</span><br></pre></td></tr></table></figure>
+
+<p>再之后sys_fork再copy_process(负责做出新的栈新的PCB，将PCB中的TSS都写好，将eax置0)开始返回，这时候打印的程序可以执行了但不能正真执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">copy_process()&#123;... &#125;&#x2F;&#x2F;ret到哪里?</span><br><span class="line">sys_fork: </span><br><span class="line">    ... call copy_process ...</span><br><span class="line">    ret &#x2F;&#x2F;到哪里?</span><br><span class="line">system_call:</span><br><span class="line">    ...call sys_call_table(,%eax,4)</span><br><span class="line">    cmpl $0,state(current) </span><br><span class="line">    jne reschedule  &#x2F;&#x2F;中断返回的时候，进行调度，可以正真执行打印程序</span><br><span class="line">    iret &#x2F;&#x2F;到哪里?</span><br><span class="line">main: int 0x80</span><br><span class="line">    100: mov %eax, res cmpl res,0</span><br></pre></td></tr></table></figure>
+
+<p>父进程再同样的创造打印B的程序。再进入等待状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main()&#123;</span><br><span class="line">    ... wait(); &#x2F;&#x2F;又是mov __NR_wait</span><br><span class="line">    int 0x80</span><br><span class="line">system_call:</span><br><span class="line">    call sys_waitpid</span><br><span class="line">sys_waitpid() &#x2F;&#x2F;exit.c中</span><br><span class="line">    current-&gt;state&#x3D;TASK_INTERRUPTIBLE;  &#x2F;&#x2F;将自己的状态设置为等待</span><br><span class="line">    schedule();  &#x2F;&#x2F;调度</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">schedule()&#123;</span><br><span class="line">    <span class="keyword">if</span> ((*p)-&gt;state == TASK_RUNNING &amp;&amp; (*p)-&gt;counter &gt; c)  <span class="comment">//修改状态</span></span><br><span class="line">    c = (*p)-&gt;counter, next = i;</span><br><span class="line">    ...</span><br><span class="line">    switch_to(next); <span class="comment">//切换线程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>switch_to：通过读硬件手册发现TSS可以换成任务的切换。</p>
+<p>通过时钟中断，来交替运行A、B线程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sched_init</span><span class="params">(<span class="keyword">void</span>)</span> <span class="comment">//在sched.c中</span></span></span><br><span class="line"><span class="function"></span>&#123; set_intr_gate(<span class="number">0x20</span>,&amp;timer_interrupt);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> _timer_interrupt:</span><br><span class="line">...</span><br><span class="line">call do_timer</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_timer</span><span class="params">(...)</span> </span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">if</span>((--current-&gt;counter&gt;<span class="number">0</span>) <span class="keyword">return</span>;<span class="comment">//当时钟减为0时调度</span></span><br><span class="line">current-&gt;counter=<span class="number">0</span>;</span><br><span class="line">schedule(); &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CPU调度策略"><a href="#CPU调度策略" class="headerlink" title="CPU调度策略"></a>CPU调度策略</h3><p>这里的调度就是获得<code>next</code></p>
+<ul>
+<li>FIFO：先进先出</li>
+<li>Priority：优先级</li>
+</ul>
+<p>不同任务的特点不同</p>
+<ul>
+<li>IO约束型：IO任务多。如读写任务</li>
+<li>CPU约束性：CPU运算任务多。如GCC</li>
+</ul>
+<p>几个基本的调度策略</p>
+<ul>
+<li>FCFS(First Come,First Served)：先来先服务<ul>
+<li>改进：SJF短作业优先。</li>
+<li>这样改进虽然整体时间不变，但是短的任务提前完成，整体的感受会更好</li>
+</ul>
+</li>
+<li>RR：按时间片来轮转调度<ul>
+<li>每时间片结束就切换下一个任务</li>
+<li>时间片大：响应时间太长。时间片小：吞吐量小</li>
+<li>折衷：时间片10-100ms，切换时间0.1-1ms</li>
+</ul>
+</li>
+<li>当有关心响应时间的程序和关心周转时间的程序同时存在时。可以设立前台任务和后台任务两个队列，前台RR，后台SJF。没有前台任务时才调度后台任务<ul>
+<li>优先级调度可能会造成饥饿导致一个进程一直无法执行</li>
+</ul>
+</li>
+</ul>
+<p>linux0.11的调度函数schedule()</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Schedule</span><span class="params">(<span class="keyword">void</span>)</span> <span class="comment">//在kernel/sched.c中</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123; c=<span class="number">-1</span>; next=<span class="number">0</span>; i=NR_TASKS;</span><br><span class="line">	p=&amp;task[NR_TASKS];<span class="comment">//将p设置为最后一位的地址，这实际是PCB数组的末位</span></span><br><span class="line">	<span class="keyword">while</span>(--i)&#123; <span class="keyword">if</span>((*p-&gt;state == TASK_RUNNING&amp;&amp;(*p)-&gt;counter&gt;c) <span class="comment">//--i就是从后往前移。如果state为RUNNING(就绪)并且counter&gt;c 这里的c为-1 </span></span><br><span class="line">    	c=(*p)-&gt;counter, next=i; &#125;<span class="comment">//设置c和next</span></span><br><span class="line">    <span class="keyword">if</span>(c) <span class="keyword">break</span>; <span class="comment">//上面循环结束找到了最大的counter，跳出循环，执行switch_to</span></span><br><span class="line">    <span class="comment">//如果就绪态的c都为0，for就将所有进程的counter右移一位(除以2)再加counter初值。这样不是就绪态不为0的c优先级会略高一些。这样阻塞时间越久的线程优先级可能会越高</span></span><br><span class="line">    <span class="keyword">for</span>(p=&amp;LAST_TASK;p&gt;&amp;FIRST_TASK;--p)</span><br><span class="line">    	(*p)-&gt;counter=((*p)-&gt;counter&gt;&gt;<span class="number">1</span>)</span><br><span class="line">    		+(*p)-&gt;priority; &#125;</span><br><span class="line">    switch_to(next);&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该算法就是基于counter作优先级和时间片来轮转</p>
+<blockquote>
+<p>counter无限阻塞后，counter也不会无限大，count=p+p/2+p/4+…。无穷级数收敛于2p</p>
+</blockquote>
+<p>counter的时间片作用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当前线程counter--减到0时调度</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_timer</span><span class="params">(...)</span> <span class="comment">//在kernel/sched.c中</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">if</span>((--current-&gt;counter&gt;<span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">current-&gt;counter=<span class="number">0</span>;</span><br><span class="line">schedule(); &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;每次时钟中断都执行do_timer</span><br><span class="line">_timer_interrupt: &#x2F;&#x2F;在kernel&#x2F;system_call.s中</span><br><span class="line">    ...</span><br><span class="line">    call _do_timer</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sched_init</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">set_intr_gate(<span class="number">0x20</span>, &amp;timer_interrupt);</span><br></pre></td></tr></table></figure>
+
+<p>这个算法，折中了大多数任务需求，既照顾前台程序，又照顾到后台程序</p>
+<p><strong>进程同步、信号量、临界区</strong></p>
+<p>信号量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">semaphore</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> value; <span class="comment">//记录资源个数</span></span><br><span class="line">    PCB *<span class="built_in">queue</span>;<span class="comment">//记录等待在该信号量上的进程</span></span><br><span class="line">&#125;</span><br><span class="line">P(semaphore s); <span class="comment">//消费资源</span></span><br><span class="line">V(semaphore s); <span class="comment">//产生资源</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>信号量解读写的生产者-消费者问题</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">semaphore full = <span class="number">0</span>; </span><br><span class="line">semaphore empty = BUFFER_SIZE;<span class="comment">//缓冲区为空的个数，初始值</span></span><br><span class="line">semaphore mutex = <span class="number">1</span>;<span class="comment">//互斥信号量 若为1才能进，为0不能进</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Producer(item) &#123;</span><br><span class="line">    P(empty);<span class="comment">//看他是否为0</span></span><br><span class="line">    P(mutex); </span><br><span class="line">	读入in;将item写入到in的位置上;</span><br><span class="line">    V(mutex);</span><br><span class="line">    V(full); </span><br><span class="line">&#125;</span><br><span class="line">Consumer() &#123;</span><br><span class="line">    P(full); </span><br><span class="line">    P(mutex);</span><br><span class="line">    读入out;从文件中的out位置读出到item;打印item;</span><br><span class="line">    V(mutex);</span><br><span class="line">    V(empty); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>前两步P函数不能调换位置，不然可能会导致死锁</p>
+</blockquote>
+<p>临界区：一次只允许一个进程进入的该进程的那一段代码</p>
+<ul>
+<li>基本原则：互斥进入：如果一个进程在临界区中执行，则其它进程不允许进入</li>
+<li>好的临界区的保护原则<ul>
+<li>有空让进：若有进程要求进入空闲临界区，应尽快让它进入</li>
+<li>有限等待：不能无限等待</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>相当于给那一段代码上锁</p>
+<p>这部分内容和Java中的多线程内容类似</p>
+</blockquote>
+<p>临界区保护法(软件解法)</p>
+<ul>
+<li><p>轮换法：满足互斥进入，不满足有空让进</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210306104103612.png" alt="image-20210306104103612"></p>
+</li>
+<li><p>标记法：由一个变量来标记，可能会造成死锁</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210306104026061.png" alt="image-20210306104026061"></p>
+</li>
+<li><p>非对称标记法：结合了标记和轮换。这就是Peterson算法</p>
+<ul>
+<li>满足互斥进入、满足有空让进、满足有限等待</li>
+<li>但只满足两个进程</li>
+</ul>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210306104011338.png" alt="image-20210306104011338"></p>
+</li>
+<li><p>面包店算法：能实现，但是太复杂</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">choosing[i] = <span class="literal">true</span>; num[i] = <span class="built_in">max</span>(num[<span class="number">0</span>], …, num[n<span class="number">-1</span>])+<span class="number">1</span>;<span class="comment">//每次取号都比已取的最大号+1</span></span><br><span class="line">choosing[i] = <span class="literal">false</span>; <span class="keyword">for</span>(j=<span class="number">0</span>; j&lt;n; j++) &#123; <span class="keyword">while</span>(choosing[j]);<span class="comment">//如果有人在选号 也等待</span></span><br><span class="line"><span class="keyword">while</span> ((num[j] != <span class="number">0</span>) &amp;&amp; (num[j], j)&lt;(num[i], i])); &#125;<span class="comment">//号小的先执行</span></span><br><span class="line">临界区</span><br><span class="line">num[i] = <span class="number">0</span>;<span class="comment">//离开时，号为0</span></span><br><span class="line">剩余区</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>硬件解法</p>
+<ul>
+<li><p>阻止另一个进程调用。通过一个函数阻止另一个进程被调度</p>
+<ul>
+<li>CPU内有INTR寄存器(中断寄存器)，CPU每执行一条指令，都会看下INTR若为1，就进入中断。一旦<code>cli()</code>CPU就不去看INTR，不进入中断。</li>
+<li>缺点：多核的时候，不好使。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cli();</span><br><span class="line">临界区</span><br><span class="line">sti();</span><br><span class="line">剩余区</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>硬件原子指令法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一次性执行完毕，</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">TestAndSet</span><span class="params">(<span class="keyword">boolean</span> &amp;x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> rv = x;</span><br><span class="line">    x = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">return</span> rv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(TestAndSet(&amp;lock)) ;</span><br><span class="line">临界区</span><br><span class="line">lock = <span class="literal">false</span>;</span><br><span class="line">剩余区</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>实际代码例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">main()&#123;</span><br><span class="line">sd=sem_open(“empty”);<span class="comment">//(1)申请信号量，这个empty就是信号量名字</span></span><br><span class="line">    <span class="comment">//执行五次把数写出。这里的代码只是实例，实际可以做别的</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span> to <span class="number">5</span>)&#123;</span><br><span class="line">        sem_wait(sd);<span class="comment">//查看是否有缓冲区</span></span><br><span class="line">        <span class="built_in">write</span>(fd,&amp;i,<span class="number">4</span>);<span class="comment">//在文件写五个数，每个4字节</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">sys_sem_wait(<span class="keyword">int</span> sd)&#123;</span><br><span class="line">    cli();</span><br><span class="line">        <span class="keyword">if</span>(semtable[sd].value -- &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            设置自己为阻塞;将自己加入semtable[sd].<span class="built_in">queue</span>中;</span><br><span class="line">            schedule();</span><br><span class="line">        &#125;</span><br><span class="line">    sti();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//内核中，获取信号量的伪代码</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> name[<span class="number">20</span>];<span class="comment">//每个信号量的名字，如果使用同一个信号量就用同样的名字</span></span><br><span class="line">    <span class="keyword">int</span> value;<span class="comment">//信号量对应的值</span></span><br><span class="line">    task_struct * <span class="built_in">queue</span>;<span class="comment">//信号量对应的队列</span></span><br><span class="line">&#125; semtable[<span class="number">20</span>];</span><br><span class="line"><span class="comment">//系统调用实现</span></span><br><span class="line">sys_sem_open(<span class="keyword">char</span> *name)</span><br><span class="line">&#123; </span><br><span class="line">在semtable中寻找name对上的;</span><br><span class="line">没找到则创建;</span><br><span class="line">返回对应的下标; &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>linux0.11读磁盘例</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在内核sys_read调用的就是bread</span></span><br><span class="line">bread(<span class="keyword">int</span> dev,<span class="keyword">int</span> block)&#123; </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">buffer_head</span> * <span class="title">bh</span>;</span><span class="comment">//获得一块空闲缓存，缓冲区是有信号量的</span></span><br><span class="line">ll_rw_block(READ,bh);<span class="comment">//启动读命令</span></span><br><span class="line">wait_on_buffer(bh);<span class="comment">//在缓冲区阻塞</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lock_buffer(buffer_head*bh)&#123;</span><br><span class="line">    cli();</span><br><span class="line">    <span class="comment">//b_lock就是缓冲区中的信号量，没有负数最小为0</span></span><br><span class="line"><span class="keyword">while</span>(bh-&gt;b_lock)???</span><br><span class="line">    sleep_on(&amp;bh-&gt;b_wait);</span><br><span class="line">bh-&gt;b_lock = <span class="number">1</span>;<span class="comment">//1表示上锁，没读完，中断会给它解锁</span></span><br><span class="line">sti(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传入一个指向队首的指针的指针</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sleep_on</span><span class="params">(struct task_struct **p)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">tmp</span>;</span><span class="comment">//这个tmp是放在当前进程的内核栈</span></span><br><span class="line">    <span class="comment">//这两句就是将自己放入阻塞队列</span></span><br><span class="line">    tmp = *p;<span class="comment">//tmp指向前一个进程</span></span><br><span class="line">    *p = current;<span class="comment">//然后将*p指向当前进程</span></span><br><span class="line">	<span class="comment">//当切回当前线程的时候，就能通过tmp找到前一个，这样形成一个队列</span></span><br><span class="line">    current-&gt;state = TASK_UNINTERRUPTIBLE;<span class="comment">//设置自己状态</span></span><br><span class="line">    schedule();</span><br><span class="line">    <span class="keyword">if</span> (tmp)</span><br><span class="line">    tmp-&gt;state=<span class="number">0</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>唤醒进程部分</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//读中断最后会开锁</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">read_intr</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">end_request(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">end_request(<span class="keyword">int</span> uptodate)&#123;</span><br><span class="line">...</span><br><span class="line">unlock_buffer(CURRENT-&gt;bh);<span class="comment">//开锁</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">unlock_buffer(struct buffer_head * bh)&#123;</span><br><span class="line">bh-&gt;b_lock=<span class="number">0</span>;<span class="comment">//开锁</span></span><br><span class="line">wake_up(&amp;bh-&gt;b_wait);&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//传入的指针就是上面的，指向的当前线程</span></span><br><span class="line">wake_up(struct task_struct **p)&#123;</span><br><span class="line">    <span class="keyword">if</span> (p &amp;&amp; *p) &#123;</span><br><span class="line">        (**p).state=<span class="number">0</span>; <span class="comment">//就绪态</span></span><br><span class="line">        *p=<span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sleep_on最后三句代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">schedule();<span class="comment">//唤醒后tmp也会执行schedule</span></span><br><span class="line"><span class="keyword">if</span> (tmp)<span class="comment">//如果队列中还有下个线程，将它设置为就绪态</span></span><br><span class="line">tmp-&gt;state=<span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>信号量一旦来了，往往后面的进程优先级会更高，这样就能保证后面先执行</p>
+</blockquote>
+<p><strong>死锁</strong></p>
+<p>死锁的4个必要条件</p>
+<ul>
+<li>互斥使用(Mutual exclusion)</li>
+<li>不可抢占(No preemption)：资源只能只愿放弃</li>
+<li>请求和保持(Hold and wait)：进程必须占有资源，再去声请</li>
+<li>循环等待(Circular wait)：存在一个环</li>
+</ul>
+<p>死锁的处理</p>
+<ul>
+<li><p>死锁预防：破坏死锁出现的条件</p>
+<ul>
+<li>一次性申请所有需要的资源，不会占有资源再去申 请其它资源<ul>
+<li>缺点1: 需要预知未来，编程困难</li>
+<li>缺点2: 许多资源分配后很长时间后才使用，资源利用率低</li>
+</ul>
+</li>
+<li>对资源类型进行排序，资源申请必须按 序进行，不会出现环路等待<ul>
+<li>缺点: 仍然造成资源浪费</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>死锁避免：检测每个资源请求，如果造成死锁就拒绝</p>
+<ul>
+<li><p>银行家算法：每次判断资源是否能够让他执行，算出安全序列</p>
+<ul>
+<li>缺点，执行效率低O(mn^2^)</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> Available[<span class="number">1.</span>.m]; <span class="comment">//每种资源剩余数量</span></span><br><span class="line"><span class="keyword">int</span> Allocation[<span class="number">1.</span>.n,<span class="number">1.</span>.m]; <span class="comment">//已分配资源数量</span></span><br><span class="line"><span class="keyword">int</span> Need[<span class="number">1.</span>.n,<span class="number">1.</span>.m];<span class="comment">//进程还需的各种资源数量</span></span><br><span class="line"><span class="keyword">int</span> Work[<span class="number">1.</span>.m]; <span class="comment">//工作向量</span></span><br><span class="line"><span class="keyword">bool</span> Finish [<span class="number">1.</span>.n]; <span class="comment">//进程是否结束</span></span><br><span class="line"><span class="comment">//算出安全序列</span></span><br><span class="line">Work = Available; Finish[<span class="number">1.</span>.n] = <span class="literal">false</span>; </span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)&#123; </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>; i&lt;=n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(Finish[i]==<span class="literal">false</span> &amp;&amp; Need[i]£Work)&#123;</span><br><span class="line">            Work = Work + Allocation[i];</span><br><span class="line">            Finish[i] = <span class="literal">true</span>; <span class="keyword">break</span>;&#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;<span class="keyword">goto</span> <span class="built_in">end</span>;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">End: <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=n;i++) </span><br><span class="line"><span class="keyword">if</span>(Finish[i]==<span class="literal">false</span>) <span class="keyword">return</span> “deadlock”;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>死锁检测+恢复：检测到死锁出现时，让一些进程回滚，让出资源</p>
+<ul>
+<li>可以在发现死锁时再处理，回滚等，但会造成其它一系列问题</li>
+</ul>
+</li>
+<li><p>死锁忽略：就好像没有出现死锁一样</p>
+<ul>
+<li>Linux和Windows都采用死锁忽略方法。<ul>
+<li>死锁忽略的处理代价最小</li>
+<li>这种机器上出现死锁的概率比其他机器低</li>
+<li>死锁可以用重启来解决，PC重启造成的影响小</li>
+<li>死锁预防让编程变得困难</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>重定位：修改程序中的地址(是相对地址)</p>
+<ul>
+<li>逻辑地址-&gt;物理地址</li>
+<li>重定位时机<ul>
+<li>编译时重定位 在实际系统中很难完成。在一些嵌入系统等可能会用到</li>
+<li>载入时重定位一旦载入内存就不能动了</li>
+<li>运行时重定位是最合适的<ul>
+<li>基地址(放在PCB中，用时放入基址寄存器)，每执行一条指令都算出物理地址</li>
+<li>往往程序在载入后还要移动，如swap时(将进程移到磁盘上，在磁盘读取进程)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>分段：程序实际由若干部分组成，每个段有各自的特定</p>
+<ul>
+<li><p>寻址方式：&lt;段号,段内偏移&gt;</p>
+</li>
+<li><p>分段移动时，能提高内存使用效率</p>
+</li>
+<li><p>这时PCB放的是进程段表，一开始的GDT表放的就是操作系统的进程段表。进程1的段表就是LDT表。</p>
+</li>
+</ul>
+<blockquote>
+<p>GDT表存放LDT表的位置</p>
+</blockquote>
+<p>分页：用来解决内存分区导致的内存效率问题(内存碎片)</p>
+<ul>
+<li>将内存等分为多个页。对每段内存请求，系统一页一页分给这个段<ul>
+<li>在mem_map中就是4k一页</li>
+</ul>
+</li>
+<li>分页也需要页表cr3，具体计算由mmu做<ul>
+<li>如0x2240，一页4k，2240右移12位，得出0x2，第2页，根据表找到物理地址的第3页，3*4k物理地址为0x3240。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210307161851572.png" alt="image-20210307161851572"></p>
+<p><strong>多级页表和快表</strong></p>
+<p>页小了，能提高内存空间利用率，但页表就大了。</p>
+<p>解决</p>
+<ol>
+<li><p>只记录用到的页</p>
+<ul>
+<li>缺点：页表的页号不连续，就要比较，查找，需要多次访存，会严重影响效率</li>
+</ul>
+</li>
+<li><p>多级页表</p>
+<ul>
+<li>页目录号+页号+Offset。只需要存储用到的页目录号，这样就省去了存放对应页号的内存<ul>
+<li>例：一个页表：2^`0^个目录项*4字节地址=4k.如果用到3个页表只需要3+1(目录页)=4。4*4k=16k。如果是单级则需要4k*2^10^*2^10^=4M。</li>
+</ul>
+</li>
+<li>问题：提高了空间效率，但每多一级就多一次访存。这就要引入快表来解决。</li>
+</ul>
+</li>
+<li><p>快表：</p>
+<ul>
+<li>TLB是一组相联快速存储，是寄存器。可以快速找到逻辑页对应的物理页号</li>
+<li>可以通过硬件实现一次比对即可找到</li>
+<li>TLB条目数通常是在[64,102]<ul>
+<li>程序的地址访问存在局部性(空间局部性)：如循环结构</li>
+</ul>
+</li>
+<li>有效访问时间 = HitR×(TLB+MA) + (1-HitR)×(TLB+2MA)<ul>
+<li>hitR：命中率</li>
+<li>MA：内存访问时间</li>
+<li>TLB：TLB时间</li>
+</ul>
+</li>
+<li></li>
+</ul>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210307193213278.png" alt="image-20210307193213278"></p>
+</li>
+</ol>
+<p><strong>段页结合的管理</strong></p>
+<p>用户给出的地址，经过段地址翻译，再经过页地址翻译，找到物理地址。</p>
+<p>一个实际的段、页式内存管理</p>
+<p>思路：</p>
+<ol>
+<li><p>先在虚拟内存区域割出一段区域来给用户的代码段、数据段、栈段</p>
+</li>
+<li><p>建立段表，假装程序放入虚拟内存</p>
+</li>
+<li><p>在物理内存找页</p>
+</li>
+<li><p>建立页表</p>
+</li>
+<li><p>开始使用</p>
+</li>
+</ol>
+<p>代码分析</p>
+<p>分配虚存、建段表：fork()-&gt;sys_fork-&gt;copy_process-&gt;copy_mem</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//p就是pcb</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copy_mem</span><span class="params">(<span class="keyword">int</span> nr, task_struct *p)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> new_data_base;</span><br><span class="line">new_data_base=nr*<span class="number">0x4000000</span>; <span class="comment">//64M*nr nr就是进程第几个，每个进程占64m虚拟地址空间，互不重叠</span></span><br><span class="line">set_base(p-&gt;ldt[<span class="number">1</span>],new_data_base);<span class="comment">//pcb的ldt代码段设置为new_data_base</span></span><br><span class="line">set_base(p-&gt;ldt[<span class="number">2</span>],new_data_base);<span class="comment">//数据段也设置为同样</span></span><br><span class="line"><span class="comment">//这里是因为操作系统比较简单，数据段代码段用同一套</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>ldt是每个进程的段表</p>
+</blockquote>
+<p>分配内存、建页表</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copy_mem</span><span class="params">(<span class="keyword">int</span> nr, task_struct *p)</span></span>&#123; </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> old_data_base; </span><br><span class="line">    old_data_base=get_base(current-&gt;ldt[<span class="number">2</span>]);</span><br><span class="line">    copy_page_tables(old_data_base,new_data_base,data_limit);<span class="comment">//复制父进程页表</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//from就是父进程的32位虚拟地址，10位页目录号10位页号12位偏移</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">copy_page_tables</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> from,<span class="keyword">unsigned</span> <span class="keyword">long</span> to, <span class="keyword">long</span> <span class="built_in">size</span>)</span> </span>&#123; </span><br><span class="line">    from_dir = (<span class="keyword">unsigned</span> <span class="keyword">long</span> *)((from&gt;&gt;<span class="number">20</span>)&amp;<span class="number">0xffc</span>);<span class="comment">//应该是(from&gt;&gt;22)*4每项4字节</span></span><br><span class="line">    to_dir = (<span class="keyword">unsigned</span> <span class="keyword">long</span> *)((to&gt;&gt;<span class="number">20</span>)&amp;<span class="number">0xffc</span>);<span class="comment">//子进程页目录</span></span><br><span class="line">    <span class="built_in">size</span> = (<span class="keyword">unsigned</span> <span class="keyword">long</span>)(<span class="built_in">size</span>+<span class="number">0x3fffff</span>)&gt;&gt;<span class="number">22</span>;</span><br><span class="line">    <span class="keyword">for</span>(; <span class="built_in">size</span>--&gt;<span class="number">0</span>; from_dir++, to_dir++)&#123;</span><br><span class="line">        from_page_table=(<span class="number">0xfffff000</span>&amp;*from_dir);</span><br><span class="line">        to_page_table=get_free_page();<span class="comment">//分配一个物理内存页给子进程,get_free_page就是给在mem_map找到0的页给他</span></span><br><span class="line">        *to_dir=((<span class="keyword">unsigned</span> <span class="keyword">long</span>)to_page_table)|<span class="number">7</span>;将创建的页地址赋给它</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//复制父进程的页表拷贝给子进程的页表。这样就指向同一块物理地址</span></span><br><span class="line"><span class="keyword">for</span>(;nr--&gt;<span class="number">0</span>;from_page_table++,to_page_table++)&#123;</span><br><span class="line">    this_page = *from_page_table; </span><br><span class="line">    this_page&amp;=~<span class="number">2</span>;<span class="comment">//父子进程共享，子进程这边设置成只读</span></span><br><span class="line">    *to_page_table=this_page; </span><br><span class="line">    *from_page_table=this_page;</span><br><span class="line">    this_page -= LOW_MEM; this_page &gt;&gt;= <span class="number">12</span>;</span><br><span class="line">    mem_map[this_page]++; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>只要页表和段表设置好，执行指令时MMU(硬件)自动完成。</p>
+<blockquote>
+<p>在实际使用时候，子进程过去发现是只读的，就会重新申请一页，进而实现和父进程的隔离</p>
+</blockquote>
+<p><strong>内存的换入</strong></p>
+<p>用换入、换出实现“大内存”。内存不足够，可用磁盘做内存</p>
+<p>mmu查页表发现缺页，就发生中断，进行页错误处理程序。在磁盘找到内容，找到空白页读入。当mmu发现缺页引起中断可以在硬件上不让pc加1。回来接着执行该指令。</p>
+<p>请求调页、请求调段：实际都是请求调页</p>
+<p>全球调页流程：发现缺页是mmu自动做的不需要我们编写代码</p>
+<ol>
+<li><p>第一步应该是从缺页中断开始 14号中断：Page fault</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">trap_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; set_trap_gate(<span class="number">14</span>, &amp;page_fault); &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> set_trap_gate(n, addr) \</span></span><br><span class="line">	_set_gate(&amp;idt[n], <span class="number">15</span>, <span class="number">0</span>, addr); <span class="comment">//初始化中断向量表</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;先压栈保存现场。</span><br><span class="line">.globl _page_fault</span><br><span class="line">    xchgl %eax,(%esp)</span><br><span class="line">    pushl %ecx</span><br><span class="line">    pushl %edx</span><br><span class="line">    push %ds</span><br><span class="line">    push %es</span><br><span class="line">    push %fs</span><br><span class="line">    movl $0x10, %edx  &#x2F;&#x2F;ds es fs等置为0x10，进入内核栈</span><br><span class="line">    mov %dx, %ds</span><br><span class="line">    mov %dx, %es</span><br><span class="line">    mov %dx, %fs</span><br><span class="line">    movl %cr2, %edx  &#x2F;&#x2F;cr2是放页错误线性地址的寄存器。虚拟也叫线性。</span><br><span class="line">    pushl %edx  </span><br><span class="line">    pushl %eax  &#x2F;&#x2F;将寄存器压栈，这里是作为参数传入后面的call调用</span><br><span class="line">    testl $1, %eax</span><br><span class="line">    jne 1f</span><br><span class="line">    call _do_no_page</span><br><span class="line">    jmp 2f</span><br><span class="line">1: call _do_wp_page &#x2F;&#x2F;保护</span><br><span class="line">2: add $8, %esp</span><br><span class="line">    pop %fs</span><br><span class="line">    pop %es</span><br><span class="line">    pop %ds</span><br><span class="line">    pop %edx</span><br><span class="line">    pop %ecx</span><br><span class="line">    pop %eax</span><br><span class="line">    iret</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>读磁盘建立映射</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_no_page</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> error_code,<span class="keyword">unsigned</span> <span class="keyword">long</span> address)</span></span>&#123; </span><br><span class="line">    address&amp;=<span class="number">0xfffff000</span>; <span class="comment">//页面地址</span></span><br><span class="line">    tmp=address–current-&gt;start_code; <span class="comment">//页面对应的偏移</span></span><br><span class="line">    <span class="keyword">if</span>(!current-&gt;executable||tmp&gt;=current-&gt;end_data)&#123;</span><br><span class="line">    get_empty_page(address); <span class="keyword">return</span>; &#125;</span><br><span class="line">    page=get_free_page();<span class="comment">//获取物理空闲页</span></span><br><span class="line">    bread_page(page, current-&gt;executable-&gt;i_dev, nr);<span class="comment">//读磁盘，读到page，current-&gt;executable-&gt;i_dev就是具体的文件</span></span><br><span class="line">    put_page(page, address);<span class="comment">//将物理页和页表建立映射</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="title">put_page</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> page, <span class="comment">//物理地址</span></span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">unsigned</span> <span class="keyword">long</span> address)</span></span>&#123; </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> tmp， *page_table;</span><br><span class="line">    page_table=(<span class="keyword">unsigned</span> <span class="keyword">long</span> *)((address&gt;&gt;<span class="number">20</span>)&amp;ffc); <span class="comment">//找到页目录项</span></span><br><span class="line">    <span class="keyword">if</span>((*page_table)&amp;<span class="number">1</span>)</span><br><span class="line">    	page_table=(<span class="keyword">unsigned</span> <span class="keyword">long</span>*)(<span class="number">0xfffff000</span>&amp;*page_table);</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        tmp=get_free_page(); </span><br><span class="line">        *page_table=tmp|<span class="number">7</span>;</span><br><span class="line">        page_table=(<span class="keyword">unsigned</span> <span class="keyword">long</span>*)tmp;&#125;</span><br><span class="line">    page_table[(address&gt;&gt;<span class="number">12</span>)&amp;<span class="number">0x3ff</span>] = page|<span class="number">7</span>;<span class="comment">//将物理页放到page_table。建立映射</span></span><br><span class="line">    <span class="keyword">return</span> page; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p><strong>内存换出</strong></p>
+<p>选择一页淘汰，换出到磁盘。</p>
+<p>淘汰算法：评价准则：缺页次数</p>
+<ul>
+<li>FIFO页面置换：先来先出</li>
+<li>MIN算法：选最远将使用的页淘汰，是最优方案<ul>
+<li>无法知道后面需要用到哪个页</li>
+</ul>
+</li>
+<li>LRU算法(用过去预测未来)：选最近最长一段时间没有使用的页淘汰<ul>
+<li>利用了程序的局部性特点</li>
+</ul>
+</li>
+</ul>
+<p>LRU的实现：</p>
+<ul>
+<li>实现1：每页维护一个时间戳，每用到该页，时间戳+1，选择时间戳最小的页。<ul>
+<li>但实现是很困难的，每执行一条指令的时候都要修改时间戳，而且时间戳非常有可能溢出</li>
+</ul>
+</li>
+<li>实现2：维护一个页码栈，选栈底页淘汰<ul>
+<li>仍然需要修改栈，代价仍然大</li>
+</ul>
+</li>
+<li>近似实现3(二次机会算法、Clock算法)： 将时间计数变为是和否，每个页加一个引用位，每访问一页时，硬件自动置1(R位)。选择淘汰页时，是1清0，继续扫描是0淘汰</li>
+<li>Clock算法改进：<ul>
+<li>Clock算法缺陷：缺页机会很少，很多时间全是1。就退化成了FIFO算法</li>
+<li>实现：再来一个扫描指针，用来清除R位置0，移动速度要快。另一个慢些的指针用来淘汰页。</li>
+</ul>
+</li>
+</ul>
+<p>进程分配页框(帧frame)</p>
+<ul>
+<li>当缺页数超过一定限度的的时候，CPU利用率急剧下降，将这一现象称为颠簸</li>
+<li>解法1：可以动态调整，当缺页次数多后，增加分配数</li>
+<li>解法2：一个程序有局部性，覆盖这个局部需要的页框数。就分配给他。<ul>
+<li>这个局部需要多少页框是很难求出来的，现在往往用到的算法是求工作集</li>
+</ul>
+</li>
+</ul>
+<h2 id="IO与显示器"><a href="#IO与显示器" class="headerlink" title="IO与显示器"></a>IO与显示器</h2><p>外设无论里面有多少调代码本质是<code>out xx,al</code>。</p>
+<p>CPU发出指令给外设控制器中的寄存器写内容，外设控制器会根据寄存器的内容来操作硬件。外设准备好后会向CPU发出中断。</p>
+<p>控制器就是对应一个端口。</p>
+<p>不同的控制器的内容的格式和语义、寄存器的地址都不系统。操作系统要给用户提高简单的视图—文件视图，更方便</p>
+<p>设备驱动系统主要的三件事</p>
+<ul>
+<li>形成文件视图</li>
+<li>发出out指令</li>
+<li>形成中断处理</li>
+</ul>
+<p>以print为例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fd = <span class="built_in">open</span>(“/dev/xxx”);<span class="comment">//打开外设文件</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line"><span class="built_in">write</span>(fd,i,<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">close</span>(fd);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_write</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> fd, <span class="keyword">char</span> *buf, <span class="keyword">int</span> count)</span></span>&#123; </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span>* <span class="title">file</span>;</span></span><br><span class="line">    file = current-&gt;filp[fd];<span class="comment">//current是当前进程。</span></span><br><span class="line">    inode = file-&gt;f_inode; <span class="comment">//incode就是文件中取出的信息</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//父进程shell最开始创立</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="built_in">open</span>(“dev/tty0”,O_RDWR,<span class="number">0</span>);dup(<span class="number">0</span>);dup(<span class="number">0</span>);<span class="comment">//打开tty0文件，拷贝到1，2位置。所以0，1，2都是tty0文件</span></span><br><span class="line">	execve(<span class="string">"/bin/sh"</span>,argv,envp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename, <span class="keyword">int</span> flag)</span></span>&#123; </span><br><span class="line">    i=open_namei(filename,flag,&amp;inode);<span class="comment">//inode就可以读到文件具体哪些信息</span></span><br><span class="line">    cuurent-&gt;filp[fd]=f; <span class="comment">//第一个空闲的fd</span></span><br><span class="line">    f-&gt;f_mode=inode-&gt;i_mode; f-&gt;f_inode=inode;<span class="comment">//根据inode发出命令</span></span><br><span class="line">    f-&gt;f_count=<span class="number">1</span>; <span class="keyword">return</span> fd; &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_write</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> fd, <span class="keyword">char</span> *buf,<span class="keyword">int</span> cnt)</span></span>&#123; </span><br><span class="line">    inode = file-&gt;f_inode;</span><br><span class="line">    <span class="keyword">if</span>(S_ISCHR(inode-&gt;i_mode))<span class="comment">//看设备是否为字符设备，外设分字符设备和块设备</span></span><br><span class="line">    	<span class="keyword">return</span> rw_char(WRITE,inode-&gt;i_zone[<span class="number">0</span>], buf, cnt); <span class="comment">///读写字符，izone[0]就是主设备号</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rw_char</span><span class="params">(<span class="keyword">int</span> rw, <span class="keyword">int</span> dev, <span class="keyword">char</span> *buf, <span class="keyword">int</span> cnt)</span></span>&#123; </span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    crw_ptr call_addr=crw_table[MAJOR(dev)]; <span class="comment">//根据dev主设备号查表。表存放的是函数指针，找到对应处理函数</span></span><br><span class="line">	call_addr(rw, dev, buf, cnt); </span><br><span class="line">    ...&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//找到第4个是rw_ttyx函数</span></span><br><span class="line"><span class="keyword">static</span> crw_ptr crw_table[]=&#123;...,rw_ttyx,&#125;;</span><br><span class="line"><span class="keyword">typedef</span> (*crw_ptr)(<span class="keyword">int</span> rw, <span class="keyword">unsigned</span> minor, <span class="keyword">char</span> </span><br><span class="line">*buf, <span class="keyword">int</span> count)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里以显示器为例，就是往显示器上写</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">rw_ttyx</span><span class="params">(<span class="keyword">int</span> rw, <span class="keyword">unsigned</span> minor, <span class="keyword">char</span> *buf, <span class="keyword">int</span> count)</span></span>&#123; </span><br><span class="line">    <span class="keyword">return</span> ((rw==READ)? tty_read(minor,buf):<span class="comment">///是否为读，如果读就执行tty_read</span></span><br><span class="line">	tty_write(minor,buf));<span class="comment">//写函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tty_write</span><span class="params">(<span class="keyword">unsigned</span> channel,<span class="keyword">char</span> *buf,<span class="keyword">int</span> nr)</span></span>&#123; </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tty_struct</span> *<span class="title">tty</span>;</span>tty=channel+tty_table;<span class="comment">//tty是根据表找到的一项</span></span><br><span class="line">	sleep_if_full(&amp;tty-&gt;write_q);<span class="comment">//如果往q(queue)就是缓冲区里写 满了，就睡眠</span></span><br><span class="line">	...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> c, *b=buf; </span><br><span class="line">    <span class="comment">//如果q没满就往里放</span></span><br><span class="line">    <span class="keyword">while</span>(nr&gt;<span class="number">0</span>&amp;&amp;!FULL(tty-&gt;write_q)) &#123; </span><br><span class="line">        c = get_fs_byte(b);<span class="comment">//b就是buf，工作在用户态内存，所以要从用户态内存取出，赋给c</span></span><br><span class="line">        <span class="keyword">if</span>(c==‘\r’)&#123;PUTCH(<span class="number">13</span>,tty-&gt;write_q);<span class="keyword">continue</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span>(O_LCUC(tty)) c = <span class="built_in">toupper</span>(c);</span><br><span class="line">        b++; nr--; PUTCH(c,tty-&gt;write_q);<span class="comment">//将c放入队列</span></span><br><span class="line">    &#125; <span class="comment">//输出完事或写队列满!</span></span><br><span class="line">    tty-&gt;<span class="built_in">write</span>(tty);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据结构体查对应函数</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tty_struct</span>&#123;</span> </span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">write</span>)(struct tty_struct *tty); </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">tty_queue</span> <span class="title">read_q</span>, <span class="title">write_q</span>;</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tty_struct</span> <span class="title">tty_table</span>[] = &#123;</span></span><br><span class="line">&#123;con_write,&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,””&#125;,&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,””&#125;&#125;,&#123;&#125;,…&#125;<span class="comment">//用con_write网里写</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">con_write</span><span class="params">(struct tty_struct *tty)</span></span>&#123; </span><br><span class="line">    GETCH(tty-&gt;write_q,c);<span class="comment">//从缓冲区取出c</span></span><br><span class="line">    <span class="comment">//将c写给显示器</span></span><br><span class="line">	<span class="keyword">if</span>(c&gt;<span class="number">31</span>&amp;&amp;c&lt;<span class="number">127</span>)&#123;__asm__(“movb _attr,%%ah\n\t”<span class="comment">//将属性赋给ah</span></span><br><span class="line">        “movw %%ax,%<span class="number">1</span>\n\t”::”a”(c),<span class="comment">//将ax赋给pos，pos就是显卡的控制器的寄存器，c字符赋给al</span></span><br><span class="line">        ”m”(*(short*)pos):”ax”); pos+=<span class="number">2</span>;&#125;<span class="comment">//每写完一些线显存就+2</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>有的外设控制器可以和内存统一编址这时候用mov命令，如果是独立编址用out命令</p>
+</blockquote>
+<blockquote>
+<p>设备驱动就是根据设备信息注册相应函数。</p>
+</blockquote>
+<p>pos的来源：在<code>con_init()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ORIG_X (*(unsigned char*)0x90000) <span class="comment">//初始光标列号</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ORIG_Y (*(unsigned char*)0x90001) <span class="comment">//初始光标行号</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">con_init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;gotoxy(ORIG_X,ORIG_Y);&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">gotoxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">    pos=origin+y*video_size_row +(x&lt;&lt;<span class="number">1</span>);<span class="comment">//根据传入参数算出pos</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>printf整个过程总结：</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210308193456502.png" alt="image-20210308193456502"></p>
+<p><strong>键盘</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//键盘中断初始化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">con_init</span><span class="params">(<span class="keyword">void</span>)</span> <span class="comment">//应为键盘也是console的一部分</span></span></span><br><span class="line"><span class="function"></span>&#123; set_trap_gate(<span class="number">0x21</span>, &amp;keyboard_interrupt); &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.globl _keyboard_interrupt</span><br><span class="line">_keyboard_interrupt:</span><br><span class="line">    inb $<span class="number">0x60</span>,%al <span class="comment">//inb读入一个字节 与outb对应 从端口0x60读扫描吗</span></span><br><span class="line">    <span class="function">call <span class="title">key_table</span><span class="params">(,%eax,<span class="number">4</span>)</span> <span class="comment">//调用key_table+eax*4，不同的扫描码调不通函数</span></span></span><br><span class="line">    ... push $0 call _do_tty_interrupt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">key_table:</span><br><span class="line">    .long none,do_self,do_self,do_self &#x2F;&#x2F;扫描码00-03 显示字符通常用do_self</span><br><span class="line">    .long do_self, ...,func, scroll, cursor 等等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#if defined(KBD_US)</span><br><span class="line">key_map: .byte 0,27 .ascii “1234567890-&#x3D;“ ...  </span><br><span class="line">shift_map: .byte 0,27 .ascii “!@#$%^&amp;*()_+” ...  &#x2F;&#x2F;按shift的按键</span><br><span class="line">#elif defined(KBD_GR) ...</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mode: .byte 0</span><br><span class="line">do_self:</span><br><span class="line">    lea alt_map,%ebx </span><br><span class="line">    testb $0x20,mode &#x2F;&#x2F;alt键是否同时按下 jne 1f</span><br><span class="line">    lea shift_map,%ebx testb $0x03,mode jne 1f</span><br><span class="line">    lea key_map,%ebx &#x2F;&#x2F;key_map就对应键盘</span><br><span class="line">1:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1: movb (%ebx,%eax),%al &#x2F;&#x2F;这里ebx和eax在上面已经将map赋给他们了 扫描码索引，ASCII码àal</span><br><span class="line">    orb %al,%al je none &#x2F;&#x2F;没有对应的ASCII码</span><br><span class="line">    testb $0x4c,mode &#x2F;&#x2F;看caps是否亮</span><br><span class="line">    je 2f cmpb $’a,%al jb 2f</span><br><span class="line">    cmpb $’&#125;,%al ja 2f subb $32,%al &#x2F;&#x2F;变大写</span><br><span class="line">2:testb $??,mode &#x2F;&#x2F;处理其他模式，如ctrl同时按下</span><br><span class="line">3:andl $0xff,%eax call put_queue&#x2F;&#x2F;放入缓冲区</span><br><span class="line">none:ret</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tty_queue</span> *<span class="title">table_list</span>[]=&#123;</span></span><br><span class="line">&amp;tty_table[<span class="number">0</span>].read_q, </span><br><span class="line">&amp;tty_table[<span class="number">0</span>].write_q;</span><br><span class="line">...&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">put_queue:</span><br><span class="line">    movl _table_list,%edx&#x2F;&#x2F;table_list就是用上面的read_q </span><br><span class="line">    movl head(%edx),%ecx&#x2F;&#x2F;得到read_q的head输出到缓存队列的头部</span><br><span class="line">1:movb %al,buf(%edx,%ecx)</span><br></pre></td></tr></table></figure>
+
+<p>回显</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_tty_interrupt</span><span class="params">(<span class="keyword">int</span> tty)</span> <span class="comment">//上面传来的是0</span></span></span><br><span class="line"><span class="function"></span>&#123; copy_to_cooked(tty_table+tty); &#125;<span class="comment">//处理下字符，放入队列</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">copy_to_cooked</span><span class="params">(struct tty_struct *tty)</span></span>&#123; </span><br><span class="line">    GETCH(tty-&gt;read_q,c);</span><br><span class="line">    <span class="keyword">if</span>(L_ECHO(tty))&#123; <span class="comment">//回显，也可以不回显</span></span><br><span class="line">        PUTCH(c,tty-&gt;write_q); <span class="comment">//将c放入缓存队列</span></span><br><span class="line">        tty-&gt;<span class="built_in">write</span>(tty); &#125; <span class="comment">//立刻显示到屏幕上</span></span><br><span class="line">    PUTCH(c,tty-&gt;secondary); <span class="comment">//完成copy_to_cooked</span></span><br><span class="line">    ... wake_up(&amp;tty-&gt;secondary.proc_list);&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h2><h3 id="生磁盘的使用"><a href="#生磁盘的使用" class="headerlink" title="生磁盘的使用"></a>生磁盘的使用</h3><p>认识磁盘</p>
+<ul>
+<li>磁盘访问单位是扇区</li>
+<li>扇区大小：512字节</li>
+<li>扇区大小是传输时间和碎片浪费的折中</li>
+</ul>
+<p>如何磁盘读写一个字节：控制器-&gt;寻道-&gt;旋转-&gt;传输</p>
+<ol>
+<li>将磁头移动到指定磁道上</li>
+<li>磁道开始旋转，转到相应地方后，</li>
+<li>再一转，磁生电发出电信号。读到内存缓冲区<ul>
+<li>写：也是一转，电生磁</li>
+</ul>
+</li>
+</ol>
+<p>需要往磁盘控制器写：柱面、磁头、扇区、缓存位置</p>
+<p><strong>最直接的使用磁盘</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_hd_request</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123; </span><br><span class="line">    ...hd_out(dev,nsect,sec,head,cyl,WIN_WRITE,...);</span><br><span class="line">    port_write(HD_DATA,CURRENT-&gt;<span class="built_in">buffer</span>,<span class="number">256</span>);&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hd_out</span><span class="params">(drive, nsect, sec, head, cyl, cmd...)</span></span>&#123; </span><br><span class="line">    port = HD_DATA; <span class="comment">//数据寄存器端口(0x1f0)</span></span><br><span class="line">    <span class="comment">//下面指令就是将数据写入磁盘控制器的寄存器。移位等操作是将数据化成相应的格式</span></span><br><span class="line">    outb_p(nsect,++port); outb_p(sect,++port);</span><br><span class="line">    outb_p(cyl,++port); outb_port(cyl&gt;&gt;<span class="number">8</span>,++port);</span><br><span class="line">    outb_p(<span class="number">0xA0</span>|(drive&lt;&lt;<span class="number">4</span>)|head, ++port);</span><br><span class="line">    outb_p(cmd, ++port); &#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是这样使用磁盘过于麻烦，所以操作系统需要一层层抽象</p>
+<p><strong>一、通过盘块号读写磁盘</strong></p>
+<p>程序发block给磁盘驱动，通过磁盘驱动算出cyl、head、sec(CHS)发给磁盘控制器<code>C´(Heads´Sectors) + H´Sectors + S</code></p>
+<p>磁盘访问时间 = 写入控制器时间 + 寻道时间 + 旋转时间 + 传输时间</p>
+<blockquote>
+<p>寻道时间往往占大头，所以相邻的此块应尽量在同一磁道上</p>
+</blockquote>
+<p>我们通常访问连续的盘块</p>
+<p>从扇区到盘块：传输时间基本可以忽略不记，这样可以大幅度提高读写速度。</p>
+<blockquote>
+<p>扇区越大空间利用率越低，读写速度越高</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">make_request</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="class"><span class="keyword">struct</span> <span class="title">requset</span> *<span class="title">req</span>;</span></span><br><span class="line">req=request+NR_REQUEST;</span><br><span class="line">req-&gt;sector=bh-&gt;b_blocknr&lt;&lt;<span class="number">1</span>;<span class="comment">//根据盘块号来算出扇区号 ，这里一个盘块2个扇区</span></span><br><span class="line">add_request(major+blk_dev,req); &#125; <span class="comment">//将请求放入队列</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_hd_request</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123; </span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> block=CURRENT-&gt;sector; </span><br><span class="line">    <span class="comment">//除法算出chs。S = block%Sectors</span></span><br><span class="line">    __asm__(“divl %<span class="number">4</span>”:”=a”(block),”=d”(sec):”<span class="number">0</span>”(block),“<span class="number">1</span>”(<span class="number">0</span>),”r”(hd_info[dev].sect));</span><br><span class="line">    __asm__(“divl %<span class="number">4</span>”:”=a”(cyl),”=d”(head):”<span class="number">0</span>”(block),“<span class="number">1</span>”(<span class="number">0</span>),”r”(hd_info[dev].head));</span><br><span class="line">    hd_out(dev,nsect,sec,head,cyl,WIN_WRITE,...);<span class="comment">//nsect就是每个盘块的扇区数</span></span><br><span class="line">... &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二、多进程通过队列访问磁盘</strong></p>
+<p>进程发给请求队列，磁盘驱动从队列取出块号，再来操作。</p>
+<p>调度算法</p>
+<ul>
+<li>FCFS(先来先服务)：程序是无序来的，会导致重复的寻道时间</li>
+<li>SSTF磁盘调度：短寻道优先，近的优先访问<ul>
+<li>缺点：磁头总在中间转动</li>
+</ul>
+</li>
+<li>SCAN磁盘调度(电梯算法)：SSTF+中途不回折。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上文的make_request调用的加入队列方法 </span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add_request</span><span class="params">(struct blk_dev_struct *dev, struct request *req)</span></span>&#123; </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">requset</span> *<span class="title">tmp</span>=<span class="title">dev</span>-&gt;<span class="title">current_request</span>;</span> </span><br><span class="line">    req-&gt;next=<span class="literal">NULL</span>; cli(); <span class="comment">//关中断(互斥)</span></span><br><span class="line">    <span class="keyword">for</span>(;tmp-&gt;next;tmp=tmp-&gt;next)</span><br><span class="line">    	<span class="keyword">if</span>((IN_ORDER(tmp,req)||!IN_ORDER(tmp,tmp-&gt;next))&amp;&amp;IN_ORDER(req,tmp-&gt;next)) <span class="keyword">break</span>;<span class="comment">//IN_ORDER是比大小第二个大为true</span></span><br><span class="line">    req-&gt;next=tmp-&gt;next; tmp-&gt;next=req; sti();&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> IN_ORDER(s1, s2) \</span></span><br><span class="line">((s1)-&gt;dev&lt;(s2)-&gt;dev)||((s1)-&gt;dev == (s2)-&gt;dev\</span><br><span class="line">&amp;&amp; (s1)-&gt;sector&lt;(s2)-&gt;sector))</span><br></pre></td></tr></table></figure>
+
+<p>生磁盘使用总结：</p>
+<ol>
+<li>进程“得到盘块号” ，算出扇区号(sector)</li>
+<li>用扇区号make req，用电梯算法add_request<ul>
+<li>用哪块内存缓冲区，这一部分非常大的提速了磁盘读写，暂不涉及</li>
+</ul>
+</li>
+<li>进程sleep_on</li>
+<li>磁盘中断处理</li>
+<li>do_hd_request算出cyl,head,sector</li>
+<li>hd_out调用outp(…)完成端口写</li>
+</ol>
+<h3 id="生磁盘到文件"><a href="#生磁盘到文件" class="headerlink" title="生磁盘到文件"></a>生磁盘到文件</h3><p><strong>三、引入文件</strong></p>
+<p>用户眼里文件的本质是字符流</p>
+<p>磁盘上文件是连接盘块</p>
+<p>存放方式</p>
+<ul>
+<li>顺序结构：不易动态增长</li>
+<li>链式结构：读写较慢，如果要读其中一块，必须把前面的块都读了</li>
+<li>索引结构：用一块做=作索引块，记录在其余几块。可以随机读哪块</li>
+</ul>
+<p>实际系统用的是多级索引，通常做三级，可以存放非常大的文件</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>工作流程</p>
+<ol>
+<li>先知道哪段字符：file中的一个读写指针，就是开始地址(fseek就是来修改它)，加上count</li>
+<li>找到要写的盘块号：通过inode找到盘块号</li>
+<li>将盘块号、buff等形成request放入“电梯”</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//fd文件描述符，buf内存缓冲区，count读写字符个数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_write</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* buf, <span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">file</span> = <span class="title">current</span>-&gt;<span class="title">filp</span>[<span class="title">fd</span>];</span><span class="comment">//file的指针</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">m_inode</span> *<span class="title">inode</span> = <span class="title">file</span>-&gt;<span class="title">inode</span>;</span></span><br><span class="line">	<span class="keyword">if</span>(S_ISREG(inode-&gt;i_mode))</span><br><span class="line">		<span class="keyword">return</span> file_write(inode, file, buf, count); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>file_write实现</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">file_write</span><span class="params">(struct m_inode *inode, struct file *filp, <span class="keyword">char</span> *buf, <span class="keyword">int</span> count)</span></span>&#123; </span><br><span class="line">    <span class="keyword">off_t</span> pos; </span><br><span class="line">    <span class="keyword">if</span>(filp-&gt;f_flags&amp;O_APPEND) <span class="comment">//如果是追加</span></span><br><span class="line">    	pos=inode-&gt;i_size; </span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        pos=filp-&gt;f_pos; <span class="comment">//读写指针</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(i&lt;count)&#123; </span><br><span class="line">    block=create_block(inode, pos/BLOCK_SIZE);<span class="comment">//根据读写位置和inode得出盘块号</span></span><br><span class="line">    bh=bread(inode-&gt;i_dev, block);<span class="comment">//bread算出扇区号放入"电梯"队列，并且自己阻塞</span></span><br><span class="line">    <span class="comment">//不断修改pos，形成流</span></span><br><span class="line">    <span class="keyword">int</span> c=pos%BLOCK_SIZE; <span class="keyword">char</span> *p=c+bh-&gt;b_data; </span><br><span class="line">    bh-&gt;b_dirt=<span class="number">1</span>; c=BLOCK_SIZE-c; pos+=c; <span class="comment">//一旦写完成post增加。</span></span><br><span class="line">    ... <span class="keyword">while</span>(c--&gt;<span class="number">0</span>) *(p++)=get_fs_byte(buf++);</span><br><span class="line">    brelse(bh); &#125;</span><br><span class="line">filp-&gt;f_pos=pos; &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//create_block就是调用_bmap</span></span><br><span class="line"><span class="keyword">int</span> _bmap(m_inode *inode, <span class="keyword">int</span> block, <span class="keyword">int</span> create)&#123;</span><br><span class="line">    <span class="comment">//(0-6):直接数据块，(7):一重间接，(8):二重间接 &#125;。如果是直接数据块就读出，如果是索引就去找</span></span><br><span class="line">    <span class="keyword">if</span>(block&lt;<span class="number">7</span>)&#123; </span><br><span class="line">        <span class="keyword">if</span>(create&amp;&amp;!inode-&gt;i_zone[block])&#123; </span><br><span class="line">            inode-&gt;i_zone[block]=new_block(inode-&gt;i_dev);</span><br><span class="line">            inode-&gt;i_ctime=CURRENT_TIME; inode-&gt;i_dirt=<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">return</span> inode-&gt;i_zone[block];</span><br><span class="line">    &#125;</span><br><span class="line">    block-=<span class="number">7</span>; </span><br><span class="line">    <span class="keyword">if</span>(block&lt;<span class="number">512</span>)&#123;</span><br><span class="line">    bh=bread(inode-&gt;i_dev,inode-&gt;i_zone[<span class="number">7</span>]);</span><br><span class="line">    <span class="keyword">return</span> (bh-&gt;b_data)[block];</span><br><span class="line">    &#125; ...</span><br></pre></td></tr></table></figure>
+
+<p>inode还能用来表示设备文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">m_inode</span>&#123;</span> <span class="comment">//读入内存后的inode</span></span><br><span class="line">    <span class="keyword">unsigned</span> short i_mode; <span class="comment">//文件的类型和属性</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">unsigned</span> short i_zone[<span class="number">9</span>]; <span class="comment">//指向文件内容数据块</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">i_wait</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> short i_count;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> i_lock;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> i_dirt; ... &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>思路：根据给出的文件路径名，解析为文件的FCB(inode)，再根据FCB获得盘号</p>
+<blockquote>
+<p>查了下FCB是文件控制块，记录文件的信息</p>
+</blockquote>
+<p>根目录放在固定位置</p>
+<p>数据盘块集合，放着目录下文件名+FCB的编号，通过编号算出FCB的位置。</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210310184110121.png" alt="image-20210310184110121"></p>
+<p>根目录放在inode数组第一项。inode位图对应位置，置1还是置0表示有或无。引导块，有引导分区才有。超级块记录i节点位图和盘块位图的大小。</p>
+<p><img src="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/image-20210310184128708.png" alt="image-20210310184128708"></p>
+<p>总结</p>
+<ol>
+<li>用户读某个文件</li>
+<li>op(“路径”)：通过解析找到根目录，再根据根目录逐层找到对应内容的inode</li>
+<li>通过FCB和文件找到对应盘块</li>
+<li>写入电梯队列</li>
+<li>磁盘中断，从队列中取出盘号，算出chs</li>
+<li>写磁盘控制器<code>outp(syl,head,sector)</code></li>
+</ol>
+<h3 id="目录实现"><a href="#目录实现" class="headerlink" title="目录实现"></a>目录实现</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//open的核心就是找到inode。</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sys_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename, <span class="keyword">int</span> flag)</span></span>&#123; </span><br><span class="line">    i=open_namei(filename,flag,&amp;inode);<span class="comment">//根据filename解析路径，写到inode返回</span></span><br><span class="line">... &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">open_namei</span><span class="params">(...)</span></span>&#123; </span><br><span class="line">    dir=dir_namei(pathname,&amp;namelen,&amp;basename);<span class="comment">//目录解析</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct m_inode *<span class="title">dir_namei</span><span class="params">()</span></span>&#123; </span><br><span class="line">    dir=get_dir(pathname); &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct m_inode *<span class="title">get_dir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>((c=get_fs_byte(pathname))==‘/’)&#123;<span class="comment">//如果以根开头就从根开始，如果不以`/`开头，就从当前目录开始</span></span><br><span class="line">        inode=current-&gt;root; pathname++;&#125; <span class="comment">//root在mount的时候就在shell中有了</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(c) </span><br><span class="line">        inode=current-&gt;pwd;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!c) </span><br><span class="line">            <span class="keyword">return</span> inode; <span class="comment">//函数的正确出口</span></span><br><span class="line">    bh=find_entry(&amp;inode,thisname,namelen,&amp;de);<span class="comment">//从根据根目录的inode找到根目录的数据项，找到那一项</span></span><br><span class="line">    <span class="keyword">int</span> inr=de-&gt;inode; <span class="comment">//inr就是目录项中的索引节点号</span></span><br><span class="line">    <span class="keyword">int</span> idev=inode-&gt;i_dev;</span><br><span class="line">    inode=iget(idev,inr); <span class="comment">//根据目录项读取下一层inode</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根目录的源头</p>
+<p>在挂载时，就有了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inode = current-&gt;root;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="built_in">setup</span>((<span class="keyword">void</span> *) &amp;drive_info); ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sys_setup(<span class="keyword">void</span> * BIOS)<span class="comment">//在kernel/hd.c中</span></span><br><span class="line">&#123; </span><br><span class="line">    hd_info[drive].head = *(<span class="number">2</span>+BIOS);</span><br><span class="line">    hd_info[drive].sect = *(<span class="number">14</span>+BIOS);</span><br><span class="line">    mount_root(); ... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mount_root</span><span class="params">(<span class="keyword">void</span>)</span><span class="comment">//在fs/super.c中</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    mi=iget(ROOT_DEV,ROOT_INO));<span class="comment">//根据根目录的inode编号得出FCB #define ROOT_INO 1</span></span><br><span class="line">    current-&gt;root = mi; <span class="comment">//根目录的FCB赋给root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//iget获取inode</span></span><br><span class="line"><span class="function">struct m_inode * <span class="title">iget</span><span class="params">(<span class="keyword">int</span> dev, <span class="keyword">int</span> nr)</span></span>&#123; </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">m_inode</span> * <span class="title">inode</span> = <span class="title">get_empty_inode</span>();</span></span><br><span class="line">    inode-&gt;i_dev=dev; inode-&gt;i_num=nr;</span><br><span class="line">    read_inode(inode);<span class="comment">//通过read_read </span></span><br><span class="line">    <span class="keyword">return</span> inode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">read_inode</span><span class="params">(struct m_inode *inode)</span></span>&#123; </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">super_block</span> *<span class="title">sb</span>=<span class="title">get_super</span>(<span class="title">inode</span>-&gt;<span class="title">i_dev</span>);</span>; <span class="comment">//得到超级块</span></span><br><span class="line">    lock_inode(inode); </span><br><span class="line">    block=<span class="number">2</span>+sb-&gt;s_imap_blocks+sb-&gt;s_zmap_blocks+(inode-&gt;i_num<span class="number">-1</span>)/INODES_PER_BLOCK;<span class="comment">//通过超级块算出目标的盘号</span></span><br><span class="line">    bh=bread(inode-&gt;i_dev,block);<span class="comment">//从磁盘上读取</span></span><br><span class="line">    inode=bh-&gt;data[(inode-&gt;i_num<span class="number">-1</span>)%INODES_PER_BLOCK];<span class="comment">//从盘块上拿出目标inode</span></span><br><span class="line">    unlock_inode(inode); &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>find_entry的目录解析代码</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dir_entry</span>&#123;</span> </span><br><span class="line"><span class="keyword">unsigned</span> short inode; <span class="comment">//i节点号</span></span><br><span class="line"><span class="keyword">char</span> name[NAME_LEN]; <span class="comment">//文件名 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> struct buffer_head *<span class="title">find_entry</span><span class="params">(struct m_inode **dir, <span class="keyword">char</span> *name, ..., struct dir_entry ** res_dir)</span></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> entries=(*dir)-&gt;i_size/(<span class="keyword">sizeof</span>(struct dir_entry));</span><br><span class="line">    <span class="keyword">int</span> block=(*dir)-&gt;i_zone[<span class="number">0</span>];<span class="comment">//找到直接索引块,配合前面文件的读取来理解，一级二级索引没详细讲</span></span><br><span class="line">    *bh=bread((*dir)-&gt;i_dev, block);<span class="comment">//然后读出来</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dir_entry</span> *<span class="title">de</span> =<span class="title">bh</span>-&gt;<span class="title">b_data</span>;</span><span class="comment">//将缓冲区data取出</span></span><br><span class="line">    <span class="comment">//挨个去匹配，能匹配直接返回</span></span><br><span class="line">    <span class="keyword">while</span>(i&lt;entries) &#123; </span><br><span class="line">    	<span class="keyword">if</span>(match(namelen,name,de))&#123;</span><br><span class="line">            *res_dir=de; </span><br><span class="line">            <span class="keyword">return</span> bh;</span><br><span class="line">        &#125;</span><br><span class="line">        de++; </span><br><span class="line">        i++;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据一级索引二级索引还是直接数据块，一层层读下去</span></span><br><span class="line"><span class="keyword">while</span>(i&lt;entries) <span class="comment">//entries是目录项数</span></span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span>((<span class="keyword">char</span>*)de&gt; = BLOCK_SIZE+bh-&gt;b_data)&#123;</span><br><span class="line">        brelse(bh); </span><br><span class="line">        block=bmap(*dir,i/DIR_ENTRIES_PER_BLOCK);</span><br><span class="line">        bh=bread((*dir)-&gt;i_dev,block);</span><br><span class="line">        de=(struct dir_entry*)bh-&gt;b_data;</span><br><span class="line">    &#125; <span class="comment">//读入下一块上的目录项继续match</span></span><br><span class="line">    <span class="keyword">if</span>(match(namelen,name,de))&#123;</span><br><span class="line">        *res_dir=de;<span class="keyword">return</span> bh;</span><br><span class="line">    &#125;</span><br><span class="line">    de++; i++; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p>不懂：</p>
+<ul>
+<li><p>L12 52分，父进程中断返回为什么不为0。(老师说自己看代码，实验四做完或许会理解)、</p>
+<ul>
+<li>为什么要在copy_process内将eax置0？</li>
+</ul>
+</li>
+<li><p>L12 49分，内存部分代码。(后面讲到内存再看)</p>
+</li>
+<li><p>L12 60分，老师说<code>lea</code>指令部分是前面赋给eax，但是我看的都是后面赋给前面</p>
+</li>
+<li><p>image-20210310184110121.png，略微没看懂。直接索引块是否就是直接数据块L32 16分20中的i_zone[0]</p>
+</li>
+</ul>
+</div><div class="tags"><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/"><i class="fa fa-tag"></i>计算机基础</a></div><div class="post-nav"><a class="pre" href="/2020/09/25/docker%E7%AC%94%E8%AE%B0/">docker笔记</a><a class="next" href="/2020/01/08/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Scala/" style="font-size: 15px;">Scala</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 15px;">并发</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/nosql/" style="font-size: 15px;">nosql</a> <a href="/tags/elasticsearch/" style="font-size: 15px;">elasticsearch</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/%E5%90%8E%E7%AB%AF/" style="font-size: 15px;">后端</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/scala/" style="font-size: 15px;">scala</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Spark/" style="font-size: 15px;">Spark</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 15px;">大数据</a> <a href="/tags/SQL/" style="font-size: 15px;">SQL</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/springsecurity/" style="font-size: 15px;">springsecurity</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/wordpress/" style="font-size: 15px;">wordpress</a> <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/marjora/" style="font-size: 15px;">marjora</a> <a href="/tags/virtualbox/" style="font-size: 15px;">virtualbox</a> <a href="/tags/maven/" style="font-size: 15px;">maven</a> <a href="/tags/bug/" style="font-size: 15px;">bug</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 15px;">服务器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15px;">算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">机器学习</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 15px;">计算机基础</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 15px;">爬虫</a> <a href="/tags/python/" style="font-size: 15px;">python</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15px;">设计模式</a> <a href="/tags/%E6%B5%81%E7%A8%8B/" style="font-size: 15px;">流程</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 15px;">开发</a> <a href="/tags/Flink/" style="font-size: 15px;">Flink</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/JVM/" style="font-size: 15px;">JVM</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 15px;">并发编程</a> <a href="/tags/spring/" style="font-size: 15px;">spring</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15px;">前端</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 15px;">数据结构</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2021/07/06/Redis/">Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/24/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">Git笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/05/07/JVM/">JVM</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/04/27/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/26/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/Git%E7%AC%94%E8%AE%B0/">Git笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/manjaro%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">manjaro配置开发环境</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/09/25/docker%E7%AC%94%E8%AE%B0/">docker笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/13/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">dian的博客.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
